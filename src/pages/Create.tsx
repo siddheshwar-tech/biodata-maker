@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -8,10 +8,17 @@ import {
   useMediaQuery,
   Button,
   Collapse,
+  Fab,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
 import Grid from '@mui/material/GridLegacy';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { useBiodata } from '../context/BiodataContext';
 import Navbar from '../components/Navbar';
@@ -119,11 +126,54 @@ const LivePreview: React.FC = () => {
 const Create: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { currentStep } = useBiodata();
+  const { currentStep, resetForm, setCurrentStep } = useBiodata();
   const [showPreview, setShowPreview] = React.useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState<boolean>(false);
+
+  const handleDeleteConfirm = () => {
+    resetForm();
+    setDeleteDialogOpen(false);
+    setCurrentStep(0);
+  };
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: theme.palette.background.default }}>
+      {/* Sticky Delete Button */}
+      <Fab
+        color="error"
+        aria-label="delete"
+        onClick={() => setDeleteDialogOpen(true)}
+        sx={{
+          position: 'fixed',
+          bottom: 24,
+          left: 24,
+          zIndex: 50,
+        }}
+      >
+        <DeleteIcon />
+      </Fab>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Delete All Data?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This action will remove all entered data. This cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained" autoFocus>
+            Delete All
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Navbar />
       <Container maxWidth="xl" sx={{ py: 3 }}>
         <StepIndicator activeStep={currentStep} />

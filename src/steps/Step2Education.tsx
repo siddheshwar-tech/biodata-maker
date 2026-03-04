@@ -39,7 +39,6 @@ const Step2Education: React.FC = () => {
     control,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(educationSchema),
@@ -102,7 +101,7 @@ const Step2Education: React.FC = () => {
                   {...field}
                   fullWidth
                   label={t('university')}
-                  placeholder="University / Board name"
+                  placeholder={t('universityPlaceholder')}
                   error={!!errors.university}
                   helperText={errors.university?.message}
                 />
@@ -124,7 +123,7 @@ const Step2Education: React.FC = () => {
                   multiline
                   rows={2}
                   label={t('certifications')}
-                  placeholder="Any extra certificates, courses..."
+                  placeholder={t('certificationsPlaceholder')}
                   error={!!errors.additionalCertifications}
                   helperText={errors.additionalCertifications?.message}
                 />
@@ -137,7 +136,7 @@ const Step2Education: React.FC = () => {
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
           <Grid item xs={12}>
             <FormControl fullWidth error={!!errors.occupation}>
-              <FormLabel sx={{ marginBottom: 1 }}>नोकरी / व्यवसाय प्रकार</FormLabel>
+              <FormLabel sx={{ marginBottom: 1 }}>{t('occupationLabel')}</FormLabel>
               <Controller
                 name="occupation"
                 control={control}

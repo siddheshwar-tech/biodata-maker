@@ -43,7 +43,6 @@ const Step3Address: React.FC = () => {
     control,
     handleSubmit,
     reset,
-    watch,
     setValue,
     formState: { errors },
   } = useForm({
@@ -96,7 +95,7 @@ const Step3Address: React.FC = () => {
                   multiline
                   rows={3}
                   label={t('fullAddress')}
-                  placeholder="घर नंबर, बिल्डिंग, रस्त्याचे नाव..."
+                  placeholder={t('addressPlaceholder')}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -216,7 +215,7 @@ const Step3Address: React.FC = () => {
                     ),
                   }}
                   error={!!errors.mobile}
-                  helperText={errors.mobile?.message || '10 अंकी मोबाईल नंबर'}
+                  helperText={errors.mobile?.message || t('mobileHelperText')}
                 />
               )}
             />
@@ -292,7 +291,7 @@ const Step3Address: React.FC = () => {
                     ),
                   }}
                   error={!!errors.email}
-                  helperText={errors.email?.message || 'Optional / ऐच्छिक'}
+                  helperText={errors.email?.message || t('optionalLabel')}
                 />
               )}
             />

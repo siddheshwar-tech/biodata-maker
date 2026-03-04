@@ -59,7 +59,35 @@ export type TranslationKey =
   | 'step'
   | 'of'
   | 'personalFamily'
-  | 'manglik';
+  | 'manglik'
+  | 'universityPlaceholder'
+  | 'certificationsPlaceholder'
+  | 'occupationLabel'
+  | 'mobileHelperText'
+  | 'addressPlaceholder'
+  | 'optionalLabel'
+  | 'uploadedPhoto'
+  | 'changePhoto'
+  | 'deletePhoto'
+  | 'mostPopular'
+  | 'traditional'
+  | 'professional'
+  | 'cleanProfessional'
+  | 'traditionMarathi'
+  | 'goldenDecor'
+  | 'religiousMarathi'
+  | 'ganeshStyle'
+  | 'modernMarathi'
+  | 'addPhotoOptional'
+  | 'chooseYourTemplate'
+  | 'beautyDesigns'
+  | 'customizeLayoutData'
+  | 'biodataReady'
+  | 'clickButtonBelow'
+  | 'pdfDownloadFolder'
+  | 'chooseDeitySymbol'
+  | 'chooseBlessingText'
+  | 'customBlessing';
 
 type Translations = Record<TranslationKey, string>;
 
@@ -122,6 +150,34 @@ export const translations: Record<Language, Translations> = {
     of: 'पैकी',
     personalFamily: 'वैयक्तिक व कौटुंबिक',
     manglik: 'मांगलिक',
+    universityPlaceholder: 'विश्वविद्यालय / बोर्डाचे नाव',
+    certificationsPlaceholder: 'अतिरिक्त प्रमाणपत्र, अभ्यासक्रम...',
+    occupationLabel: 'नोकरी / व्यवसाय प्रकार',
+    mobileHelperText: '10 अंकी मोबाईल नंबर',
+    addressPlaceholder: 'घर नंबर, बिल्डिंग, रस्त्याचे नाव...',
+    optionalLabel: 'ऐच्छिक',
+    uploadedPhoto: 'अपलोड केलेली फोटो',
+    changePhoto: 'फोटो बदला',
+    deletePhoto: 'फोटो हटवा',
+    mostPopular: 'सर्वाधिक लोकप्रिय',
+    traditional: 'पारंपारिक',
+    professional: 'व्यावसायिक',
+    cleanProfessional: 'स्वच्छ, व्यावसायिक डिझाईन',
+    traditionMarathi: 'पारंपारिक',
+    goldenDecor: 'मराठी परंपरा, सुवर्ण सजावट',
+    religiousMarathi: 'धार्मिक',
+    ganeshStyle: 'गणेश वंदना, सनातन शैली',
+    modernMarathi: 'आधुनिक',
+    addPhotoOptional: 'फोटो जोडा (ऐच्छिक)',
+    chooseYourTemplate: 'तुमचा टेम्पलेट निवडा',
+    beautyDesigns: '3 सुंदर डिझाईन उपलब्ध आहेत',
+    customizeLayoutData: 'फील्ड्स चे क्रम बदलण्यासाठी ड्रॅग करा. विभागांचे स्वतंत्र क्रम आहेत.',
+    chooseDeitySymbol: 'देवतेची प्रतिमा निवडा',
+    chooseBlessingText: 'शुभ वचन निवडा',
+    customBlessing: 'कस्टम लिहा...',
+    biodataReady: 'बायोडेटा तयार आहे! 🎉',
+    clickButtonBelow: 'खाली दिलेल्या बटनावर क्लिक करा',
+    pdfDownloadFolder: 'PDF आपोआप download folder मध्ये जाईल',
   },
   hindi: {
     appName: 'विवाह बायोडेटा मेकर',
@@ -181,6 +237,35 @@ export const translations: Record<Language, Translations> = {
     of: 'का',
     personalFamily: 'व्यक्तिगत और पारिवारिक',
     manglik: 'मांगलिक',
+    universityPlaceholder: 'विश्वविद्यालय / बोर्ड का नाम',
+    certificationsPlaceholder: 'अतिरिक्त प्रमाणपत्र, पाठ्यक्रम...',
+    occupationLabel: 'व्यवसाय का प्रकार',
+    mobileHelperText: '10 अंकों का मोबाइल नंबर',
+    addressPlaceholder: 'घर नंबर, बिल्डिंग, सड़क का नाम...',
+    optionalLabel: 'वैकल्पिक',
+    uploadedPhoto: 'अपलोड की गई फोटो',
+    changePhoto: 'फोटो बदलें',
+    deletePhoto: 'फोटो हटाएं',
+    mostPopular: 'सबसे लोकप्रिय',
+    traditional: 'पारंपरिक',
+    professional: 'व्यावसायिक',
+    cleanProfessional: 'स्वच्छ, व्यावसायिक डिज़ाइन',
+    traditionMarathi: 'पारंपरिक',
+    goldenDecor: 'परंपरा, सोने की सजावट',
+    religiousMarathi: 'धार्मिक',
+    ganeshStyle: 'गणेश वंदना, शाश्वत शैली',
+    modernMarathi: 'आधुनिक',
+    addPhotoOptional: 'फोटो जोड़ें (वैकल्पिक)',
+    chooseYourTemplate: 'अपना टेम्पलेट चुनें',
+    beautyDesigns: '3 सुंदर डिज़ाइन उपलब्ध हैं',
+    customizeLayoutData: 'अंतिम पीडीएफ में क्रम बदलने के लिए फील्ड्स को ड्रैग करें। अनुभागों का अपना क्रम है।',
+    chooseDeitySymbol: 'देवता प्रतीक चुनें',
+    chooseBlessingText: 'आशीर्वाद पाठ चुनें',
+    customBlessing: 'कस्टम लिखें...',
+    biodataReady: 'बायोडेटा तैयार है! 🎉',
+    clickButtonBelow: 'नीचे दिए गए बटन पर क्लिक करें',
+    pdfDownloadFolder: 'पीडीएफ स्वचालित रूप से डाउनलोड फ़ोल्डर में जाएगी',
+  
   },
   english: {
     appName: 'Vivah Biodata Maker',
@@ -240,6 +325,34 @@ export const translations: Record<Language, Translations> = {
     of: 'of',
     personalFamily: 'Personal & Family',
     manglik: 'Manglik',
+    universityPlaceholder: 'University / Board name',
+    certificationsPlaceholder: 'Any extra certificates, courses...',
+    occupationLabel: 'Type of Occupation',
+    mobileHelperText: '10-digit mobile number',
+    addressPlaceholder: 'House number, Building, Street name...',
+    optionalLabel: 'Optional',
+    uploadedPhoto: 'Uploaded Photo',
+    changePhoto: 'Change Photo',
+    deletePhoto: 'Delete Photo',
+    mostPopular: 'Most Popular',
+    traditional: 'Traditional',
+    professional: 'Professional',
+    cleanProfessional: 'Clean, professional design',
+    traditionMarathi: 'Traditional',
+    goldenDecor: 'Marathi tradition, golden decor',
+    religiousMarathi: 'Religious',
+    ganeshStyle: 'Ganesh prayer, eternal style',
+    modernMarathi: 'Modern',
+    addPhotoOptional: 'Add Photo (Optional)',
+    chooseYourTemplate: 'Choose Your Template',
+    beautyDesigns: '3 beautiful designs available',
+    customizeLayoutData: 'Drag fields to change their order in the final PDF. Sections have independent orders.',
+    chooseDeitySymbol: 'Choose Deity Symbol',
+    chooseBlessingText: 'Choose Blessing Text',
+    customBlessing: 'Custom text...',
+    biodataReady: 'Biodata is Ready! 🎉',
+    clickButtonBelow: 'Click the button below',
+    pdfDownloadFolder: 'PDF will automatically go to download folder',
   },
 };
 

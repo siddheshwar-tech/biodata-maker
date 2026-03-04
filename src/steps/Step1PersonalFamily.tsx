@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { z } from 'zod';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler } from 'react-hook-form';
 import {
@@ -37,7 +37,7 @@ import {
 const Step1PersonalFamily: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { formData, updatePersonal, updateFamily, setCurrentStep } = useBiodata();
+  const { formData, updatePersonal, updateFamily, setCurrentStep, updateDeity, updateShlokaText } = useBiodata();
   const t = useTranslation(formData.language);
 
   type PersonalFamilyInput = z.input<typeof personalFamilySchema>;

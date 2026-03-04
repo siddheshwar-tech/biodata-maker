@@ -77,6 +77,8 @@ type Action =
   | { type: 'updatePhoto'; payload: string | null }
   | { type: 'updateTemplate'; payload: TemplateId }
   | { type: 'updateLanguage'; payload: Language }
+  | { type: 'updateDeity'; payload: string }
+  | { type: 'updateShlokaText'; payload: string }
   | { type: 'updateFieldOrder'; payload: { section: keyof typeof defaultFieldOrder; order: string[] } }
   | { type: 'resetFieldOrder' }
   | { type: 'setStep'; payload: number }
@@ -134,6 +136,8 @@ const defaultFormData: BiodataFormData = {
   photo: null,
   selectedTemplate: 1,
   language: 'english',
+  selectedDeity: 'ganesh',
+  shlokaText: '|| श्री गणेशाय नमः ||',
 };
 
 const initialState: State = {
@@ -178,6 +182,16 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         formData: { ...state.formData, language: action.payload },
+      };
+    case 'updateDeity':
+      return {
+        ...state,
+        formData: { ...state.formData, selectedDeity: action.payload },
+      };
+    case 'updateShlokaText':
+      return {
+        ...state,
+        formData: { ...state.formData, shlokaText: action.payload },
       };
     case 'setStep':
       return { ...state, currentStep: action.payload };
@@ -241,6 +255,8 @@ export const BiodataProvider: React.FC<{ children: ReactNode }> = ({ children })
     updatePhoto: (photo) => dispatch({ type: 'updatePhoto', payload: photo }),
     updateTemplate: (id) => dispatch({ type: 'updateTemplate', payload: id }),
     updateLanguage: (lang) => dispatch({ type: 'updateLanguage', payload: lang }),
+    updateDeity: (deityId) => dispatch({ type: 'updateDeity', payload: deityId }),
+    updateShlokaText: (text) => dispatch({ type: 'updateShlokaText', payload: text }),
     updateFieldOrder: (section, newOrder) =>
       dispatch({ type: 'updateFieldOrder', payload: { section, order: newOrder } }),
     resetFieldOrder: () => dispatch({ type: 'resetFieldOrder' }),

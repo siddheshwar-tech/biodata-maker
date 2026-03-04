@@ -144,8 +144,7 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight }) => {
 
 // ─── Template 1 — Traditional ─────────────────────────────────
 const Template1Traditional: React.FC<Props> = ({ formData }) => {
-  // const { personal, family, education, address, photo, shlokaText, selectedDeity } = formData;
-  const { personal, family, education, address, photo } = formData;
+  const { personal, family, education, address, photo, shlokaText, selectedDeity } = formData;
   const { fieldOrder } = useBiodata();
 
   const brotherText = family.totalBrothers > 0
@@ -186,7 +185,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
         <Box sx={{ textAlign: 'center', mb: 0.5 }}>
 
           {/* Deity SVG or fallback Om */}
-          {/* {selectedDeity && selectedDeity !== 'none' ? (
+          {selectedDeity && selectedDeity !== 'none' ? (
             <Box sx={{ mb: 0.5 }}>
               <img
                 src={`/deities/${selectedDeity}.svg`}
@@ -199,10 +198,10 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
             <Typography sx={{ fontSize: '2rem', color: '#8B0000', lineHeight: 1, mb: 0.5 }}>
               ॐ
             </Typography>
-          )} */}
+          )}
 
           {/* Shloka line */}
-          {/* {shlokaText && (
+          {shlokaText && (
             <Typography sx={{
               fontSize: '0.85rem', color: '#8B0000', fontWeight: 600,
               fontFamily: '"Noto Sans Devanagari", sans-serif',
@@ -210,7 +209,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
             }}>
               {shlokaText}
             </Typography>
-          )} */}
+          )}
 
           <TopOrnament />
 
@@ -219,15 +218,9 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
             <Typography sx={{
               fontSize: '1.7rem', fontWeight: 800, color: '#8B0000',
               fontFamily: '"Noto Sans Devanagari", sans-serif',
-              letterSpacing: '4px', lineHeight: 1.2,
+              letterSpacing: '4px', lineHeight: 1,
             }}>
-              विवाह बायोडेटा
-            </Typography>
-            <Typography sx={{
-              fontSize: '0.65rem', color: '#D4AF37', fontWeight: 700,
-              letterSpacing: '5px', textTransform: 'uppercase', mt: 0.3,
-            }}>
-              Marriage Biodata
+              बायोडेटा
             </Typography>
           </Box>
 
@@ -265,7 +258,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
         {/* ── Fix 1 & 2: All sections single column, centered with maxWidth ── */}
 
         {/* PERSONAL DETAILS */}
-        <SectionHeading title="वैयक्तिक माहिती | Personal Details" />
+        <SectionHeading title="वैयक्तिक माहिती" />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
           {/** Use fieldOrder from context to determine rendering sequence **/}
           {(() => {
@@ -297,7 +290,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
         <ThinDivider />
 
         {/* FAMILY DETAILS */}
-        <SectionHeading title="कौटुंबिक माहिती | Family Details" />
+        <SectionHeading title="कौटुंबिक माहिती" />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
           {(() => {
             
@@ -326,7 +319,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
         <ThinDivider />
 
         {/* EDUCATION & CAREER */}
-        <SectionHeading title="शिक्षण व करिअर | Education & Career" />
+        <SectionHeading title="शिक्षण व करिअर" />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
           {(() => {
             
@@ -339,7 +332,6 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               jobTitle: 'पद',
               annualIncome: 'वार्षिक उत्पन्न',
             };
-
             return (fieldOrder.education || Object.keys(labelMap)).map((key) => {
               const val = (education as any)[key];
               return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='qualification' || key==='occupation'} />;
@@ -350,10 +342,9 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
         <ThinDivider />
 
         {/* ADDRESS & CONTACT */}
-        <SectionHeading title="पत्ता व संपर्क | Address & Contact" />
+        <SectionHeading title="पत्ता व संपर्क" />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
           {(() => {
-            
             const labelMap: Record<string, string> = {
               fullAddress: 'पत्ता',
               city: 'शहर',
@@ -374,20 +365,6 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
             });
           })()}
         </Box>
-
-        {/* FOOTER */}
-        <Box sx={{ mt: 3 }}>
-          <TopOrnament />
-          <Typography sx={{
-            textAlign: 'center', fontSize: '0.62rem',
-            color: '#8B0000', opacity: 0.6, mt: 0.5,
-            fontFamily: '"Noto Sans Devanagari", sans-serif',
-            letterSpacing: '1.5px',
-          }}>
-            ॐ तत्सत् • शुभं भवतु • कल्याणमस्तु
-          </Typography>
-        </Box>
-
       </Box>
     </Box>
   );

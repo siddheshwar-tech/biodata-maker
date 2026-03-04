@@ -63,6 +63,8 @@ export interface BiodataFormData {
   photo: string | null;        // base64 encoded image string
   selectedTemplate: TemplateId;
   language: Language;
+  selectedDeity: string;       // default: 'ganesh'
+  shlokaText: string;          // default: '|| श्री गणेशाय नमः ||'
 }
 
 // Context type used by BiodataContext
@@ -81,6 +83,8 @@ export interface BiodataContextType {
   updatePhoto: (photo: string | null) => void;
   updateTemplate: (id: TemplateId) => void;
   updateLanguage: (lang: Language) => void;
+  updateDeity: (deityId: string) => void;
+  updateShlokaText: (text: string) => void;
   updateFieldOrder: (
     section: 'personal' | 'family' | 'education' | 'address',
     newOrder: string[]
