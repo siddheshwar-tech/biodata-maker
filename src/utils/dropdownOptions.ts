@@ -1,0 +1,165 @@
+// src/utils/dropdownOptions.ts
+
+export const rashiOptions: readonly string[] = [
+  'मेष (Aries)',
+  'वृषभ (Taurus)',
+  'मिथुन (Gemini)',
+  'कर्क (Cancer)',
+  'सिंह (Leo)',
+  'कन्या (Virgo)',
+  'तुला (Libra)',
+  'वृश्चिक (Scorpio)',
+  'धनु (Sagittarius)',
+  'मकर (Capricorn)',
+  'कुंभ (Aquarius)',
+  'मीन (Pisces)',
+];
+
+export const nakshatraOptions: readonly string[] = [
+  'अश्विनी',
+  'भरणी',
+  'कृत्तिका',
+  'रोहिणी',
+  'मृगशीर्ष',
+  'आर्द्रा',
+  'पुनर्वसु',
+  'पुष्य',
+  'आश्लेषा',
+  'मघा',
+  'पूर्वाफाल्गुनी',
+  'उत्तराफाल्गुनी',
+  'हस्त',
+  'चित्रा',
+  'स्वाती',
+  'विशाखा',
+  'अनुराधा',
+  'ज्येष्ठा',
+  'मूळ',
+  'पूर्वाषाढा',
+  'उत्तराषाढा',
+  'श्रवण',
+  'धनिष्ठा',
+  'शतभिषा',
+  'पूर्वाभाद्रपदा',
+  'उत्तराभाद्रपदा',
+  'रेवती',
+];
+
+export const bloodGroupOptions: readonly string[] = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
+export const complexionOptions: readonly string[] = ['Fair', 'Wheatish', 'Dusky', 'Dark'];
+
+export const heightOptions: readonly string[] = [
+  "4'6\"",
+  "4'7\"",
+  "4'8\"",
+  "4'9\"",
+  "4'10\"",
+  "4'11\"",
+  "5'0\"",
+  "5'1\"",
+  "5'2\"",
+  "5'3\"",
+  "5'4\"",
+  "5'5\"",
+  "5'6\"",
+  "5'7\"",
+  "5'8\"",
+  "5'9\"",
+  "5'10\"",
+  "5'11\"",
+  "6'0\"",
+  "6'1\"",
+  "6'2\"",
+  "6'3\"",
+  "6'4\"",
+  "6'5\"",
+];
+
+export const qualificationOptions: readonly string[] = [
+  '10th',
+  '12th',
+  'Diploma',
+  'B.A.',
+  'B.Com.',
+  'B.Sc.',
+  'B.E./B.Tech.',
+  'M.A.',
+  'M.Com.',
+  'M.Sc.',
+  'M.E./M.Tech.',
+  'MBA',
+  'CA',
+  'MBBS',
+  'MD',
+  'LLB',
+  'PhD',
+  'Other',
+];
+
+export const incomeOptions: readonly string[] = [
+  'Below ₹2 LPA',
+  '₹2-4 LPA',
+  '₹4-6 LPA',
+  '₹6-8 LPA',
+  '₹8-12 LPA',
+  '₹12-18 LPA',
+  '₹18-25 LPA',
+  'Above ₹25 LPA',
+  'Not Disclosed',
+];
+
+export const indianStates: readonly string[] = [
+  'Andhra Pradesh',
+  'Arunachal Pradesh',
+  'Assam',
+  'Bihar',
+  'Chhattisgarh',
+  'Goa',
+  'Gujarat',
+  'Haryana',
+  'Himachal Pradesh',
+  'Jharkhand',
+  'Karnataka',
+  'Kerala',
+  'Madhya Pradesh',
+  'Maharashtra',
+  'Manipur',
+  'Meghalaya',
+  'Mizoram',
+  'Nagaland',
+  'Odisha',
+  'Punjab',
+  'Rajasthan',
+  'Sikkim',
+  'Tamil Nadu',
+  'Telangana',
+  'Tripura',
+  'Uttar Pradesh',
+  'Uttarakhand',
+  'West Bengal',
+  'Delhi',
+  'Jammu & Kashmir',
+  'Ladakh',
+  'Puducherry',
+  'Andaman and Nicobar Islands',
+  'Chandigarh',
+  'Dadra and Nagar Haveli',
+  'Daman and Diu',
+  'Lakshadweep',
+];
+
+export const familyTypeOptions: readonly string[] = ['Joint Family', 'Nuclear Family'];
+
+export const occupationOptions: readonly string[] = [
+  'Private Job',
+  'Government Job',
+  'Business',
+  'Self-employed',
+  'Farmer',
+  'Other',
+];
+
+export const religionOptions: readonly string[] = ['Hindu', 'Muslim', 'Christian', 'Sikh', 'Buddhist', 'Jain', 'Other'];
+
+export const manglikOptions: readonly string[] = ['Manglik', 'Non-Manglik', 'Anshik Manglik'];

@@ -1,0 +1,189 @@
+import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
+import {
+  BiodataFormData,
+  BiodataContextType,
+  PersonalDetails,
+  FamilyDetails,
+  EducationDetails,
+  AddressDetails,
+  TemplateId,
+  Language,
+} from '../types/biodata.types';
+
+const LOCAL_STORAGE_KEY = 'vivah_biodata_draft';
+
+interface State {
+  formData: BiodataFormData;
+  currentStep: number;
+}
+
+type Action =
+  | { type: 'updatePersonal'; payload: PersonalDetails }
+  | { type: 'updateFamily'; payload: FamilyDetails }
+  | { type: 'updateEducation'; payload: EducationDetails }
+  | { type: 'updateAddress'; payload: AddressDetails }
+  | { type: 'updatePhoto'; payload: string | null }
+  | { type: 'updateTemplate'; payload: TemplateId }
+  | { type: 'updateLanguage'; payload: Language }
+  | { type: 'setStep'; payload: number }
+  | { type: 'reset' };
+
+const defaultFormData: BiodataFormData = {
+  personal: {
+    fullName: '',
+    dateOfBirth: '',
+    timeOfBirth: '',
+    placeOfBirth: '',
+    rashi: '',
+    nakshatra: '',
+    gotra: '',
+    religion: '',
+    caste: '',
+    subCaste: '',
+    height: '',
+    complexion: '',
+    bloodGroup: '',
+    manglik: '',
+  },
+  family: {
+    fatherName: '',
+    fatherOccupation: '',
+    motherName: '',
+    motherOccupation: '',
+    totalBrothers: 0,
+    marriedBrothers: 0,
+    totalSisters: 0,
+    marriedSisters: 0,
+    familyType: '',
+    nativePlace: '',
+  },
+  education: {
+    qualification: '',
+    university: '',
+    additionalCertifications: '',
+    occupation: '',
+    companyName: '',
+    jobTitle: '',
+    annualIncome: '',
+  },
+  address: {
+    fullAddress: '',
+    city: '',
+    district: '',
+    state: '',
+    pincode: '',
+    mobile: '',
+    whatsappSameAsMobile: false,
+    whatsapp: '',
+    email: '',
+  },
+  photo: null,
+  selectedTemplate: 1,
+  language: 'english',
+};
+
+const initialState: State = {
+  formData: defaultFormData,
+  currentStep: 1,
+};
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'updatePersonal':
+      return {
+        ...state,
+        formData: { ...state.formData, personal: action.payload },
+      };
+    case 'updateFamily':
+      return {
+        ...state,
+        formData: { ...state.formData, family: action.payload },
+      };
+    case 'updateEducation':
+      return {
+        ...state,
+        formData: { ...state.formData, education: action.payload },
+      };
+    case 'updateAddress':
+      return {
+        ...state,
+        formData: { ...state.formData, address: action.payload },
+      };
+    case 'updatePhoto':
+      return {
+        ...state,
+        formData: { ...state.formData, photo: action.payload },
+      };
+    case 'updateTemplate':
+      return {
+        ...state,
+        formData: { ...state.formData, selectedTemplate: action.payload },
+      };
+    case 'updateLanguage':
+      return {
+        ...state,
+        formData: { ...state.formData, language: action.payload },
+      };
+    case 'setStep':
+      return { ...state, currentStep: action.payload };
+    case 'reset':
+      return initialState;
+    default:
+      return state;
+  }
+};
+
+const loadFromStorage = (): State => {
+  try {
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (stored) {
+      return JSON.parse(stored) as State;
+    }
+  } catch (_e) {
+    // ignore
+  }
+  return initialState;
+};
+
+const saveToStorage = (state: State) => {
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+  } catch (_e) {
+    // ignore write errors
+  }
+};
+
+const BiodataContext = createContext<BiodataContextType | undefined>(undefined);
+
+export const BiodataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState, () => loadFromStorage());
+
+  // persist whenever state changes
+  useEffect(() => {
+    saveToStorage(state);
+  }, [state]);
+
+  const value: BiodataContextType = {
+    formData: state.formData,
+    updatePersonal: (data) => dispatch({ type: 'updatePersonal', payload: data }),
+    updateFamily: (data) => dispatch({ type: 'updateFamily', payload: data }),
+    updateEducation: (data) => dispatch({ type: 'updateEducation', payload: data }),
+    updateAddress: (data) => dispatch({ type: 'updateAddress', payload: data }),
+    updatePhoto: (photo) => dispatch({ type: 'updatePhoto', payload: photo }),
+    updateTemplate: (id) => dispatch({ type: 'updateTemplate', payload: id }),
+    updateLanguage: (lang) => dispatch({ type: 'updateLanguage', payload: lang }),
+    currentStep: state.currentStep,
+    setCurrentStep: (step) => dispatch({ type: 'setStep', payload: step }),
+    resetForm: () => dispatch({ type: 'reset' }),
+  };
+
+  return <BiodataContext.Provider value={value}>{children}</BiodataContext.Provider>;
+};
+
+export const useBiodata = () => {
+  const ctx = useContext(BiodataContext);
+  if (!ctx) {
+    throw new Error('useBiodata must be used within a BiodataProvider');
+  }
+  return ctx;
+};
