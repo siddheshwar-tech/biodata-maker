@@ -280,7 +280,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               manglik: 'मांगलिक',
             };
 
-            return (fieldOrder.personal || Object.keys(labelMap)).map((key) => {
+            return (fieldOrder?.personal || Object.keys(labelMap)).map((key) => {
               const val = (personal as any)[key];
               return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='fullName' || key==='qualification'} />;
             });
@@ -307,7 +307,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               nativePlace: 'मूळ गाव',
             };
 
-            return (fieldOrder.family || Object.keys(labelMap)).map((key) => {
+            return (fieldOrder?.family || Object.keys(labelMap)).map((key) => {
               let val: any = (family as any)[key];
               if (key === 'totalBrothers') val = brotherText;
               if (key === 'totalSisters') val = sisterText;
@@ -332,7 +332,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               jobTitle: 'पद',
               annualIncome: 'वार्षिक उत्पन्न',
             };
-            return (fieldOrder.education || Object.keys(labelMap)).map((key) => {
+            return (fieldOrder?.education || Object.keys(labelMap)).map((key) => {
               const val = (education as any)[key];
               return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='qualification' || key==='occupation'} />;
             });
@@ -357,7 +357,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               email: 'ईमेल',
             };
 
-            return (fieldOrder.address || Object.keys(labelMap)).map((key) => {
+            return (fieldOrder?.address || Object.keys(labelMap)).map((key) => {
               let val: any = (address as any)[key];
               if (key === 'mobile') val = val ? `+91 ${val}` : '';
               if (key === 'whatsapp') val = val ? `+91 ${val}` : '';

@@ -21,7 +21,9 @@ import {
 import Grid from '@mui/material/GridLegacy';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useBiodata } from '../context/BiodataContext';
-import { useTranslation } from '../utils/translations';
+import { useTranslation, TranslationKey } from '../utils/translations';
+import DeitySelector from '../components/DeitySelector';
+import ShlokaEditor from '../components/ShlokaEditor';
 import { personalFamilySchema, PersonalFamilyFormValues } from '../schemas/biodata.schema';
 import {
   rashiOptions,
@@ -32,6 +34,7 @@ import {
   religionOptions,
   manglikOptions,
   familyTypeOptions,
+  gotraOptions,
 } from '../utils/dropdownOptions';
 
 const Step1PersonalFamily: React.FC = () => {
@@ -144,6 +147,24 @@ const Step1PersonalFamily: React.FC = () => {
   return (
     <Paper sx={{ padding: 3 }}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
+         {/* SECTION — Deity Selection & Blessing */}
+        <Paper sx={{ padding: 2, mt: 2, mb: 3 }}>
+          <DeitySelector
+            selectedDeity={formData.selectedDeity}
+            onSelectDeity={(id) => updateDeity(id)}
+            language={formData.language}
+          />
+
+          <Divider sx={{ my: 2 }} />
+
+          <ShlokaEditor
+            shlokaText={formData.shlokaText}
+            onUpdateShloka={(text) => updateShlokaText(text)}
+            language={formData.language}
+          />
+        </Paper>
+
+
         <Typography variant="h6" sx={{ color: theme.palette.primary.main, mb: 1 }}>
           {t('personalDetails')}
         </Typography>
@@ -257,20 +278,25 @@ const Step1PersonalFamily: React.FC = () => {
           </Grid>
         </Grid>
 
+       
+
         {/* Row 4 — Gotra + Religion */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
-          <Grid xs={12} sm={6}>
+          <Grid item xs={12} sm={6}>
             <Controller
               name="gotra"
               control={control}
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  label={t('gotra')}
-                  error={!!errors.gotra}
-                  helperText={errors.gotra?.message}
-                />
+                <FormControl fullWidth>
+                  <InputLabel>{t('gotra')}</InputLabel>
+                  <Select {...field} label={t('gotra')}>
+                    {gotraOptions.map((opt) => (
+                      <MenuItem key={opt} value={opt}>
+                        {t(`gotra_${opt}` as TranslationKey)}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               )}
             />
           </Grid>

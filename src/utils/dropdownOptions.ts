@@ -163,3 +163,17 @@ export const occupationOptions: readonly string[] = [
 export const religionOptions: readonly string[] = ['Hindu', 'Muslim', 'Christian', 'Sikh', 'Buddhist', 'Jain', 'Other'];
 
 export const manglikOptions: readonly string[] = ['Manglik', 'Non-Manglik', 'Anshik Manglik'];
+
+// common gotras – stored as keys so that they can be localized via translation
+export const gotraOptions: readonly string[] = [
+  'atri',
+  'bhardwaj',
+  'kaushik',
+  'kashyap',
+  'vasistha',
+  'agastya',
+  'vats',
+  'bajaj',
+  'chandra',
+  'sharma',
+];

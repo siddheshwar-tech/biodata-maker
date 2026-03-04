@@ -30,8 +30,6 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { useBiodata } from '../context/BiodataContext';
 import { useTranslation } from '../utils/translations';
 import DownloadButton from '../components/DownloadButton';
-import DeitySelector from '../components/DeitySelector';
-import ShlokaEditor from '../components/ShlokaEditor';
 import { TemplateId } from '../types/biodata.types';
 import { BoxOwnProps } from '@mui/system';
 import { JSX } from 'react/jsx-runtime';
@@ -359,22 +357,7 @@ const Step4PhotoTemplate: React.FC = () => {
         )}
       </Paper>
 
-      {/* SECTION — Deity Selector and Shloka Editor */}
-      <Paper sx={{ padding: 3, mt: 3 }}>
-        <DeitySelector
-          selectedDeity={formData.selectedDeity}
-          onSelectDeity={updateDeity}
-          language={formData.language}
-        />
-
-        <Divider sx={{ my: 3 }} />
-
-        <ShlokaEditor
-          shlokaText={formData.shlokaText}
-          onUpdateShloka={updateShlokaText}
-          language={formData.language}
-        />
-      </Paper>
+      {/* Deity and blessing selection moved to Step 1 */}
 
       {/* SECTION B: template chooser */}
       <Paper sx={{ padding: 3, mt: 3 }}>

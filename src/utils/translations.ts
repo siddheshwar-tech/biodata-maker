@@ -50,6 +50,17 @@ export type TranslationKey =
   | 'whatsapp'
   | 'email'
   | 'sameAsMobile'
+  // gotra options (keys correspond to dropdownOptions.gotraOptions)
+  | 'gotra_atri'
+  | 'gotra_bhardwaj'
+  | 'gotra_kaushik'
+  | 'gotra_kashyap'
+  | 'gotra_vasistha'
+  | 'gotra_agastya'
+  | 'gotra_vats'
+  | 'gotra_bajaj'
+  | 'gotra_chandra'
+  | 'gotra_sharma'
   | 'uploadPhoto'
   | 'chooseTemplate'
   | 'downloadPDF'
@@ -178,6 +189,17 @@ export const translations: Record<Language, Translations> = {
     biodataReady: 'बायोडेटा तयार आहे! 🎉',
     clickButtonBelow: 'खाली दिलेल्या बटनावर क्लिक करा',
     pdfDownloadFolder: 'PDF आपोआप download folder मध्ये जाईल',
+    // gotra option labels
+    gotra_atri: 'अत्री',
+    gotra_bhardwaj: 'भर्तृद्वाज',
+    gotra_kaushik: 'कौशिक',
+    gotra_kashyap: 'कश्यप',
+    gotra_vasistha: 'वसिष्ठ',
+    gotra_agastya: 'अगस्त्य',
+    gotra_vats: 'वात्स',
+    gotra_bajaj: 'बाजाज',
+    gotra_chandra: 'चंद्र',
+    gotra_sharma: 'शर्मा',
   },
   hindi: {
     appName: 'विवाह बायोडेटा मेकर',
@@ -265,6 +287,17 @@ export const translations: Record<Language, Translations> = {
     biodataReady: 'बायोडेटा तैयार है! 🎉',
     clickButtonBelow: 'नीचे दिए गए बटन पर क्लिक करें',
     pdfDownloadFolder: 'पीडीएफ स्वचालित रूप से डाउनलोड फ़ोल्डर में जाएगी',
+    // gotra option labels
+    gotra_atri: 'अत्री',
+    gotra_bhardwaj: 'भरद्वाज',
+    gotra_kaushik: 'कौशिक',
+    gotra_kashyap: 'कश्यप',
+    gotra_vasistha: 'वासिष्ठ',
+    gotra_agastya: 'अगस्त्य',
+    gotra_vats: 'वात्स',
+    gotra_bajaj: 'बाजाज',
+    gotra_chandra: 'चंद्र',
+    gotra_sharma: 'शर्मा',
   
   },
   english: {
@@ -353,6 +386,17 @@ export const translations: Record<Language, Translations> = {
     biodataReady: 'Biodata is Ready! 🎉',
     clickButtonBelow: 'Click the button below',
     pdfDownloadFolder: 'PDF will automatically go to download folder',
+    // gotra option labels
+    gotra_atri: 'Atri',
+    gotra_bhardwaj: 'Bhardwaj',
+    gotra_kaushik: 'Kaushik',
+    gotra_kashyap: 'Kashyap',
+    gotra_vasistha: 'Vasistha',
+    gotra_agastya: 'Agastya',
+    gotra_vats: 'Vats',
+    gotra_bajaj: 'Bajaj',
+    gotra_chandra: 'Chandra',
+    gotra_sharma: 'Sharma',
   },
 };
 
