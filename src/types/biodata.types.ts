@@ -68,6 +68,12 @@ export interface BiodataFormData {
 // Context type used by BiodataContext
 export interface BiodataContextType {
   formData: BiodataFormData;
+  fieldOrder: {
+    personal: string[];
+    family: string[];
+    education: string[];
+    address: string[];
+  };
   updatePersonal: (data: PersonalDetails) => void;
   updateFamily: (data: FamilyDetails) => void;
   updateEducation: (data: EducationDetails) => void;
@@ -75,6 +81,11 @@ export interface BiodataContextType {
   updatePhoto: (photo: string | null) => void;
   updateTemplate: (id: TemplateId) => void;
   updateLanguage: (lang: Language) => void;
+  updateFieldOrder: (
+    section: 'personal' | 'family' | 'education' | 'address',
+    newOrder: string[]
+  ) => void;
+  resetFieldOrder: () => void;
   currentStep: number;
   setCurrentStep: (step: number) => void;
   resetForm: () => void;

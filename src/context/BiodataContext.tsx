@@ -12,9 +12,61 @@ import {
 
 const LOCAL_STORAGE_KEY = 'vivah_biodata_draft';
 
+const defaultFieldOrder = {
+  personal: [
+    'fullName',
+    'dateOfBirth',
+    'timeOfBirth',
+    'placeOfBirth',
+    'rashi',
+    'nakshatra',
+    'gotra',
+    'religion',
+    'caste',
+    'subCaste',
+    'height',
+    'complexion',
+    'bloodGroup',
+    'manglik',
+  ],
+  family: [
+    'fatherName',
+    'fatherOccupation',
+    'motherName',
+    'motherOccupation',
+    'totalBrothers',
+    'marriedBrothers',
+    'totalSisters',
+    'marriedSisters',
+    'familyType',
+    'nativePlace',
+  ],
+  education: [
+    'qualification',
+    'university',
+    'additionalCertifications',
+    'occupation',
+    'companyName',
+    'jobTitle',
+    'annualIncome',
+  ],
+  address: [
+    'fullAddress',
+    'city',
+    'district',
+    'state',
+    'pincode',
+    'mobile',
+    'whatsappSameAsMobile',
+    'whatsapp',
+    'email',
+  ],
+};
+
 interface State {
   formData: BiodataFormData;
   currentStep: number;
+  fieldOrder: typeof defaultFieldOrder;
 }
 
 type Action =
@@ -25,6 +77,8 @@ type Action =
   | { type: 'updatePhoto'; payload: string | null }
   | { type: 'updateTemplate'; payload: TemplateId }
   | { type: 'updateLanguage'; payload: Language }
+  | { type: 'updateFieldOrder'; payload: { section: keyof typeof defaultFieldOrder; order: string[] } }
+  | { type: 'resetFieldOrder' }
   | { type: 'setStep'; payload: number }
   | { type: 'reset' };
 
@@ -85,6 +139,7 @@ const defaultFormData: BiodataFormData = {
 const initialState: State = {
   formData: defaultFormData,
   currentStep: 1,
+  fieldOrder: defaultFieldOrder,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -127,7 +182,20 @@ const reducer = (state: State, action: Action): State => {
     case 'setStep':
       return { ...state, currentStep: action.payload };
     case 'reset':
-      return initialState;
+      return { ...initialState, fieldOrder: defaultFieldOrder };
+    case 'updateFieldOrder':
+      return {
+        ...state,
+        fieldOrder: {
+          ...state.fieldOrder,
+          [action.payload.section]: action.payload.order,
+        },
+      };
+    case 'resetFieldOrder':
+      return {
+        ...state,
+        fieldOrder: defaultFieldOrder,
+      };
     default:
       return state;
   }
@@ -165,6 +233,7 @@ export const BiodataProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const value: BiodataContextType = {
     formData: state.formData,
+    fieldOrder: state.fieldOrder,
     updatePersonal: (data) => dispatch({ type: 'updatePersonal', payload: data }),
     updateFamily: (data) => dispatch({ type: 'updateFamily', payload: data }),
     updateEducation: (data) => dispatch({ type: 'updateEducation', payload: data }),
@@ -172,6 +241,9 @@ export const BiodataProvider: React.FC<{ children: ReactNode }> = ({ children })
     updatePhoto: (photo) => dispatch({ type: 'updatePhoto', payload: photo }),
     updateTemplate: (id) => dispatch({ type: 'updateTemplate', payload: id }),
     updateLanguage: (lang) => dispatch({ type: 'updateLanguage', payload: lang }),
+    updateFieldOrder: (section, newOrder) =>
+      dispatch({ type: 'updateFieldOrder', payload: { section, order: newOrder } }),
+    resetFieldOrder: () => dispatch({ type: 'resetFieldOrder' }),
     currentStep: state.currentStep,
     setCurrentStep: (step) => dispatch({ type: 'setStep', payload: step }),
     resetForm: () => dispatch({ type: 'reset' }),

@@ -12,6 +12,7 @@ import {
   Chip,
   Alert,
   useTheme,
+  Theme,
 } from '@mui/material';
 import Grid from '@mui/material/GridLegacy';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -19,14 +20,23 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import IconButton from '@mui/material/IconButton';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { useBiodata } from '../context/BiodataContext';
 import { useTranslation } from '../utils/translations';
 import DownloadButton from '../components/DownloadButton';
 import { TemplateId } from '../types/biodata.types';
+import { BoxOwnProps } from '@mui/system';
+import { JSX } from 'react/jsx-runtime';
 
 const Step4PhotoTemplate: React.FC = () => {
   const theme = useTheme();
-  const { formData, updatePhoto, updateTemplate, setCurrentStep } = useBiodata();
+  const { formData, updatePhoto, updateTemplate, setCurrentStep, fieldOrder, updateFieldOrder, resetFieldOrder } = useBiodata();
   const t = useTranslation(formData.language);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -296,6 +306,93 @@ const Step4PhotoTemplate: React.FC = () => {
           </Grid>
         </Grid>
       </Paper>
+
+      {/* SECTION: Customize Layout (drag & drop) */}
+      <Accordion sx={{ mt: 2 }}>
+        <AccordionSummary>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <Typography variant="h6">Customize Layout</Typography>
+            <Box>
+              <IconButton size="small" onClick={() => resetFieldOrder()} title="Reset order">
+                <RestartAltIcon />
+              </IconButton>
+            </Box>
+          </Box>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            Drag fields to change their order in the final PDF. Sections have independent orders.
+          </Typography>
+          <DragDropContext
+            onDragEnd={(result: { source: any; destination: any; }) => {
+              const { source, destination } = result;
+              if (!destination) return;
+              // only allow reordering within same droppable (section)
+              if (source.droppableId !== destination.droppableId) return;
+              const section = source.droppableId as 'personal' | 'family' | 'education' | 'address';
+              const current = (fieldOrder && fieldOrder[section]) || [];
+              const newOrder = Array.from(current);
+              const [moved] = newOrder.splice(source.index, 1);
+              newOrder.splice(destination.index, 0, moved);
+              updateFieldOrder(section, newOrder);
+            }}
+          >
+            <Grid container spacing={2}>
+              {(['personal','family','education','address'] as const).map((section) => (
+                <Grid item xs={12} md={6} key={section}>
+                  <Paper sx={{ p: 1 }}>
+                    <Typography sx={{ fontWeight: 700, mb: 1, textTransform: 'capitalize' }}>{section}</Typography>
+                    <Droppable droppableId={section}>
+                      {(provided, snapshot: { isDraggingOver: any; }) => (
+                        <Box
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          sx={{
+                            minHeight: 48,
+                            borderRadius: 1,
+                            p: 1,
+                            background: snapshot.isDraggingOver ? '#FFF9E6' : 'transparent',
+                            border: snapshot.isDraggingOver ? '1px dashed #D4AF37' : '1px solid transparent',
+                          }}
+                        >
+                          {(fieldOrder && fieldOrder[section]).map((fieldKey, idx) => (
+                            <Draggable key={fieldKey} draggableId={`${section}:${fieldKey}`} index={idx}>
+                              {(prov: any, snap: any) => (
+                                <Box
+                                  ref={prov.innerRef}
+                                  {...prov.draggableProps}
+                                  {...prov.dragHandleProps}
+                                  sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1,
+                                    p: 1,
+                                    mb: 1,
+                                    borderRadius: 1,
+                                    background: snap.isDragging ? '#FFF9E6' : '#fff',
+                                    boxShadow: snap.isDragging ? 3 : 'none',
+                                    border: '1px solid rgba(0,0,0,0.04)',
+                                  }}
+                                >
+                                  <Box sx={{ color: '#8B0000', display: 'flex', alignItems: 'center' }} {...prov.dragHandleProps}>
+                                    <DragIndicatorIcon />
+                                  </Box>
+                                  <Typography sx={{ flex: 1 }}>{fieldKey}</Typography>
+                                </Box>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </Box>
+                      )}
+                    </Droppable>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </DragDropContext>
+        </AccordionDetails>
+      </Accordion>
 
       {/* SECTION C: download */}
       <Paper sx={{ padding: 3, mt: 3, background: theme.palette.background.default }}>

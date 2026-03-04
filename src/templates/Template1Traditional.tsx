@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { BiodataFormData } from '../types/biodata.types';
+import { useBiodata } from '../context/BiodataContext';
 
 interface Props {
   formData: BiodataFormData;
@@ -145,6 +146,7 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight }) => {
 const Template1Traditional: React.FC<Props> = ({ formData }) => {
   // const { personal, family, education, address, photo, shlokaText, selectedDeity } = formData;
   const { personal, family, education, address, photo } = formData;
+  const { fieldOrder } = useBiodata();
 
   const brotherText = family.totalBrothers > 0
     ? `${family.totalBrothers} (विवाहित: ${family.marriedBrothers})`
@@ -265,20 +267,31 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
         {/* PERSONAL DETAILS */}
         <SectionHeading title="वैयक्तिक माहिती | Personal Details" />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
-          <FieldRow label="पूर्ण नाव"    value={personal.fullName}    highlight />
-          <FieldRow label="जन्म तारीख"   value={personal.dateOfBirth} />
-          <FieldRow label="जन्म वेळ"     value={personal.timeOfBirth} />
-          <FieldRow label="जन्म स्थान"   value={personal.placeOfBirth} />
-          <FieldRow label="राशी"         value={personal.rashi} />
-          <FieldRow label="नक्षत्र"       value={personal.nakshatra} />
-          <FieldRow label="गोत्र"         value={personal.gotra} />
-          <FieldRow label="धर्म"         value={personal.religion} />
-          <FieldRow label="जात"          value={personal.caste} />
-          <FieldRow label="पोटजात"       value={personal.subCaste} />
-          <FieldRow label="उंची"         value={personal.height} />
-          <FieldRow label="वर्ण"         value={personal.complexion} />
-          <FieldRow label="रक्तगट"       value={personal.bloodGroup} />
-          <FieldRow label="मांगलिक"      value={personal.manglik} />
+          {/** Use fieldOrder from context to determine rendering sequence **/}
+          {(() => {
+            
+            const labelMap: Record<string, string> = {
+              fullName: 'पूर्ण नाव',
+              dateOfBirth: 'जन्म तारीख',
+              timeOfBirth: 'जन्म वेळ',
+              placeOfBirth: 'जन्म स्थान',
+              rashi: 'राशी',
+              nakshatra: 'नक्षत्र',
+              gotra: 'गोत्र',
+              religion: 'धर्म',
+              caste: 'जात',
+              subCaste: 'पोटजात',
+              height: 'उंची',
+              complexion: 'वर्ण',
+              bloodGroup: 'रक्तगट',
+              manglik: 'मांगलिक',
+            };
+
+            return (fieldOrder.personal || Object.keys(labelMap)).map((key) => {
+              const val = (personal as any)[key];
+              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='fullName' || key==='qualification'} />;
+            });
+          })()}
         </Box>
 
         <ThinDivider />
@@ -286,14 +299,28 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
         {/* FAMILY DETAILS */}
         <SectionHeading title="कौटुंबिक माहिती | Family Details" />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
-          <FieldRow label="वडिलांचे नाव"     value={family.fatherName}       highlight />
-          <FieldRow label="वडिलांचा व्यवसाय" value={family.fatherOccupation} />
-          <FieldRow label="आईचे नाव"         value={family.motherName}       highlight />
-          <FieldRow label="आईचा व्यवसाय"     value={family.motherOccupation} />
-          <FieldRow label="भाऊ"              value={brotherText} />
-          <FieldRow label="बहीण"             value={sisterText} />
-          <FieldRow label="कुटुंब प्रकार"     value={family.familyType} />
-          <FieldRow label="मूळ गाव"          value={family.nativePlace} />
+          {(() => {
+            
+            const labelMap: Record<string, string> = {
+              fatherName: 'वडिलांचे नाव',
+              fatherOccupation: 'वडिलांचा व्यवसाय',
+              motherName: 'आईचे नाव',
+              motherOccupation: 'आईचा व्यवसाय',
+              totalBrothers: 'भाऊ',
+              marriedBrothers: 'विवाहित भाऊ',
+              totalSisters: 'बहीण',
+              marriedSisters: 'विवाहित बहीण',
+              familyType: 'कुटुंब प्रकार',
+              nativePlace: 'मूळ गाव',
+            };
+
+            return (fieldOrder.family || Object.keys(labelMap)).map((key) => {
+              let val: any = (family as any)[key];
+              if (key === 'totalBrothers') val = brotherText;
+              if (key === 'totalSisters') val = sisterText;
+              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='fatherName' || key==='motherName'} />;
+            });
+          })()}
         </Box>
 
         <ThinDivider />
@@ -301,13 +328,23 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
         {/* EDUCATION & CAREER */}
         <SectionHeading title="शिक्षण व करिअर | Education & Career" />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
-          <FieldRow label="शिक्षण"          value={education.qualification}            highlight />
-          <FieldRow label="विद्यापीठ"        value={education.university} />
-          <FieldRow label="इतर पदवी"        value={education.additionalCertifications} />
-          <FieldRow label="व्यवसाय"         value={education.occupation}               highlight />
-          <FieldRow label="कंपनी / संस्था"   value={education.companyName} />
-          <FieldRow label="पद"              value={education.jobTitle} />
-          <FieldRow label="वार्षिक उत्पन्न"  value={education.annualIncome} />
+          {(() => {
+            
+            const labelMap: Record<string, string> = {
+              qualification: 'शिक्षण',
+              university: 'विद्यापीठ',
+              additionalCertifications: 'इतर पदवी',
+              occupation: 'व्यवसाय',
+              companyName: 'कंपनी / संस्था',
+              jobTitle: 'पद',
+              annualIncome: 'वार्षिक उत्पन्न',
+            };
+
+            return (fieldOrder.education || Object.keys(labelMap)).map((key) => {
+              const val = (education as any)[key];
+              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='qualification' || key==='occupation'} />;
+            });
+          })()}
         </Box>
 
         <ThinDivider />
@@ -315,14 +352,27 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
         {/* ADDRESS & CONTACT */}
         <SectionHeading title="पत्ता व संपर्क | Address & Contact" />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
-          <FieldRow label="पत्ता"     value={address.fullAddress} />
-          <FieldRow label="शहर"      value={address.city} />
-          <FieldRow label="जिल्हा"   value={address.district} />
-          <FieldRow label="राज्य"    value={address.state} />
-          <FieldRow label="पिनकोड"   value={address.pincode} />
-          <FieldRow label="मोबाईल"   value={address.mobile   ? `+91 ${address.mobile}`   : ''} />
-          <FieldRow label="WhatsApp" value={address.whatsapp ? `+91 ${address.whatsapp}` : ''} />
-          <FieldRow label="ईमेल"     value={address.email} />
+          {(() => {
+            
+            const labelMap: Record<string, string> = {
+              fullAddress: 'पत्ता',
+              city: 'शहर',
+              district: 'जिल्हा',
+              state: 'राज्य',
+              pincode: 'पिनकोड',
+              mobile: 'मोबाईल',
+              whatsappSameAsMobile: 'WhatsApp same as mobile',
+              whatsapp: 'WhatsApp',
+              email: 'ईमेल',
+            };
+
+            return (fieldOrder.address || Object.keys(labelMap)).map((key) => {
+              let val: any = (address as any)[key];
+              if (key === 'mobile') val = val ? `+91 ${val}` : '';
+              if (key === 'whatsapp') val = val ? `+91 ${val}` : '';
+              return <FieldRow key={key} label={labelMap[key] || key} value={val} />;
+            });
+          })()}
         </Box>
 
         {/* FOOTER */}
