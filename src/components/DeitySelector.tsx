@@ -1,8 +1,15 @@
-import React from 'react';
-import { Box, Card, Typography, useTheme, useMediaQuery } from '@mui/material';
-import Grid from '@mui/material/GridLegacy';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { deityOptions, getDeityLabel } from '../utils/deityOptions';
+import React, { useState } from 'react';
+import {
+  Box,
+  Card,
+  Typography,
+  useTheme,
+  useMediaQuery,
+  Button,
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeitySelectorModal from './DeitySelectorModal';
+import { deityOptions } from '../utils/deityOptions';
 import { Language } from '../types/biodata.types';
 
 interface DeitySelectorProps {
@@ -18,113 +25,86 @@ const DeitySelector: React.FC<DeitySelectorProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const selectedDeityData = deityOptions.find((d) => d.id === selectedDeity);
 
   return (
-    <Box sx={{ mb: 4 }}>
-      <Typography
-        variant="h6"
-        sx={{
-          color: theme.palette.primary.main,
-          marginBottom: 2,
-          fontWeight: 600,
-        }}
-      >
-        देवतेची प्रतिमा निवडा | Choose Deity Symbol
-      </Typography>
+    <>
+      <Box sx={{ mb: 4 }}>
+        <Typography
+          variant="h6"
+          sx={{
+            color: theme.palette.primary.main,
+            marginBottom: 2,
+            fontWeight: 600,
+          }}
+        >
+          देवतेची प्रतिमा
+        </Typography>
 
-      <Grid container spacing={2}>
-        {deityOptions.map((deity) => {
-          const isSelected = selectedDeity === deity.id;
-          return (
-            <Grid
-              item
-              xs={6}
-              sm={3}
-              key={deity.id}
-              sx={{
-                display: 'flex',
-              }}
-            >
-              <Card
-                onClick={() => onSelectDeity(deity.id)}
-                sx={{
-                  width: '100%',
-                  padding: 2,
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  border: isSelected ? `3px solid ${theme.palette.primary.main}` : '2px solid #e0e0e0',
-                  transition: 'all 0.3s ease',
-                  position: 'relative',
-                  '&:hover': {
-                    border: `3px solid ${theme.palette.secondary.main}`,
-                    transform: 'scale(1.05)',
-                    boxShadow: `0 4px 12px rgba(212, 175, 55, 0.3)`,
-                  },
-                  backgroundColor: isSelected ? 'rgba(139, 0, 0, 0.05)' : 'transparent',
+        <Card
+          sx={{
+            padding: 3,
+            textAlign: 'center',
+            backgroundColor: 'rgba(139, 0, 0, 0.02)',
+            border: `2px solid ${theme.palette.primary.main}`,
+            maxWidth: '300px',
+          }}
+        >
+          <Box
+            sx={{
+              height: '100px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mb: 2,
+              overflow: 'hidden',
+            }}
+          >
+            {selectedDeityData?.imagePath &&
+            selectedDeityData.id !== 'none' ? (
+              <img
+                src={selectedDeityData.imagePath}
+                alt={selectedDeity}
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                  objectFit: 'contain',
                 }}
-              >
-                <Box
-                  sx={{
-                    fontSize: '48px',
-                    mb: 1,
-                    height: '64px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {deity.svgPath && deity.id !== 'none' ? (
-                    <img
-                      src={deity.svgPath}
-                      alt={getDeityLabel(deity.id, language)}
-                      style={{
-                        width: '48px',
-                        height: '48px',
-                        objectFit: 'contain',
-                      }}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                        const parent = (e.target as HTMLImageElement).parentElement;
-                        if (parent) {
-                          parent.textContent = deity.symbol;
-                        }
-                      }}
-                    />
-                  ) : (
-                    <span>{deity.symbol}</span>
-                  )}
-                </Box>
+              />
+            ) : (
+              <span style={{ fontSize: '64px' }}>
+                {selectedDeityData?.id}
+              </span>
+            )}
+          </Box>
 
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontWeight: 500,
-                    display: 'block',
-                    color: theme.palette.text.primary,
-                    wordBreak: 'break-word',
-                  }}
-                >
-                  {getDeityLabel(deity.id, language)}
-                </Typography>
+          <Button
+            variant="contained"
+            startIcon={<EditIcon />}
+            onClick={() => setModalOpen(true)}
+            sx={{
+              backgroundColor: theme.palette.primary.main,
+              color: theme.palette.primary.contrastText,
+              '&:hover': {
+                backgroundColor: theme.palette.primary.dark,
+              },
+            }}
+          >
+            Change Deity
+          </Button>
+        </Card>
+      </Box>
 
-                {isSelected && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: 8,
-                      right: 8,
-                      color: theme.palette.secondary.main,
-                    }}
-                  >
-                    <CheckCircleIcon sx={{ fontSize: 24 }} />
-                  </Box>
-                )}
-              </Card>
-            </Grid>
-          );
-        })}
-      </Grid>
-    </Box>
+      <DeitySelectorModal
+        open={modalOpen}
+        selectedDeity={selectedDeity}
+        onSelectDeity={onSelectDeity}
+        onClose={() => setModalOpen(false)}
+        language={language}
+      />
+    </>
   );
 };
 

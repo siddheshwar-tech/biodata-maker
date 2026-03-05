@@ -1,92 +1,83 @@
 export interface DeityOption {
   id: string;
-  labelMarathi: string;
-  labelHindi: string;
-  labelEnglish: string;
-  symbol: string;
-  svgPath?: string;
+  imagePath?: string;
 }
 
 export const deityOptions: DeityOption[] = [
   {
-    id: 'ganesh',
-    labelMarathi: 'श्री गणेश',
-    labelHindi: 'श्री गणेश',
-    labelEnglish: 'Shree Ganesh',
-    symbol: '🕉️',
-    svgPath: '/deities/ganesh.svg',
+    id: 'ganesh_1',
+    imagePath: '/deities/ganesh_1.png',
+  },
+  {
+    id: 'ganesh_2',
+   
+    imagePath: '/deities/ganesh_2.png',
+  },
+  {
+    id: 'ganesh_3',
+    
+    imagePath: '/deities/ganesh_3.png',
+  },
+  {
+    id: 'ganesh_4',
+    
+    imagePath: '/deities/ganesh_4.png',
   },
   {
     id: 'laxmi',
-    labelMarathi: 'श्री लक्ष्मी',
-    labelHindi: 'श्री लक्ष्मी',
-    labelEnglish: 'Shree Lakshmi',
-    symbol: '🪔',
-    svgPath: '/deities/laxmi.svg',
-  },
-  {
-    id: 'saraswati',
-    labelMarathi: 'श्री सरस्वती',
-    labelHindi: 'श्री सरस्वती',
-    labelEnglish: 'Shree Saraswati',
-    symbol: '🎵',
-    svgPath: '/deities/saraswati.svg',
-  },
-  {
-    id: 'balaji',
-    labelMarathi: 'श्री बालाजी',
-    labelHindi: 'श्री बालाजी',
-    labelEnglish: 'Shree Balaji',
-    symbol: '🙏',
-    svgPath: '/deities/balaji.svg',
-  },
-  {
-    id: 'shiva',
-    labelMarathi: 'श्री शंकर',
-    labelHindi: 'श्री शंकर',
-    labelEnglish: 'Shree Shiva',
-    symbol: '🔱',
-    svgPath: '/deities/shiva.svg',
+   
+    imagePath: '/deities/laxmi.png',
   },
   {
     id: 'krishna',
-    labelMarathi: 'श्री कृष्ण',
-    labelHindi: 'श्री कृष्ण',
-    labelEnglish: 'Shree Krishna',
-    symbol: '🦚',
-    svgPath: '/deities/krishna.svg',
+    
+    imagePath: '/deities/krishna.png',
   },
   {
-    id: 'rama',
-    labelMarathi: 'श्री राम',
-    labelHindi: 'श्री राम',
-    labelEnglish: 'Shree Ram',
-    symbol: '🏹',
-    svgPath: '/deities/rama.svg',
+    id: 'shiva',
+    imagePath: '/deities/shiva.png',
   },
   {
-    id: 'none',
-    labelMarathi: 'देवता नको',
-    labelHindi: 'देवता नहीं',
-    labelEnglish: 'None',
-    symbol: '✕',
+    id: 'vitthal',
+    imagePath: '/deities/vitthal.png',
+  },
+  {
+    id: 'baba',
+    imagePath: '/deities/baba.png',
+  },
+  {
+    id: 'swastik',
+    imagePath: '/deities/swastik.png',
+  },
+  {
+    id: 'namo',
+    imagePath: '/deities/namo.png',
+  },
+  {
+    id: 'ari',
+    imagePath: '/deities/ari.png',
+  },
+  {
+    id: 'ari1',
+    imagePath: '/deities/ari1.png',
+  },
+  {
+    id: 'raje',
+    imagePath: '/deities/raje.png',
+  },
+  {
+    id: 'swami',
+    imagePath: '/deities/swami.png',
+  },
+  {
+    id: 'god_11',
+    imagePath: '/deities/god_11.png',
+  },
+  {
+    id: 'god_12',
+    imagePath: '/deities/god_12.png',
+  },
+  {
+    id: 'none'
   },
 ];
-
-export function getDeityLabel(
-  deityId: string,
-  language: 'marathi' | 'hindi' | 'english'
-): string {
-  const deity = deityOptions.find((d) => d.id === deityId);
-  if (!deity) return '';
-  switch (language) {
-    case 'marathi':
-      return deity.labelMarathi;
-    case 'hindi':
-      return deity.labelHindi;
-    case 'english':
-      return deity.labelEnglish;
-    default:
-      return deity.labelEnglish;
-  }
-}

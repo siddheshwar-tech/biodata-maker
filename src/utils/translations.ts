@@ -98,7 +98,8 @@ export type TranslationKey =
   | 'pdfDownloadFolder'
   | 'chooseDeitySymbol'
   | 'chooseBlessingText'
-  | 'customBlessing';
+  | 'customBlessing'
+  | 'biodataTitle';
 
 type Translations = Record<TranslationKey, string>;
 
@@ -189,6 +190,7 @@ export const translations: Record<Language, Translations> = {
     biodataReady: 'बायोडेटा तयार आहे! 🎉',
     clickButtonBelow: 'खाली दिलेल्या बटनावर क्लिक करा',
     pdfDownloadFolder: 'PDF आपोआप download folder मध्ये जाईल',
+    biodataTitle: 'बायोडेटा',
     // gotra option labels
     gotra_atri: 'अत्री',
     gotra_bhardwaj: 'भर्तृद्वाज',
@@ -287,6 +289,7 @@ export const translations: Record<Language, Translations> = {
     biodataReady: 'बायोडेटा तैयार है! 🎉',
     clickButtonBelow: 'नीचे दिए गए बटन पर क्लिक करें',
     pdfDownloadFolder: 'पीडीएफ स्वचालित रूप से डाउनलोड फ़ोल्डर में जाएगी',
+    biodataTitle: 'बायोडेटा',
     // gotra option labels
     gotra_atri: 'अत्री',
     gotra_bhardwaj: 'भरद्वाज',
@@ -386,6 +389,7 @@ export const translations: Record<Language, Translations> = {
     biodataReady: 'Biodata is Ready! 🎉',
     clickButtonBelow: 'Click the button below',
     pdfDownloadFolder: 'PDF will automatically go to download folder',
+    biodataTitle: 'Biodata',
     // gotra option labels
     gotra_atri: 'Atri',
     gotra_bhardwaj: 'Bhardwaj',

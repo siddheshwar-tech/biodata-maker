@@ -782,22 +782,22 @@ Step 4 (Photo & Template step) — a dedicated card section above the
 template picker, labelled "देवतेची प्रतिमा निवडा | Choose Deity Symbol".
 
 **Available deity options (8 total):**
-Stored as an array of objects with id, label, and SVG/emoji representation:
+Stored as an array of objects with id, label, and image/emoji representation:
 ```typescript
 export interface DeityOption {
-  id: string;           // unique key e.g. 'ganesh'
+  id: string;           // unique key e.g. 'ganesh_2'
   labelMarathi: string; // e.g. 'श्री गणेश'
   labelHindi: string;   // e.g. 'श्री गणेश'
   labelEnglish: string; // e.g. 'Shree Ganesh'
   symbol: string;       // Unicode symbol or emoji used as fallback
-  svgPath?: string;     // optional path to SVG file in /public/deities/
+  imagePath?: string;   // optional path to image file in /public/deities/
 }
 
 export const deityOptions: DeityOption[] = [
-  { id: 'ganesh',      labelMarathi: 'श्री गणेश',      symbol: '🕉️' },
+  { id: 'ganesh_2',    labelMarathi: 'श्री गणेश',      symbol: '🕉️' },
   { id: 'laxmi',       labelMarathi: 'श्री लक्ष्मी',    symbol: '🪔' },
-  { id: 'saraswati',   labelMarathi: 'श्री सरस्वती',    symbol: '🎵' },
-  { id: 'balaji',      labelMarathi: 'श्री बालाजी',     symbol: '🙏' },
+  { id: 'krishna',     labelMarathi: 'श्री कृष्ण',     symbol: '🦚' },
+  { id: 'shiva',       labelMarathi: 'श्री शंकर',      symbol: '🔱' },
   { id: 'shiva',       labelMarathi: 'श्री शंकर',       symbol: '🔱' },
   { id: 'krishna',     labelMarathi: 'श्री कृष्ण',      symbol: '🦚' },
   { id: 'rama',        labelMarathi: 'श्री राम',         symbol: '🏹' },

@@ -2,10 +2,101 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { BiodataFormData } from '../types/biodata.types';
 import { useBiodata } from '../context/BiodataContext';
+import { deityOptions } from '../utils/deityOptions';
+import { useTranslation } from '../utils/translations';
 
 interface Props {
   formData: BiodataFormData;
 }
+
+// ─── Dynamic Spacing Calculator ─────────────────────────────────
+/**
+ * Calculates dynamic spacing to fit all biodata content on a single A4 page.
+ * 
+ * Algorithm:
+ * 1. Count visible fields across all sections
+ * 2. Calculate available space (A4 height minus fixed elements)
+ * 3. Estimate required space with base values
+ * 4. Calculate compression factor to fit everything
+ * 5. Scale spacing proportionally while maintaining minimum readable sizes
+ */
+const calculateDynamicSpacing = (formData: BiodataFormData) => {
+  const { personal, family, education, address, photo, fieldOrder } = formData;
+
+  // Count visible fields in each section
+  const countVisibleFields = (section: any, keys: string[]) => {
+    return keys.filter(key => {
+      const val = section[key];
+      return val !== undefined && val !== null && val !== '' && val !== 0;
+    }).length;
+  };
+
+  const personalKeys = fieldOrder?.personal || [
+    'fullName', 'dateOfBirth', 'timeOfBirth', 'placeOfBirth', 'rashi', 'nakshatra',
+    'gotra', 'religion', 'caste', 'subCaste', 'height', 'complexion', 'bloodGroup', 'manglik'
+  ];
+  const familyKeys = fieldOrder?.family || [
+    'fatherName', 'fatherOccupation', 'motherName', 'motherOccupation',
+    'totalBrothers', 'marriedBrothers', 'totalSisters', 'marriedSisters', 'familyType', 'nativePlace'
+  ];
+  const educationKeys = fieldOrder?.education || [
+    'qualification', 'university', 'additionalCertifications', 'occupation',
+    'companyName', 'jobTitle', 'annualIncome'
+  ];
+  const addressKeys = fieldOrder?.address || [
+    'fullAddress', 'city', 'district', 'state', 'pincode', 'mobile', 'whatsapp', 'email'
+  ];
+
+  const personalCount = countVisibleFields(personal, personalKeys);
+  const familyCount = countVisibleFields(family, familyKeys);
+  const educationCount = countVisibleFields(education, educationKeys);
+  const addressCount = countVisibleFields(address, addressKeys);
+
+  const totalFields = personalCount + familyCount + educationCount + addressCount;
+  const totalSections = 4; // Always 4 sections
+
+  // A4 page height at 96dpi: 1123px
+  // Fixed space: header (200px including deity image), photo (150px if present), borders/padding (100px), footer (50px)
+  const fixedSpace = 200 + (photo ? 150 : 0) + 100 + 50;
+  const availableSpace = 1123 - fixedSpace;
+
+  // Base spacing values (when content is minimal)
+  const baseFieldHeight = 24; // px per field
+  const baseSectionSpacing = 32; // px between sections
+  const baseDividerHeight = 16; // px for dividers
+
+  // Calculate required space with base values
+  const requiredSpace = (totalFields * baseFieldHeight) + (totalSections * baseSectionSpacing) + ((totalSections - 1) * baseDividerHeight);
+
+  // Calculate compression factor (how much we need to squeeze)
+  const compressionFactor = Math.min(1, availableSpace / requiredSpace);
+
+  // Dynamic spacing values with minimums for readability
+  const fieldPadding = Math.max(2, 4 * compressionFactor); // Min 2px, max 4px
+  const sectionMargin = Math.max(8, 24 * compressionFactor); // Min 8px, max 24px
+  const dividerMargin = Math.max(4, 8 * compressionFactor); // Min 4px, max 8px
+  const fontSize = Math.max(10, 12 * compressionFactor); // Min 10px, max 12px
+  const highlightFontSize = Math.max(11, 13 * compressionFactor); // Min 11px, max 13px
+
+  // Debug logging (remove in production)
+  // console.log('Dynamic Spacing Debug:', {
+  //   totalFields,
+  //   availableSpace,
+  //   requiredSpace,
+  //   compressionFactor,
+  //   spacing: { fieldPadding, sectionMargin, dividerMargin, fontSize, highlightFontSize }
+  // });
+
+  return {
+    fieldPadding,
+    sectionMargin,
+    dividerMargin,
+    fontSize,
+    highlightFontSize,
+    totalFields,
+    compressionFactor
+  };
+};
 
 // ─── SVG Ornaments ────────────────────────────────────────────
 
@@ -72,8 +163,14 @@ const CornerMandala: React.FC<{ rotate?: number }> = ({ rotate = 0 }) => (
   </svg>
 );
 
-const ThinDivider: React.FC = () => (
-  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 6, my: 0.5 }}>
+const ThinDivider: React.FC<{ spacing: { dividerMargin: number } }> = ({ spacing }) => (
+  <Box sx={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: 1,
+    px: 6,
+    my: `${spacing.dividerMargin}px`
+  }}>
     <Box sx={{ flex: 1, height: '1px', background: 'linear-gradient(to right, transparent, #D4AF37)' }} />
     <Typography sx={{ color: '#D4AF37', fontSize: '0.55rem', lineHeight: 1 }}>✦</Typography>
     <Box sx={{ flex: 1, height: '1px', background: 'linear-gradient(to left, transparent, #D4AF37)' }} />
@@ -81,10 +178,10 @@ const ThinDivider: React.FC = () => (
 );
 
 // ─── Section Heading ──────────────────────────────────────────
-const SectionHeading: React.FC<{ title: string }> = ({ title }) => (
+const SectionHeading: React.FC<{ title: string; spacing: { sectionMargin: number } }> = ({ title, spacing }) => (
   <Box sx={{
     background: 'linear-gradient(90deg, transparent, #8B0000 20%, #8B0000 80%, transparent)',
-    px: 3, py: '5px', my: 1.5,
+    px: 3, py: '5px', my: `${spacing.sectionMargin}px`,
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1.5,
   }}>
     <Typography sx={{ color: '#D4AF37', fontSize: '0.55rem' }}>◆</Typography>
@@ -105,21 +202,22 @@ interface FieldRowProps {
   label: string;
   value?: string | number;
   highlight?: boolean;
+  spacing: { fieldPadding: number; fontSize: number; highlightFontSize: number };
 }
-const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight }) => {
+const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight, spacing }) => {
   if (value === undefined || value === null || value === '' || value === 0) return null;
 
   return (
     <Box sx={{
       display: 'flex',
       alignItems: 'baseline',
-      py: '4px',
+      py: `${spacing.fieldPadding}px`,
       borderBottom: '1px dotted rgba(139,0,0,0.1)',
       '&:last-child': { borderBottom: 'none' },
     }}>
       <Typography sx={{
         width: '42%', flexShrink: 0,
-        fontSize: highlight ? '0.79rem' : '0.75rem',
+        fontSize: `${highlight ? spacing.highlightFontSize : spacing.fontSize}px`,
         fontWeight: 600,
         color: '#8B0000',
         fontFamily: '"Noto Sans Devanagari", "Noto Sans", sans-serif',
@@ -127,10 +225,14 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight }) => {
       }}>
         {label}
       </Typography>
-      <Typography sx={{ color: '#6B3030', fontSize: '0.75rem', mr: 1 }}>:</Typography>
+      <Typography sx={{
+        color: '#6B3030',
+        fontSize: `${spacing.fontSize}px`,
+        mr: 1
+      }}>:</Typography>
       <Typography sx={{
         flex: 1,
-        fontSize: highlight ? '0.79rem' : '0.75rem',
+        fontSize: `${highlight ? spacing.highlightFontSize : spacing.fontSize}px`,
         fontWeight: highlight ? 700 : 400,
         color: highlight ? '#4A0000' : '#2C1810',
         fontFamily: '"Noto Sans Devanagari", "Noto Sans", sans-serif',
@@ -144,8 +246,14 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight }) => {
 
 // ─── Template 1 — Traditional ─────────────────────────────────
 const Template1Traditional: React.FC<Props> = ({ formData }) => {
-  const { personal, family, education, address, photo, shlokaText, selectedDeity } = formData;
+  const { personal, family, education, address, photo, shlokaText, selectedDeity, language } = formData;
   const { fieldOrder } = useBiodata();
+
+  // Get translation function based on selected language
+  const t = useTranslation(language);
+
+  // Calculate dynamic spacing based on content
+  const spacing = calculateDynamicSpacing(formData);
 
   const brotherText = family.totalBrothers > 0
     ? `${family.totalBrothers} (विवाहित: ${family.marriedBrothers})`
@@ -179,23 +287,46 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
       <Box sx={{ position: 'absolute', bottom: 2, right: 2,  zIndex: 2 }}><CornerMandala rotate={180} /></Box>
 
       {/* Main content */}
-      <Box sx={{ px: 6, pt: 3, pb: 4, position: 'relative', zIndex: 3 }}>
+      <Box sx={{
+        px: 6,
+        pt: `${Math.max(12, 18 * spacing.compressionFactor)}px`,
+        pb: `${Math.max(16, 24 * spacing.compressionFactor)}px`,
+        position: 'relative',
+        zIndex: 3
+      }}>
 
         {/* ── HEADER ── */}
-        <Box sx={{ textAlign: 'center', mb: 0.5 }}>
+        <Box sx={{
+          textAlign: 'center',
+          mb: `${Math.max(2, 4 * spacing.compressionFactor)}px`
+        }}>
 
           {/* Deity SVG or fallback Om */}
           {selectedDeity && selectedDeity !== 'none' ? (
-            <Box sx={{ mb: 0.5 }}>
-              <img
-                src={`/deities/${selectedDeity}.svg`}
-                alt={selectedDeity}
-                style={{ width: 56, height: 56, objectFit: 'contain' }}
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
+            <Box sx={{ mb: `${Math.max(2, 4 * spacing.compressionFactor)}px` }}>
+              {(() => {
+                const selectedDeityData = deityOptions.find((d) => d.id === selectedDeity);
+                return selectedDeityData?.imagePath ? (
+                  <img
+                    src={selectedDeityData.imagePath}
+                    alt={selectedDeity}
+                    style={{
+                      width: '56px',
+                      height: '56px',
+                      objectFit: 'contain'
+                    }}
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
+                ) : null;
+              })()}
             </Box>
           ) : (
-            <Typography sx={{ fontSize: '2rem', color: '#8B0000', lineHeight: 1, mb: 0.5 }}>
+            <Typography sx={{
+              fontSize: '2rem',
+              color: '#8B0000',
+              lineHeight: 1,
+              mb: `${Math.max(2, 4 * spacing.compressionFactor)}px`
+            }}>
               ॐ
             </Typography>
           )}
@@ -203,24 +334,30 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
           {/* Shloka line */}
           {shlokaText && (
             <Typography sx={{
-              fontSize: '0.85rem', color: '#8B0000', fontWeight: 600,
+              fontSize: `${Math.max(0.51, 0.85 * spacing.compressionFactor)}rem`,
+              color: '#8B0000',
+              fontWeight: 600,
               fontFamily: '"Noto Sans Devanagari", sans-serif',
-              letterSpacing: '0.5px', mb: 0.5,
+              letterSpacing: '0.5px',
+              mb: `${Math.max(2, 4 * spacing.compressionFactor)}px`,
             }}>
               {shlokaText}
             </Typography>
           )}
 
-          <TopOrnament />
+          {/* <TopOrnament /> */}
 
           {/* Biodata Title */}
-          <Box sx={{ my: 1 }}>
+          <Box sx={{ my: `${Math.max(4, 8 * spacing.compressionFactor)}px` }}>
             <Typography sx={{
-              fontSize: '1.7rem', fontWeight: 800, color: '#8B0000',
+              fontSize: `${Math.max(0.85, 1.7 * spacing.compressionFactor)}rem`,
+              fontWeight: 800,
+              color: '#8B0000',
               fontFamily: '"Noto Sans Devanagari", sans-serif',
-              letterSpacing: '4px', lineHeight: 1,
+              letterSpacing: `${Math.max(2, 4 * spacing.compressionFactor)}px`,
+              lineHeight: 1,
             }}>
-              बायोडेटा
+              {t('biodataTitle')}
             </Typography>
           </Box>
 
@@ -229,7 +366,12 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
 
         {/* ── PHOTO — only shown if uploaded ── */}
         {photo && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1.5, mb: 1 }}>
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            mt: `${Math.max(6, 12 * spacing.compressionFactor)}px`,
+            mb: `${Math.max(4, 8 * spacing.compressionFactor)}px`
+          }}>
             <Box sx={{ position: 'relative' }}>
               <Box sx={{
                 width: 110, height: 135,
@@ -258,110 +400,110 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
         {/* ── Fix 1 & 2: All sections single column, centered with maxWidth ── */}
 
         {/* PERSONAL DETAILS */}
-        <SectionHeading title="वैयक्तिक माहिती" />
+        <SectionHeading title={t('personalDetails')} spacing={spacing} />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
           {/** Use fieldOrder from context to determine rendering sequence **/}
           {(() => {
             
             const labelMap: Record<string, string> = {
-              fullName: 'पूर्ण नाव',
-              dateOfBirth: 'जन्म तारीख',
-              timeOfBirth: 'जन्म वेळ',
-              placeOfBirth: 'जन्म स्थान',
-              rashi: 'राशी',
-              nakshatra: 'नक्षत्र',
-              gotra: 'गोत्र',
-              religion: 'धर्म',
-              caste: 'जात',
-              subCaste: 'पोटजात',
-              height: 'उंची',
-              complexion: 'वर्ण',
-              bloodGroup: 'रक्तगट',
-              manglik: 'मांगलिक',
+              fullName: t('fullName'),
+              dateOfBirth: t('dateOfBirth'),
+              timeOfBirth: t('timeOfBirth'),
+              placeOfBirth: t('placeOfBirth'),
+              rashi: t('rashi'),
+              nakshatra: t('nakshatra'),
+              gotra: t('gotra'),
+              religion: t('religion'),
+              caste: t('caste'),
+              subCaste: t('subCaste'),
+              height: t('height'),
+              complexion: t('complexion'),
+              bloodGroup: t('bloodGroup'),
+              manglik: t('manglik'),
             };
 
             return (fieldOrder?.personal || Object.keys(labelMap)).map((key) => {
               const val = (personal as any)[key];
-              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='fullName' || key==='qualification'} />;
+              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='fullName'} spacing={spacing} />;
             });
           })()}
         </Box>
 
-        <ThinDivider />
+        <ThinDivider spacing={spacing} />
 
         {/* FAMILY DETAILS */}
-        <SectionHeading title="कौटुंबिक माहिती" />
+        <SectionHeading title={t('familyDetails')} spacing={spacing} />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
           {(() => {
             
             const labelMap: Record<string, string> = {
-              fatherName: 'वडिलांचे नाव',
-              fatherOccupation: 'वडिलांचा व्यवसाय',
-              motherName: 'आईचे नाव',
-              motherOccupation: 'आईचा व्यवसाय',
-              totalBrothers: 'भाऊ',
-              marriedBrothers: 'विवाहित भाऊ',
-              totalSisters: 'बहीण',
-              marriedSisters: 'विवाहित बहीण',
-              familyType: 'कुटुंब प्रकार',
-              nativePlace: 'मूळ गाव',
+              fatherName: t('fatherName'),
+              fatherOccupation: t('fatherOccupation'),
+              motherName: t('motherName'),
+              motherOccupation: t('motherOccupation'),
+              totalBrothers: t('brothers'),
+              marriedBrothers: t('married') + ' ' + t('brothers'),
+              totalSisters: t('sisters'),
+              marriedSisters: t('married') + ' ' + t('sisters'),
+              familyType: t('familyType'),
+              nativePlace: t('nativePlace'),
             };
 
             return (fieldOrder?.family || Object.keys(labelMap)).map((key) => {
               let val: any = (family as any)[key];
               if (key === 'totalBrothers') val = brotherText;
               if (key === 'totalSisters') val = sisterText;
-              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='fatherName' || key==='motherName'} />;
+              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='fatherName' || key==='motherName'} spacing={spacing} />;
             });
           })()}
         </Box>
 
-        <ThinDivider />
+        <ThinDivider spacing={spacing} />
 
         {/* EDUCATION & CAREER */}
-        <SectionHeading title="शिक्षण व करिअर" />
+        <SectionHeading title={t('educationCareer')} spacing={spacing} />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
           {(() => {
             
             const labelMap: Record<string, string> = {
-              qualification: 'शिक्षण',
-              university: 'विद्यापीठ',
-              additionalCertifications: 'इतर पदवी',
-              occupation: 'व्यवसाय',
-              companyName: 'कंपनी / संस्था',
-              jobTitle: 'पद',
-              annualIncome: 'वार्षिक उत्पन्न',
+              qualification: t('qualification'),
+              university: t('university'),
+              additionalCertifications: t('certifications'),
+              occupation: t('occupation'),
+              companyName: t('companyName'),
+              jobTitle: t('jobTitle'),
+              annualIncome: t('annualIncome'),
             };
             return (fieldOrder?.education || Object.keys(labelMap)).map((key) => {
               const val = (education as any)[key];
-              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='qualification' || key==='occupation'} />;
+              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='qualification' || key==='occupation'} spacing={spacing} />;
             });
           })()}
         </Box>
 
-        <ThinDivider />
+        <ThinDivider spacing={spacing} />
 
         {/* ADDRESS & CONTACT */}
-        <SectionHeading title="पत्ता व संपर्क" />
+        <SectionHeading title={t('addressContact')} spacing={spacing} />
         <Box sx={{ maxWidth: 480, mx: 'auto' }}>
           {(() => {
             const labelMap: Record<string, string> = {
-              fullAddress: 'पत्ता',
-              city: 'शहर',
-              district: 'जिल्हा',
-              state: 'राज्य',
-              pincode: 'पिनकोड',
-              mobile: 'मोबाईल',
-              whatsappSameAsMobile: 'WhatsApp same as mobile',
-              whatsapp: 'WhatsApp',
-              email: 'ईमेल',
+              fullAddress: t('fullAddress'),
+              city: t('city'),
+              district: t('district'),
+              state: t('state'),
+              pincode: t('pincode'),
+              mobile: t('mobile'),
+              whatsappSameAsMobile: t('sameAsMobile'),
+              whatsapp: t('whatsapp'),
+              email: t('email'),
             };
 
             return (fieldOrder?.address || Object.keys(labelMap)).map((key) => {
               let val: any = (address as any)[key];
               if (key === 'mobile') val = val ? `+91 ${val}` : '';
               if (key === 'whatsapp') val = val ? `+91 ${val}` : '';
-              return <FieldRow key={key} label={labelMap[key] || key} value={val} />;
+              return <FieldRow key={key} label={labelMap[key] || key} value={val} spacing={spacing} />;
             });
           })()}
         </Box>
