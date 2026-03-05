@@ -134,7 +134,7 @@ const defaultFormData: BiodataFormData = {
     email: '',
   },
   photo: null,
-  selectedTemplate: 1,
+  selectedTemplate: 3,
   language: 'english',
   selectedDeity: 'ganesh_2',
   shlokaText: '|| श्री गणेशाय नमः ||',

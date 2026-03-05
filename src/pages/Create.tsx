@@ -28,6 +28,8 @@ import Step2Education from '../steps/Step2Education';
 import Step3Address from '../steps/Step3Address';
 import Step4PhotoTemplate from '../steps/Step4PhotoTemplate';
 import Template1Traditional from '../templates/Template1Traditional';
+import Template2 from '../templates/Template2';
+import Template3 from '../templates/Template3';
 
 // ─── Step Renderer ────────────────────────────────────────────
 const renderStep = (step: number): React.ReactNode => {
@@ -45,9 +47,8 @@ const renderStep = (step: number): React.ReactNode => {
 const renderTemplate = (formData: ReturnType<typeof useBiodata>['formData']): React.ReactNode => {
   switch (formData.selectedTemplate) {
     case 1:  return <Template1Traditional formData={formData} />;
-    // case 2: return <Template2Religious formData={formData} />;
-    // case 3: return <Template3Modern formData={formData} />;
-    default: return <Template1Traditional formData={formData} />;
+    case 2: return <Template2 formData={formData} />;
+    default: return <Template3 formData={formData} />;
   }
 };
 
