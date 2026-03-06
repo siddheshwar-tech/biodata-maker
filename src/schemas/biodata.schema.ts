@@ -66,8 +66,6 @@ export const addressSchema = z.object({
     .regex(/^[0-9]{6}$/, 'Pincode must contain only numbers'),
   mobile: z.string()
     .regex(/^[0-9]{10}$/, 'Enter a valid 10-digit mobile number'),
-  whatsappSameAsMobile: z.boolean().default(false),
-  whatsapp: z.string().optional().default(''),
   email: z.string().email('Enter a valid email').optional().or(z.literal('')),
 });
 

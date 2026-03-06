@@ -43,7 +43,6 @@ const defaultFieldOrder = {
   ],
   education: [
     'qualification',
-    'university',
     'additionalCertifications',
     'occupation',
     'companyName',
@@ -57,8 +56,6 @@ const defaultFieldOrder = {
     'state',
     'pincode',
     'mobile',
-    'whatsappSameAsMobile',
-    'whatsapp',
     'email',
   ],
 };
@@ -129,8 +126,6 @@ const defaultFormData: BiodataFormData = {
     state: '',
     pincode: '',
     mobile: '',
-    whatsappSameAsMobile: false,
-    whatsapp: '',
     email: '',
   },
   photo: null,

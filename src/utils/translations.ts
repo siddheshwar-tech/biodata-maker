@@ -47,9 +47,7 @@ export type TranslationKey =
   | 'state'
   | 'pincode'
   | 'mobile'
-  | 'whatsapp'
   | 'email'
-  | 'sameAsMobile'
   // gotra options (keys correspond to dropdownOptions.gotraOptions)
   | 'gotra_atri'
   | 'gotra_bhardwaj'
@@ -149,9 +147,7 @@ export const translations: Record<Language, Translations> = {
     state: 'राज्य',
     pincode: 'पिनकोड',
     mobile: 'मोबाईल नं.',
-    whatsapp: 'व्हाट्सअँप नं.',
     email: 'ईमेल',
-    sameAsMobile: 'हे मोबाईल नंबरसारखेच आहे',
     uploadPhoto: 'फोटो अपलोड करा',
     chooseTemplate: 'डिझाईन निवडा',
     downloadPDF: 'PDF डाऊनलोड करा',
@@ -248,9 +244,7 @@ export const translations: Record<Language, Translations> = {
     state: 'राज्य',
     pincode: 'पिनकोड',
     mobile: 'मोबाइल नंबर',
-    whatsapp: 'व्हाट्सएप नंबर',
     email: 'ईमेल',
-    sameAsMobile: 'यह मोबाइल नंबर के समान है',
     uploadPhoto: 'फोटो अपलोड करें',
     chooseTemplate: 'डिज़ाइन चुनें',
     downloadPDF: 'PDF डाउनलोड करें',
@@ -348,9 +342,7 @@ export const translations: Record<Language, Translations> = {
     state: 'State',
     pincode: 'Pincode',
     mobile: 'Mobile Number',
-    whatsapp: 'WhatsApp Number',
     email: 'Email',
-    sameAsMobile: 'Same as Mobile',
     uploadPhoto: 'Upload Photo',
     chooseTemplate: 'Choose Template',
     downloadPDF: 'Download PDF',

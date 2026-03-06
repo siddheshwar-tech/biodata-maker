@@ -25,7 +25,7 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight }) => {
       sx={{
         display: "flex",
         alignItems: "center",
-        py: "2px",
+        py: "1px",
         borderBottom: "1px dotted rgba(0,0,0,0.15)",
       }}
     >
@@ -127,7 +127,7 @@ const Template2: React.FC<Props> = ({ formData }) => {
 
         {/* Deity SVG or fallback Om */}
         {selectedDeity && selectedDeity !== 'none' ? (
-          <Box sx={{ mb: 0, mt: 8 }}>
+          <Box sx={{ mb: 0, mt: 2 }}>
             {(() => {
               const selectedDeityData = deityOptions.find((d) => d.id === selectedDeity);
               return selectedDeityData?.imagePath ? (
@@ -169,7 +169,7 @@ const Template2: React.FC<Props> = ({ formData }) => {
           </Typography>
         )}
 
-        <Typography
+        {/* <Typography
           sx={{
             fontSize: "1.5rem",
             fontWeight: 700,
@@ -178,13 +178,13 @@ const Template2: React.FC<Props> = ({ formData }) => {
           }}
         >
           {t('biodataTitle')}
-        </Typography>
+        </Typography> */}
       </Box>
 
       {/* PHOTO */}
 
       {photo && (
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
           <Box
             sx={{
               width: 120,
@@ -312,20 +312,37 @@ const Template2: React.FC<Props> = ({ formData }) => {
             annualIncome: t('annualIncome'),
           };
 
-          return (fieldOrder?.education || Object.keys(labelMap)).map(
-            (key) => {
-              const val = (education as any)[key];
+          // compute combined display for qualification + university
+          const qualDisplay = education.qualification
+            ? education.university
+              ? `${education.qualification} (${education.university})`
+              : education.qualification
+            : '';
 
+          return (fieldOrder?.education || Object.keys(labelMap)).map((key) => {
+            if (key === 'qualification') {
               return (
                 <FieldRow
-                  key={key}
-                  label={labelMap[key]}
-                  value={val}
-                  highlight={key === "qualification"}
+                  key="qualification"
+                  label={labelMap.qualification}
+                  value={qualDisplay}
+                  highlight
                 />
               );
             }
-          );
+            if (key === 'university') {
+              return null;
+            }
+            const val = (education as any)[key];
+            return (
+              <FieldRow
+                key={key}
+                label={labelMap[key]}
+                value={val}
+                highlight={false}
+              />
+            );
+          });
         })()}
       </Section>
 
@@ -341,7 +358,7 @@ const Template2: React.FC<Props> = ({ formData }) => {
           if (address.pincode) addressParts.push(address.pincode);
           const combinedAddress = addressParts.join(", ");
 
-          const rows = [address.district, address.mobile, address.whatsapp, address.email].filter(Boolean).length;
+          const rows = [address.district, address.mobile, address.email].filter(Boolean).length;
 
           return [
             combinedAddress ? (
@@ -363,13 +380,6 @@ const Template2: React.FC<Props> = ({ formData }) => {
                 key="mobile"
                 label={t('mobile')}
                 value={`+91 ${address.mobile}`}
-              />
-            ) : null,
-            address.whatsapp ? (
-              <FieldRow
-                key="whatsapp"
-                label={t('whatsapp')}
-                value={`+91 ${address.whatsapp}`}
               />
             ) : null,
             address.email ? (

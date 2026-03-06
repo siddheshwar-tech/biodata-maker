@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm, Controller, useWatch } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   TextField,
@@ -24,7 +24,6 @@ import Grid from '@mui/material/GridLegacy';
 import HomeIcon from '@mui/icons-material/Home';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailIcon from '@mui/icons-material/Email';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -50,25 +49,10 @@ const Step3Address: React.FC = () => {
     defaultValues: formData.address,
   });
 
-  const whatsappSameAsMobile = useWatch({
-    control,
-    name: 'whatsappSameAsMobile',
-  });
-
-  const mobileValue = useWatch({
-    control,
-    name: 'mobile',
-  });
-
   useEffect(() => {
     reset(formData.address);
   }, [formData.address, reset]);
 
-  useEffect(() => {
-    if (whatsappSameAsMobile && mobileValue) {
-      setValue('whatsapp', mobileValue);
-    }
-  }, [whatsappSameAsMobile, mobileValue, setValue]);
 
   const onSubmit = (data: any) => {
     updateAddress(data);
@@ -222,55 +206,6 @@ const Step3Address: React.FC = () => {
           </Grid>
         </Grid>
 
-        <Grid container spacing={2} sx={{ marginBottom: 3 }}>
-          <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Controller
-                  name="whatsappSameAsMobile"
-                  control={control}
-                  render={({ field }) => (
-                    <Checkbox
-                      {...field}
-                      checked={field.value}
-                      onChange={(e) => field.onChange(e.target.checked)}
-                    />
-                  )}
-                />
-              }
-              label={t('sameAsMobile')}
-            />
-          </Grid>
-        </Grid>
-
-        <Collapse in={!whatsappSameAsMobile}>
-          <Grid container spacing={2} sx={{ marginBottom: 3 }}>
-            <Grid item xs={12}>
-              <Controller
-                name="whatsapp"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    fullWidth
-                    label={t('whatsapp')}
-                    type="tel"
-                    inputProps={{ maxLength: 10 }}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <WhatsAppIcon sx={{ color: '#25D366' }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                    error={!!errors.whatsapp}
-                    helperText={errors.whatsapp?.message}
-                  />
-                )}
-              />
-            </Grid>
-          </Grid>
-        </Collapse>
 
         <Grid container spacing={2} sx={{ marginBottom: 4 }}>
           <Grid item xs={12} sm={8}>

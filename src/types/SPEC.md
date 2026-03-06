@@ -10,7 +10,7 @@
 **Type:** Free web application  
 **Purpose:** Let users fill a simple form with their marriage biodata details, choose a template design, preview it live, and download a professionally designed PDF — completely free, no login required.  
 **Target Users:** Marathi and Hindi speaking families in India looking to create marriage biodata.  
-**Unique Value:** Mobile-first, beautiful modern templates, real-time preview, WhatsApp-ready PDF, pure Marathi/Hindi UI option, truly 100% free with no watermark.
+**Unique Value:** Mobile-first, beautiful modern templates, real-time preview, pure Marathi/Hindi UI option, truly 100% free with no watermark.
 
 ---
 
@@ -151,8 +151,7 @@ export interface AddressDetails {
   state: string;               // from dropdown
   pincode: string;
   mobile: string;
-  whatsappSameAsMobile: boolean;
-  whatsapp: string;
+  // whatsapp fields removed
   email: string;
 }
 
@@ -235,8 +234,7 @@ export const addressSchema = z.object({
   state: z.string().min(1, 'State is required'),
   pincode: z.string().length(6, 'Pincode must be 6 digits'),
   mobile: z.string().length(10, 'Mobile must be 10 digits'),
-  whatsappSameAsMobile: z.boolean(),
-  whatsapp: z.string().optional(),
+  // whatsapp fields removed
   email: z.string().email('Invalid email').optional().or(z.literal('')),
 });
 
@@ -386,7 +384,7 @@ Mobile (sm and below):
 ### Step3Address.tsx
 - Full Address: MUI `TextField` multiline rows=3
 - State: MUI Select with all Indian states
-- WhatsApp same as mobile: MUI `Checkbox` — when checked, hide WhatsApp field
+- (whatsapp field removed in vX)  
 - Mobile + Pincode: type="tel" with numeric validation
 
 ### Step4PhotoTemplate.tsx
@@ -992,7 +990,7 @@ fieldOrder: {
   education:['qualification','university','additionalCertifications',
              'occupation','companyName','jobTitle','annualIncome'],
   address:  ['fullAddress','city','district','state','pincode',
-             'mobile','whatsapp','email'],
+             'mobile','email'],
 },
 ```
 

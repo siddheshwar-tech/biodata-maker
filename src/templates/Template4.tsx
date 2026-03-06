@@ -312,20 +312,36 @@ const Template4: React.FC<Props> = ({ formData }) => {
             annualIncome: t('annualIncome'),
           };
 
-          return (fieldOrder?.education || Object.keys(labelMap)).map(
-            (key) => {
-              const val = (education as any)[key];
+          const qualDisplay = education.qualification
+            ? education.university
+              ? `${education.qualification} (${education.university})`
+              : education.qualification
+            : '';
 
+          return (fieldOrder?.education || Object.keys(labelMap)).map((key) => {
+            if (key === 'qualification') {
               return (
                 <FieldRow
-                  key={key}
-                  label={labelMap[key]}
-                  value={val}
-                  highlight={key === "qualification"}
+                  key="qualification"
+                  label={labelMap.qualification}
+                  value={qualDisplay}
+                  highlight
                 />
               );
             }
-          );
+            if (key === 'university') {
+              return null;
+            }
+            const val = (education as any)[key];
+            return (
+              <FieldRow
+                key={key}
+                label={labelMap[key]}
+                value={val}
+                highlight={false}
+              />
+            );
+          });
         })()}
       </Section>
 
@@ -341,7 +357,7 @@ const Template4: React.FC<Props> = ({ formData }) => {
           if (address.pincode) addressParts.push(address.pincode);
           const combinedAddress = addressParts.join(", ");
 
-          const rows = [address.district, address.mobile, address.whatsapp, address.email].filter(Boolean).length;
+          const rows = [address.district, address.mobile, address.email].filter(Boolean).length;
 
           return [
             combinedAddress ? (
@@ -363,13 +379,6 @@ const Template4: React.FC<Props> = ({ formData }) => {
                 key="mobile"
                 label={t('mobile')}
                 value={`+91 ${address.mobile}`}
-              />
-            ) : null,
-            address.whatsapp ? (
-              <FieldRow
-                key="whatsapp"
-                label={t('whatsapp')}
-                value={`+91 ${address.whatsapp}`}
               />
             ) : null,
             address.email ? (

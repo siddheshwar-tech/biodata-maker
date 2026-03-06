@@ -105,7 +105,7 @@ const Home: React.FC = () => {
 
         <Box sx={{ textAlign: 'center', py: 5, backgroundColor: theme.palette.primary.main, borderRadius: 4, color: 'white' }}>
           <Typography variant="h5" fontWeight={700} gutterBottom>Create Your Biodata Today — Free!</Typography>
-          <Typography variant="body1" sx={{ opacity: 0.9, mb: 3 }}>Ready in 2 minutes • Download PDF • Share on WhatsApp</Typography>
+          <Typography variant="body1" sx={{ opacity: 0.9, mb: 3 }}>Ready in 2 minutes • Download PDF</Typography>
           <Button variant="contained" size="large" onClick={() => navigate('/create')} sx={{ backgroundColor: theme.palette.secondary.main, color: '#2C1810', fontWeight: 700, fontSize: '1.1rem', px: 5, py: 1.5, '&:hover': { backgroundColor: theme.palette.secondary.light } }}>
             {t('createBiodata')} --&gt;
           </Button>

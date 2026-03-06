@@ -50,8 +50,6 @@ export interface AddressDetails {
   state: string;               // from dropdown
   pincode: string;
   mobile: string;
-  whatsappSameAsMobile: boolean;
-  whatsapp: string;
   email: string;
 }
 

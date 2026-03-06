@@ -72,7 +72,6 @@ const Step4PhotoTemplate: React.FC = () => {
       },
       education: {
         qualification: 'qualification',
-        university: 'university',
         additionalCertifications: 'certifications',
         occupation: 'occupation',
         companyName: 'companyName',
@@ -86,8 +85,6 @@ const Step4PhotoTemplate: React.FC = () => {
         state: 'state',
         pincode: 'pincode',
         mobile: 'mobile',
-        whatsappSameAsMobile: 'sameAsMobile',
-        whatsapp: 'whatsapp',
         email: 'email',
       },
     };

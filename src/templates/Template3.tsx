@@ -168,7 +168,7 @@ const Template3: React.FC<Props> = ({ formData }) => {
           </Typography>
         )}
 
-        <Typography
+        {/* <Typography
           sx={{
             fontSize: "1.5rem",
             fontWeight: 700,
@@ -177,7 +177,7 @@ const Template3: React.FC<Props> = ({ formData }) => {
           }}
         >
           {t('biodataTitle')}
-        </Typography>
+        </Typography> */}
       </Box>
 
       {/* PHOTO */}
@@ -340,7 +340,7 @@ const Template3: React.FC<Props> = ({ formData }) => {
           if (address.pincode) addressParts.push(address.pincode);
           const combinedAddress = addressParts.join(", ");
 
-          const rows = [address.district, address.mobile, address.whatsapp, address.email].filter(Boolean).length;
+          const rows = [address.district, address.mobile, address.email].filter(Boolean).length;
 
           return [
             combinedAddress ? (
@@ -362,13 +362,6 @@ const Template3: React.FC<Props> = ({ formData }) => {
                 key="mobile"
                 label={t('mobile')}
                 value={`+91 ${address.mobile}`}
-              />
-            ) : null,
-            address.whatsapp ? (
-              <FieldRow
-                key="whatsapp"
-                label={t('whatsapp')}
-                value={`+91 ${address.whatsapp}`}
               />
             ) : null,
             address.email ? (

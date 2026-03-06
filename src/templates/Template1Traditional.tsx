@@ -474,9 +474,20 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               jobTitle: t('jobTitle'),
               annualIncome: t('annualIncome'),
             };
+            const qualDisplay = education.qualification
+              ? education.university
+                ? `${education.qualification} (${education.university})`
+                : education.qualification
+              : '';
             return (fieldOrder?.education || Object.keys(labelMap)).map((key) => {
+              if (key === 'qualification') {
+                return <FieldRow key="qualification" label={labelMap.qualification} value={qualDisplay} highlight spacing={spacing} />;
+              }
+              if (key === 'university') {
+                return null;
+              }
               const val = (education as any)[key];
-              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='qualification' || key==='occupation'} spacing={spacing} />;
+              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={false} spacing={spacing} />;
             });
           })()}
         </Box>
@@ -494,15 +505,12 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               state: t('state'),
               pincode: t('pincode'),
               mobile: t('mobile'),
-              whatsappSameAsMobile: t('sameAsMobile'),
-              whatsapp: t('whatsapp'),
               email: t('email'),
             };
 
             return (fieldOrder?.address || Object.keys(labelMap)).map((key) => {
               let val: any = (address as any)[key];
               if (key === 'mobile') val = val ? `+91 ${val}` : '';
-              if (key === 'whatsapp') val = val ? `+91 ${val}` : '';
               return <FieldRow key={key} label={labelMap[key] || key} value={val} spacing={spacing} />;
             });
           })()}

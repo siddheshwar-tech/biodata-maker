@@ -1,5 +1,4 @@
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+// libs imported dynamically within the function to enable code splitting
 
 /**
  * generateBiodataPDF
@@ -14,6 +13,11 @@ import html2canvas from 'html2canvas';
  * the template exactly.
  */
 export const generateBiodataPDF = async (fileName: string = 'Biodata'): Promise<void> => {
+  // dynamic import libraries so they are split into their own chunks
+  const [{ default: jsPDF }, { default: html2canvas }] = await Promise.all([
+    import('jspdf'),
+    import('html2canvas'),
+  ]);
 
   // 1. Find the original template container
   const original = document.getElementById('biodata-preview-container');
@@ -43,7 +47,7 @@ export const generateBiodataPDF = async (fileName: string = 'Biodata'): Promise<
     // 5. Small delay — lets browser render the clone fully before capture
     await new Promise((resolve) => setTimeout(resolve, 150));
 
-    // 6. Capture clone with html2canvas
+    // 6. Capture clone with html2canvas (dynamically imported above)
     const canvas = await html2canvas(clone, {
       scale: 2,              // retina quality (2x pixel density)
       useCORS: true,         // allow cross-origin images (uploaded photos)
