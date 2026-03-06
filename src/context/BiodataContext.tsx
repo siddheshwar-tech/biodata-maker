@@ -137,7 +137,8 @@ const defaultFormData: BiodataFormData = {
 
 const initialState: State = {
   formData: defaultFormData,
-  currentStep: 1,
+  // steps are zero-indexed; 0 corresponds to the first personal/family page
+  currentStep: 0,
   fieldOrder: defaultFieldOrder,
 };
 

@@ -223,9 +223,37 @@ const Template3: React.FC<Props> = ({ formData }) => {
             manglik: t('manglik'),
           };
 
-          return (fieldOrder?.personal || Object.keys(labelMap)).map((key) => {
+          const keys = fieldOrder?.personal || Object.keys(labelMap);
+          const seen = new Set<string>();
+          return keys.reduce<React.ReactNode[]>((acc, key) => {
+            if (seen.has(key)) return acc;
+            if (key === 'religion' || key === 'caste') {
+              seen.add('religion');
+              seen.add('caste');
+              const rel = personal.religion;
+              const cast = personal.caste;
+              if (rel && cast) {
+                acc.push(
+                  <FieldRow
+                    key="religion-caste"
+                    label={t('religion')}
+                    value={`${rel} (${cast})`}
+                  />
+                );
+              } else if (rel) {
+                acc.push(
+                  <FieldRow key="religion" label={t('religion')} value={rel} />
+                );
+              } else if (cast) {
+                acc.push(
+                  <FieldRow key="caste" label={t('caste')} value={cast} />
+                );
+              }
+              return acc;
+            }
+            seen.add(key);
             const val = (personal as any)[key];
-            return (
+            acc.push(
               <FieldRow
                 key={key}
                 label={labelMap[key] || key}
@@ -233,7 +261,8 @@ const Template3: React.FC<Props> = ({ formData }) => {
                 highlight={key === "fullName"}
               />
             );
-          });
+            return acc;
+          }, []);
         })()}
       </Section>
 

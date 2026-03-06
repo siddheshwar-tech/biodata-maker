@@ -422,10 +422,65 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               manglik: t('manglik'),
             };
 
-            return (fieldOrder?.personal || Object.keys(labelMap)).map((key) => {
+            // custom logic: if both religion and caste provided, combine into one row
+            const keys = fieldOrder?.personal || Object.keys(labelMap);
+            const seen = new Set<string>();
+            return keys.reduce<React.ReactNode[]>((acc, key) => {
+              if (seen.has(key)) return acc;
+
+              if (key === 'religion' || key === 'caste') {
+                // ensure we only output one combined entry
+                seen.add('religion');
+                seen.add('caste');
+                const rel = personal.religion;
+                const cast = personal.caste;
+                if (rel && cast) {
+                  acc.push(
+                    <FieldRow
+                      key="religion-caste"
+                      label={t('religion')}
+                      value={`${rel} (${cast})`}
+                      highlight={false}
+                      spacing={spacing}
+                    />
+                  );
+                } else if (rel) {
+                  acc.push(
+                    <FieldRow
+                      key="religion"
+                      label={t('religion')}
+                      value={rel}
+                      highlight={false}
+                      spacing={spacing}
+                    />
+                  );
+                } else if (cast) {
+                  acc.push(
+                    <FieldRow
+                      key="caste"
+                      label={t('caste')}
+                      value={cast}
+                      highlight={false}
+                      spacing={spacing}
+                    />
+                  );
+                }
+                return acc;
+              }
+
+              seen.add(key);
               const val = (personal as any)[key];
-              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='fullName'} spacing={spacing} />;
-            });
+              acc.push(
+                <FieldRow
+                  key={key}
+                  label={labelMap[key] || key}
+                  value={val}
+                  highlight={key === 'fullName'}
+                  spacing={spacing}
+                />
+              );
+              return acc;
+            }, []);
           })()}
         </Box>
 

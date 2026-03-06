@@ -55,13 +55,13 @@ const Step1PersonalFamily: React.FC = () => {
     resolver: zodResolver(personalFamilySchema),
     defaultValues: {
   fullName: formData.personal.fullName ?? '',
+  religion: formData.personal.religion ?? '',
   dateOfBirth: formData.personal.dateOfBirth ?? '',
   timeOfBirth: formData.personal.timeOfBirth ?? '',
   placeOfBirth: formData.personal.placeOfBirth ?? '',
   rashi: formData.personal.rashi ?? '',
   nakshatra: formData.personal.nakshatra ?? '',
   gotra: formData.personal.gotra ?? '',
-  religion: formData.personal.religion ?? '',
   caste: formData.personal.caste ?? '',
   subCaste: formData.personal.subCaste ?? '',
   height: formData.personal.height ?? '',
@@ -279,28 +279,8 @@ const Step1PersonalFamily: React.FC = () => {
         </Grid>
 
        
-
-        {/* Row 4 — Gotra + Religion */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
-            <Controller
-              name="gotra"
-              control={control}
-              render={({ field }) => (
-                <FormControl fullWidth>
-                  <InputLabel>{t('gotra')}</InputLabel>
-                  <Select {...field} label={t('gotra')}>
-                    {gotraOptions.map((opt) => (
-                      <MenuItem key={opt} value={opt}>
-                        {t(`gotra_${opt}` as TranslationKey)}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-            />
-          </Grid>
-          <Grid xs={12} sm={6}>
             <Controller
               name="religion"
               control={control}
@@ -315,6 +295,24 @@ const Step1PersonalFamily: React.FC = () => {
                   {errors.religion && (
                     <FormHelperText>{errors.religion.message}</FormHelperText>
                   )}
+                </FormControl>
+              )}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Controller
+              name="gotra"
+              control={control}
+              render={({ field }) => (
+                <FormControl fullWidth>
+                  <InputLabel>{t('gotra')}</InputLabel>
+                  <Select {...field} label={t('gotra')}>
+                    {gotraOptions.map((opt) => (
+                      <MenuItem key={opt} value={opt}>
+                        {t(`gotra_${opt}` as TranslationKey)}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </FormControl>
               )}
             />

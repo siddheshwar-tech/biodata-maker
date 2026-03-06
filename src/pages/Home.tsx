@@ -14,6 +14,7 @@ import PaletteIcon from '@mui/icons-material/Palette';
 import Navbar from '../components/Navbar';
 import { useBiodata } from '../context/BiodataContext';
 import { useTranslation } from '../utils/translations';
+import { TemplateId } from '../types/biodata.types';
 
 interface FeatureCardProps { icon: React.ReactNode; title: string; description: string; }
 const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) => {
@@ -41,10 +42,13 @@ const HowItWorksStep: React.FC<HowItWorksStepProps> = ({ step, icon, label }) =>
   );
 };
 
-interface TemplateCardProps { name: string; gradient: string; tag: string; }
-const TemplateCard: React.FC<TemplateCardProps> = ({ name, gradient, tag }) => (
-  <Card sx={{ overflow: 'hidden', height: '100%' }}>
-    <Box sx={{ height: 120, background: gradient }} />
+interface TemplateCardProps { id: number; name: string; imgSrc: string; tag: string; onClick: () => void; }
+const TemplateCard: React.FC<TemplateCardProps> = ({ id, name, imgSrc, tag, onClick }) => (
+  <Card
+    onClick={onClick}
+    sx={{ overflow: 'hidden', height: '100%', cursor: 'pointer', '&:hover': { boxShadow: 6 } }}
+  >
+    <Box component="img" src={imgSrc} alt={`template-${id}`} sx={{ height: 120, width: '100%', objectFit: 'cover' }} />
     <CardContent sx={{ py: 1.5 }}>
       <Typography variant="body1" fontWeight={600}>{name}</Typography>
       <Chip label={tag} size="small" sx={{ mt: 0.5 }} />
@@ -55,8 +59,17 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ name, gradient, tag }) => (
 const Home: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { formData } = useBiodata();
+  const { formData, setCurrentStep, updateTemplate } = useBiodata();
   const t = useTranslation(formData.language);
+
+  const goToCreate = (templateId?: number) => {
+    // always reset to first step when coming from homepage
+    setCurrentStep(0);
+    if (templateId) {
+      updateTemplate(templateId as TemplateId);
+    }
+    navigate('/create');
+  };
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: theme.palette.background.default }}>
@@ -69,10 +82,10 @@ const Home: React.FC = () => {
             Free Marathi / Hindi Marriage Biodata Maker<br />Choose Beautiful Template — Download PDF
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Button variant="contained" size="large" onClick={() => navigate('/create')} sx={{ backgroundColor: theme.palette.secondary.main, color: '#2C1810', fontWeight: 700, fontSize: '1.1rem', px: 4, py: 1.5, '&:hover': { backgroundColor: theme.palette.secondary.light } }}>
+            <Button variant="contained" size="large" onClick={() => goToCreate()} sx={{ backgroundColor: theme.palette.secondary.main, color: '#2C1810', fontWeight: 700, fontSize: '1.1rem', px: 4, py: 1.5, '&:hover': { backgroundColor: theme.palette.secondary.light } }}>
               {t('createBiodata')}
             </Button>
-            <Button variant="outlined" size="large" onClick={() => navigate('/create')} sx={{ borderColor: 'white', color: 'white', fontWeight: 600, px: 4, py: 1.5, '&:hover': { borderColor: 'white', backgroundColor: 'rgba(255,255,255,0.1)' } }}>
+            <Button variant="outlined" size="large" onClick={() => goToCreate()} sx={{ borderColor: 'white', color: 'white', fontWeight: 600, px: 4, py: 1.5, '&:hover': { borderColor: 'white', backgroundColor: 'rgba(255,255,255,0.1)' } }}>
               View Templates
             </Button>
           </Box>
@@ -98,9 +111,33 @@ const Home: React.FC = () => {
 
         <Typography variant="h5" fontWeight={700} textAlign="center" gutterBottom sx={{ mb: 4 }}>Available Templates</Typography>
         <Grid container spacing={3} sx={{ mb: 8 }}>
-          <Grid item xs={12} sm={4}><TemplateCard name="Traditional | Paramparik" gradient="linear-gradient(135deg, #8B0000, #D4AF37)" tag="Most Popular" /></Grid>
-          <Grid item xs={12} sm={4}><TemplateCard name="Religious | Dharmik" gradient="linear-gradient(135deg, #FF6B00, #8B0000)" tag="Traditional" /></Grid>
-          <Grid item xs={12} sm={4}><TemplateCard name="Modern | Adhunik" gradient="linear-gradient(135deg, #1A237E, #D4AF37)" tag="Professional" /></Grid>
+          <Grid item xs={12} sm={4}>
+            <TemplateCard
+              id={1}
+              name="Traditional | Paramparik"
+              imgSrc="/templates/template_1.jpg"
+              tag="Most Popular"
+              onClick={() => goToCreate(1)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TemplateCard
+              id={2}
+              name="Religious | Dharmik"
+              imgSrc="/templates/template_2.jpg"
+              tag="Traditional"
+              onClick={() => goToCreate(2)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TemplateCard
+              id={3}
+              name="Modern | Adhunik"
+              imgSrc="/templates/template_3.jpg"
+              tag="Professional"
+              onClick={() => goToCreate(3)}
+            />
+          </Grid>
         </Grid>
 
         <Box sx={{ textAlign: 'center', py: 5, backgroundColor: theme.palette.primary.main, borderRadius: 4, color: 'white' }}>
