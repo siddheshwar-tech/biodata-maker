@@ -25,9 +25,26 @@ import Grid from '@mui/material/GridLegacy';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useBiodata } from '../context/BiodataContext';
-import { useTranslation } from '../utils/translations';
+import { useTranslation, TranslationKey } from '../utils/translations';
 import { educationSchema } from '../schemas/biodata.schema';
 import { qualificationOptions, incomeOptions, occupationOptions } from '../utils/dropdownOptions';
+
+// helper component for editable field labels similar to Step1
+const EditableLabel: React.FC<{ fieldKey: string; defaultKey: TranslationKey }> = ({ fieldKey, defaultKey }) => {
+  const { formData, updateCustomLabel } = useBiodata();
+  const t = useTranslation(formData.language);
+  const labelValue = formData?.customLabels?.[fieldKey] ?? t(defaultKey);
+  return (
+    <TextField
+      fullWidth
+      size="small"
+      label={t('fieldName')}
+      value={labelValue}
+      onChange={(e) => updateCustomLabel(fieldKey, e.target.value)}
+      sx={{ mb: 1 }}
+    />
+  );
+};
 
 const Step2Education: React.FC = () => {
   const theme = useTheme();
@@ -74,6 +91,7 @@ const Step2Education: React.FC = () => {
         {/* Row 1 */}
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="qualification" defaultKey="qualification" />
             <Controller
               name="qualification"
               control={control}
@@ -93,6 +111,7 @@ const Step2Education: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="university" defaultKey="university" />
             <Controller
               name="university"
               control={control}
@@ -113,6 +132,7 @@ const Step2Education: React.FC = () => {
         {/* Row 2 */}
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
           <Grid item xs={12}>
+            <EditableLabel fieldKey="additionalCertifications" defaultKey="certifications" />
             <Controller
               name="additionalCertifications"
               control={control}
@@ -135,6 +155,7 @@ const Step2Education: React.FC = () => {
         {/* Row 3 — Occupation Radio */}
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
           <Grid item xs={12}>
+            <EditableLabel fieldKey="occupation" defaultKey="occupation" />
             <FormControl fullWidth error={!!errors.occupation}>
               <FormLabel sx={{ marginBottom: 1 }}>{t('occupationLabel')}</FormLabel>
               <Controller
@@ -192,12 +213,12 @@ const Step2Education: React.FC = () => {
         {/* Row 5 */}
         <Grid container spacing={2} sx={{ marginBottom: 4 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="annualIncome" defaultKey="annualIncome" />
             <Controller
               name="annualIncome"
               control={control}
               render={({ field }) => (
                 <FormControl fullWidth>
-                  <InputLabel>{t('annualIncome')}</InputLabel>
                   <Select {...field} label={t('annualIncome')}>
                     {incomeOptions.map((opt) => (
                       <MenuItem key={opt} value={opt}>

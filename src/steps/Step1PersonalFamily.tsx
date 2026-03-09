@@ -25,6 +25,23 @@ import { useTranslation, TranslationKey } from '../utils/translations';
 import DeitySelector from '../components/DeitySelector';
 import ShlokaEditor from '../components/ShlokaEditor';
 import { personalFamilySchema, PersonalFamilyFormValues } from '../schemas/biodata.schema';
+
+// helper component renders a small textfield allowing the user to override a field's label
+const EditableLabel: React.FC<{ fieldKey: string; defaultKey: TranslationKey }> = ({ fieldKey, defaultKey }) => {
+  const { formData, updateCustomLabel } = useBiodata();
+  const t = useTranslation(formData.language);
+  const labelValue = formData?.customLabels?.[fieldKey] ?? t(defaultKey);
+  return (
+    <TextField
+      fullWidth
+      size="small"
+      label={t('fieldName')}
+      value={labelValue}
+      onChange={(e) => updateCustomLabel(fieldKey, e.target.value)}
+      sx={{ mb: 1 }}
+    />
+  );
+};
 import {
   rashiOptions,
   nakshatraOptions,
@@ -172,6 +189,7 @@ const Step1PersonalFamily: React.FC = () => {
 
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="fullName" defaultKey="fullName" />
             <Controller
               name="fullName"
               control={control}
@@ -184,6 +202,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="dateOfBirth" defaultKey="dateOfBirth" />
             <Controller
               name="dateOfBirth"
               control={control}
@@ -204,6 +223,7 @@ const Step1PersonalFamily: React.FC = () => {
         {/* Row 2 — Time of Birth + Place of Birth */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="timeOfBirth" defaultKey="timeOfBirth" />
             <Controller
               name="timeOfBirth"
               control={control}
@@ -221,6 +241,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="placeOfBirth" defaultKey="placeOfBirth" />
             <Controller
               name="placeOfBirth"
               control={control}
@@ -241,6 +262,7 @@ const Step1PersonalFamily: React.FC = () => {
         {/* Row 3 — Rashi + Nakshatra */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
          <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="rashi" defaultKey="rashi" />
             <Controller
               name="rashi"
               control={control}
@@ -261,6 +283,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="nakshatra" defaultKey="nakshatra" />
             <Controller
               name="nakshatra"
               control={control}
@@ -281,6 +304,7 @@ const Step1PersonalFamily: React.FC = () => {
        
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="religion" defaultKey="religion" />
             <Controller
               name="religion"
               control={control}
@@ -300,6 +324,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="gotra" defaultKey="gotra" />
             <Controller
               name="gotra"
               control={control}
@@ -322,6 +347,7 @@ const Step1PersonalFamily: React.FC = () => {
         {/* Row 5 — Caste + Sub-Caste */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="caste" defaultKey="caste" />
             <Controller
               name="caste"
               control={control}
@@ -337,6 +363,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="subCaste" defaultKey="subCaste" />
             <Controller
               name="subCaste"
               control={control}
@@ -356,6 +383,7 @@ const Step1PersonalFamily: React.FC = () => {
         {/* Row 6 — Height + Complexion */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="height" defaultKey="height" />
             <Controller
               name="height"
               control={control}
@@ -372,6 +400,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="complexion" defaultKey="complexion" />
             <Controller
               name="complexion"
               control={control}
@@ -392,6 +421,7 @@ const Step1PersonalFamily: React.FC = () => {
         {/* Row 7 — Blood Group + Manglik */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="bloodGroup" defaultKey="bloodGroup" />
             <Controller
               name="bloodGroup"
               control={control}
@@ -408,6 +438,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="manglik" defaultKey="manglik" />
             <Controller
               name="manglik"
               control={control}
@@ -434,6 +465,7 @@ const Step1PersonalFamily: React.FC = () => {
         {/* Row 8 — Father Name + Occupation */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="fatherName" defaultKey="fatherName" />
             <Controller
               name="fatherName"
               control={control}
@@ -450,6 +482,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="fatherOccupation" defaultKey="fatherOccupation" />
             <Controller
               name="fatherOccupation"
               control={control}
@@ -467,6 +500,7 @@ const Step1PersonalFamily: React.FC = () => {
         {/* Row 9 — Mother Name + Occupation */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="motherName" defaultKey="motherName" />
             <Controller
               name="motherName"
               control={control}
@@ -483,6 +517,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="motherOccupation" defaultKey="motherOccupation" />
             <Controller
               name="motherOccupation"
               control={control}
@@ -500,6 +535,7 @@ const Step1PersonalFamily: React.FC = () => {
         {/* Row 10 — Brothers */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="totalBrothers" defaultKey="brothers" />
             <Controller
               name="totalBrothers"
               control={control}
@@ -519,6 +555,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="marriedBrothers" defaultKey="married" />
             <Controller
               name="marriedBrothers"
               control={control}
@@ -541,6 +578,7 @@ const Step1PersonalFamily: React.FC = () => {
         {/* Row 11 — Sisters */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="totalSisters" defaultKey="sisters" />
             <Controller
               name="totalSisters"
               control={control}
@@ -559,6 +597,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="marriedSisters" defaultKey="married" />
             <Controller
               name="marriedSisters"
               control={control}
@@ -581,6 +620,7 @@ const Step1PersonalFamily: React.FC = () => {
         {/* Row 12 — Family Type + Native Place */}
         <Grid container spacing={2} sx={{ mb: 4 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="familyType" defaultKey="familyType" />
             <Controller
               name="familyType"
               control={control}
@@ -597,6 +637,7 @@ const Step1PersonalFamily: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="nativePlace" defaultKey="nativePlace" />
             <Controller
               name="nativePlace"
               control={control}

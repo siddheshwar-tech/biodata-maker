@@ -63,6 +63,7 @@ export interface BiodataFormData {
   language: Language;
   selectedDeity: string;       // default: 'ganesh'
   shlokaText: string;          // default: '|| श्री गणेशाय नमः ||'
+  customLabels: Record<string, string>;
 }
 
 // Context type used by BiodataContext
@@ -83,6 +84,8 @@ export interface BiodataContextType {
   updateLanguage: (lang: Language) => void;
   updateDeity: (deityId: string) => void;
   updateShlokaText: (text: string) => void;
+  updateCustomLabel: (key: string, label: string) => void;
+  resetCustomLabels: () => void;
   updateFieldOrder: (
     section: 'personal' | 'family' | 'education' | 'address',
     newOrder: string[]

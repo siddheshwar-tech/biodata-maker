@@ -85,10 +85,14 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
 /* ---------- Template ---------- */
 
 const Template4: React.FC<Props> = ({ formData }) => {
-  const { personal, family, education, address, photo, selectedDeity, shlokaText } = formData;
+  const { personal, family, education, address, photo, selectedDeity, shlokaText, customLabels } = formData;
   const { fieldOrder } = useBiodata();
   const { language } = formData;
   const t = useTranslation(language);
+
+  const getLabel = (key: string, defaultKey?: string) => {
+    return customLabels?.[key] || t(defaultKey || (key as any));
+  };
 
   const brotherText =
     family.totalBrothers > 0
@@ -243,11 +247,11 @@ const Template4: React.FC<Props> = ({ formData }) => {
                 );
               } else if (rel) {
                 acc.push(
-                  <FieldRow key="religion" label={t('religion')} value={rel} />
+                  <FieldRow key="religion" label={getLabel('religion')} value={rel} />
                 );
               } else if (cast) {
                 acc.push(
-                  <FieldRow key="caste" label={t('caste')} value={cast} />
+                  <FieldRow key="caste" label={getLabel('caste')} value={cast} />
                 );
               }
               return acc;
@@ -285,42 +289,42 @@ const Template4: React.FC<Props> = ({ formData }) => {
             fatherDisplay ? (
               <FieldRow
                 key="father"
-                label={t('fatherName')}
+                label={getLabel('fatherName')}
                 value={fatherDisplay}
               />
             ) : null,
             motherDisplay ? (
               <FieldRow
                 key="mother"
-                label={t('motherName')}
+                label={getLabel('motherName')}
                 value={motherDisplay}
               />
             ) : null,
             family.totalBrothers > 0 ? (
               <FieldRow
                 key="brothers"
-                label={t('brothers')}
+                label={getLabel('totalBrothers', t('brothers'))}
                 value={brotherText}
               />
             ) : null,
             family.totalSisters > 0 ? (
               <FieldRow
                 key="sisters"
-                label={t('sisters')}
+                label={getLabel('totalSisters', t('sisters'))}
                 value={sisterText}
               />
             ) : null,
             family.familyType ? (
               <FieldRow
                 key="familyType"
-                label={t('familyType')}
+                label={getLabel('familyType')}
                 value={family.familyType}
               />
             ) : null,
             family.nativePlace ? (
               <FieldRow
                 key="nativePlace"
-                label={t('nativePlace')}
+                label={getLabel('nativePlace')}
                 value={family.nativePlace}
               />
             ) : null,
@@ -352,7 +356,7 @@ const Template4: React.FC<Props> = ({ formData }) => {
               return (
                 <FieldRow
                   key="qualification"
-                  label={labelMap.qualification}
+                  label={getLabel('qualification', labelMap.qualification)}
                   value={qualDisplay}
                   highlight
                 />

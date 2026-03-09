@@ -28,9 +28,26 @@ import EmailIcon from '@mui/icons-material/Email';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useBiodata } from '../context/BiodataContext';
-import { useTranslation } from '../utils/translations';
+import { useTranslation, TranslationKey } from '../utils/translations';
 import { addressSchema } from '../schemas/biodata.schema';
 import { indianStates } from '../utils/dropdownOptions';
+
+// helper for editable label field
+const EditableLabel: React.FC<{ fieldKey: string; defaultKey: TranslationKey }> = ({ fieldKey, defaultKey }) => {
+  const { formData, updateCustomLabel } = useBiodata();
+  const t = useTranslation(formData.language);
+  const labelValue = formData?.customLabels?.[fieldKey] ?? t(defaultKey);
+  return (
+    <TextField
+      fullWidth
+      size="small"
+      label={t('fieldName')}
+      value={labelValue}
+      onChange={(e) => updateCustomLabel(fieldKey, e.target.value)}
+      sx={{ mb: 1 }}
+    />
+  );
+};
 
 const Step3Address: React.FC = () => {
   const theme = useTheme();
@@ -69,6 +86,7 @@ const Step3Address: React.FC = () => {
 
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
           <Grid item xs={12}>
+            <EditableLabel fieldKey="fullAddress" defaultKey="fullAddress" />
             <Controller
               name="fullAddress"
               control={control}
@@ -97,6 +115,7 @@ const Step3Address: React.FC = () => {
 
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="city" defaultKey="city" />
             <Controller
               name="city"
               control={control}
@@ -119,6 +138,7 @@ const Step3Address: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="district" defaultKey="district" />
             <Controller
               name="district"
               control={control}
@@ -137,12 +157,12 @@ const Step3Address: React.FC = () => {
 
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="state" defaultKey="state" />
             <Controller
               name="state"
               control={control}
               render={({ field }) => (
                 <FormControl fullWidth error={!!errors.state}>
-                  <InputLabel>{t('state')}</InputLabel>
                   <Select {...field} label={t('state')}>
                     {indianStates.map((opt) => (
                       <MenuItem key={opt} value={opt}>
@@ -156,6 +176,7 @@ const Step3Address: React.FC = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="pincode" defaultKey="pincode" />
             <Controller
               name="pincode"
               control={control}
@@ -181,6 +202,7 @@ const Step3Address: React.FC = () => {
 
         <Grid container spacing={2} sx={{ marginBottom: 3 }}>
           <Grid item xs={12} sm={6}>
+            <EditableLabel fieldKey="mobile" defaultKey="mobile" />
             <Controller
               name="mobile"
               control={control}
@@ -209,6 +231,7 @@ const Step3Address: React.FC = () => {
 
         <Grid container spacing={2} sx={{ marginBottom: 4 }}>
           <Grid item xs={12} sm={8}>
+            <EditableLabel fieldKey="email" defaultKey="email" />
             <Controller
               name="email"
               control={control}

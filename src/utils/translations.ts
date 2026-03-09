@@ -97,12 +97,16 @@ export type TranslationKey =
   | 'chooseDeitySymbol'
   | 'chooseBlessingText'
   | 'customBlessing'
-  | 'biodataTitle';
+  | 'biodataTitle'
+  | 'fieldName'
+  | 'resetLabels';
 
 type Translations = Record<TranslationKey, string>;
 
 export const translations: Record<Language, Translations> = {
   marathi: {
+    fieldName: '',
+    resetLabels: 'सर्व लेबले रीसेट करा',
     appName: 'विवाह बायोडेटा मेकर',
     tagline: 'एक क्लिकमध्ये तुमचा बायोडेटा तयार करा',
     createBiodata: 'बायोडेटा बनवा',
@@ -283,6 +287,8 @@ export const translations: Record<Language, Translations> = {
     biodataReady: 'बायोडेटा तैयार है! 🎉',
     clickButtonBelow: 'नीचे दिए गए बटन पर क्लिक करें',
     pdfDownloadFolder: 'पीडीएफ स्वचालित रूप से डाउनलोड फ़ोल्डर में जाएगी',
+    fieldName: 'फ़ील्ड का नाम',
+    resetLabels: 'सभी लेबल रीसेट करें',
     biodataTitle: 'बायोडेटा',
     // gotra option labels
     gotra_atri: 'अत्री',
@@ -382,6 +388,8 @@ export const translations: Record<Language, Translations> = {
     clickButtonBelow: 'Click the button below',
     pdfDownloadFolder: 'PDF will automatically go to download folder',
     biodataTitle: 'Biodata',
+    fieldName: 'Field name',
+    resetLabels: 'Reset labels',
     // gotra option labels
     gotra_atri: 'Atri',
     gotra_bhardwaj: 'Bhardwaj',

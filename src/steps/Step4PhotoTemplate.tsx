@@ -36,11 +36,16 @@ import { JSX } from 'react/jsx-runtime';
 
 const Step4PhotoTemplate: React.FC = () => {
   const theme = useTheme();
-  const { formData, updatePhoto, updateTemplate, setCurrentStep, fieldOrder, updateFieldOrder, resetFieldOrder, updateDeity, updateShlokaText } = useBiodata();
+  const { formData, updatePhoto, updateTemplate, setCurrentStep, fieldOrder, updateFieldOrder, resetFieldOrder, resetCustomLabels, updateDeity, updateShlokaText } = useBiodata();
   const t = useTranslation(formData.language);
 
-  // Helper function to get translated field names
+  // Helper function to get translated field names (respecting custom labels)
   const getFieldLabel = (section: 'personal' | 'family' | 'education' | 'address', fieldKey: string): string => {
+    // check for custom override first
+    if (formData.customLabels && formData.customLabels[fieldKey]) {
+      return formData.customLabels[fieldKey];
+    }
+
     const fieldLabelMap: Record<string, Record<string, string>> = {
       personal: {
         fullName: 'fullName',
@@ -173,6 +178,9 @@ const Step4PhotoTemplate: React.FC = () => {
             <Box>
               <IconButton size="small" onClick={() => resetFieldOrder()} title="Reset order">
                 <RestartAltIcon />
+              </IconButton>
+              <IconButton size="small" onClick={() => resetCustomLabels()} title={t('resetLabels')}>
+                <DeleteIcon />
               </IconButton>
             </Box>
           </Box>

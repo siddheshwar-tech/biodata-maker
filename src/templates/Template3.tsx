@@ -85,10 +85,14 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
 /* ---------- Template ---------- */
 
 const Template3: React.FC<Props> = ({ formData }) => {
-  const { personal, family, education, address, photo, selectedDeity, shlokaText } = formData;
+  const { personal, family, education, address, photo, selectedDeity, shlokaText, customLabels } = formData;
   const { fieldOrder } = useBiodata();
   const { language } = formData;
   const t = useTranslation(language);
+
+  const getLabel = (key: string, defaultKey?: string) => {
+    return customLabels?.[key] || t(defaultKey || (key as any));
+  };
 
   const brotherText =
     family.totalBrothers > 0
@@ -236,7 +240,7 @@ const Template3: React.FC<Props> = ({ formData }) => {
                 acc.push(
                   <FieldRow
                     key="religion-caste"
-                    label={t('religion')}
+                    label={getLabel('religion')}
                     value={`${rel} (${cast})`}
                   />
                 );
@@ -256,7 +260,7 @@ const Template3: React.FC<Props> = ({ formData }) => {
             acc.push(
               <FieldRow
                 key={key}
-                label={labelMap[key] || key}
+                label={getLabel(key, labelMap[key] || key)}
                 value={val}
                 highlight={key === "fullName"}
               />
@@ -284,42 +288,42 @@ const Template3: React.FC<Props> = ({ formData }) => {
             fatherDisplay ? (
               <FieldRow
                 key="father"
-                label={t('fatherName')}
+                label={getLabel('fatherName')}
                 value={fatherDisplay}
               />
             ) : null,
             motherDisplay ? (
               <FieldRow
                 key="mother"
-                label={t('motherName')}
+                label={getLabel('motherName')}
                 value={motherDisplay}
               />
             ) : null,
             family.totalBrothers > 0 ? (
               <FieldRow
                 key="brothers"
-                label={t('brothers')}
+                label={getLabel('totalBrothers', t('brothers'))}
                 value={brotherText}
               />
             ) : null,
             family.totalSisters > 0 ? (
               <FieldRow
                 key="sisters"
-                label={t('sisters')}
+                label={getLabel('totalSisters', t('sisters'))}
                 value={sisterText}
               />
             ) : null,
             family.familyType ? (
               <FieldRow
                 key="familyType"
-                label={t('familyType')}
+                label={getLabel('familyType')}
                 value={family.familyType}
               />
             ) : null,
             family.nativePlace ? (
               <FieldRow
                 key="nativePlace"
-                label={t('nativePlace')}
+                label={getLabel('nativePlace')}
                 value={family.nativePlace}
               />
             ) : null,

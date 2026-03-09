@@ -79,6 +79,8 @@ type Action =
   | { type: 'updateFieldOrder'; payload: { section: keyof typeof defaultFieldOrder; order: string[] } }
   | { type: 'resetFieldOrder' }
   | { type: 'setStep'; payload: number }
+  | { type: 'updateCustomLabel'; payload: { key: string; label: string } }
+  | { type: 'resetCustomLabels' }
   | { type: 'reset' };
 
 const defaultFormData: BiodataFormData = {
@@ -133,6 +135,7 @@ const defaultFormData: BiodataFormData = {
   language: 'english',
   selectedDeity: 'ganesh_2',
   shlokaText: '|| श्री गणेशाय नमः ||',
+  customLabels: {},
 };
 
 const initialState: State = {
@@ -193,6 +196,25 @@ const reducer = (state: State, action: Action): State => {
       return { ...state, currentStep: action.payload };
     case 'reset':
       return { ...initialState, fieldOrder: defaultFieldOrder };
+    case 'updateCustomLabel':
+      return {
+        ...state,
+        formData: {
+          ...state.formData,
+          customLabels: {
+            ...state.formData.customLabels,
+            [action.payload.key]: action.payload.label,
+          },
+        },
+      };
+    case 'resetCustomLabels':
+      return {
+        ...state,
+        formData: {
+          ...state.formData,
+          customLabels: {},
+        },
+      };
     case 'updateFieldOrder':
       return {
         ...state,
@@ -215,7 +237,21 @@ const loadFromStorage = (): State => {
   try {
     const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (stored) {
-      return JSON.parse(stored) as State;
+      const parsed = JSON.parse(stored) as Partial<State>;
+      // merge with defaults to avoid null/undefined properties from stale storage
+      return {
+        ...initialState,
+        ...parsed,
+        formData: {
+          ...initialState.formData,
+          ...parsed.formData,
+          // ensure customLabels object always exists
+          customLabels: {
+            ...initialState.formData.customLabels,
+            ...(parsed.formData?.customLabels || {}),
+          },
+        },
+      } as State;
     }
   } catch (_e) {
     // ignore
@@ -255,6 +291,8 @@ export const BiodataProvider: React.FC<{ children: ReactNode }> = ({ children })
     updateShlokaText: (text) => dispatch({ type: 'updateShlokaText', payload: text }),
     updateFieldOrder: (section, newOrder) =>
       dispatch({ type: 'updateFieldOrder', payload: { section, order: newOrder } }),
+    updateCustomLabel: (key, label) => dispatch({ type: 'updateCustomLabel', payload: { key, label } }),
+    resetCustomLabels: () => dispatch({ type: 'resetCustomLabels' }),
     resetFieldOrder: () => dispatch({ type: 'resetFieldOrder' }),
     currentStep: state.currentStep,
     setCurrentStep: (step) => dispatch({ type: 'setStep', payload: step }),

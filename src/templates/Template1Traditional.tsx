@@ -20,8 +20,11 @@ interface Props {
  * 4. Calculate compression factor to fit everything
  * 5. Scale spacing proportionally while maintaining minimum readable sizes
  */
-const calculateDynamicSpacing = (formData: BiodataFormData) => {
-  const { personal, family, education, address, photo, fieldOrder } = formData;
+const calculateDynamicSpacing = (
+  formData: BiodataFormData,
+  fieldOrder: { personal: string[]; family: string[]; education: string[]; address: string[] }
+) => {
+  const { personal, family, education, address, photo } = formData;
 
   // Count visible fields in each section
   const countVisibleFields = (section: any, keys: string[]) => {
@@ -246,14 +249,19 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight, spacing })
 
 // ─── Template 1 — Traditional ─────────────────────────────────
 const Template1Traditional: React.FC<Props> = ({ formData }) => {
-  const { personal, family, education, address, photo, shlokaText, selectedDeity, language } = formData;
+  const { personal, family, education, address, photo, shlokaText, selectedDeity, language, customLabels } = formData;
   const { fieldOrder } = useBiodata();
 
   // Get translation function based on selected language
   const t = useTranslation(language);
 
+  // helper gives precedence to any custom label stored in form data
+  const getLabel = (key: string, defaultKey?: string) => {
+    return customLabels?.[key] || t(defaultKey || (key as any));
+  };
+
   // Calculate dynamic spacing based on content
-  const spacing = calculateDynamicSpacing(formData);
+  const spacing = calculateDynamicSpacing(formData, fieldOrder);
 
   const brotherText = family.totalBrothers > 0
     ? `${family.totalBrothers} (विवाहित: ${family.marriedBrothers})`
@@ -438,7 +446,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
                   acc.push(
                     <FieldRow
                       key="religion-caste"
-                      label={t('religion')}
+                      label={getLabel('religion')}
                       value={`${rel} (${cast})`}
                       highlight={false}
                       spacing={spacing}
@@ -448,7 +456,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
                   acc.push(
                     <FieldRow
                       key="religion"
-                      label={t('religion')}
+                      label={getLabel('religion')}
                       value={rel}
                       highlight={false}
                       spacing={spacing}
@@ -458,7 +466,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
                   acc.push(
                     <FieldRow
                       key="caste"
-                      label={t('caste')}
+                      label={getLabel('caste')}
                       value={cast}
                       highlight={false}
                       spacing={spacing}
@@ -473,7 +481,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               acc.push(
                 <FieldRow
                   key={key}
-                  label={labelMap[key] || key}
+                  label={getLabel(key, labelMap[key] || key)}
                   value={val}
                   highlight={key === 'fullName'}
                   spacing={spacing}
@@ -508,7 +516,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               let val: any = (family as any)[key];
               if (key === 'totalBrothers') val = brotherText;
               if (key === 'totalSisters') val = sisterText;
-              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={key==='fatherName' || key==='motherName'} spacing={spacing} />;
+              return <FieldRow key={key} label={getLabel(key, labelMap[key] || key)} value={val} highlight={key==='fatherName' || key==='motherName'} spacing={spacing} />;
             });
           })()}
         </Box>
@@ -536,13 +544,13 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               : '';
             return (fieldOrder?.education || Object.keys(labelMap)).map((key) => {
               if (key === 'qualification') {
-                return <FieldRow key="qualification" label={labelMap.qualification} value={qualDisplay} highlight spacing={spacing} />;
+                return <FieldRow key="qualification" label={getLabel('qualification', labelMap.qualification)} value={qualDisplay} highlight spacing={spacing} />;
               }
               if (key === 'university') {
                 return null;
               }
               const val = (education as any)[key];
-              return <FieldRow key={key} label={labelMap[key] || key} value={val} highlight={false} spacing={spacing} />;
+              return <FieldRow key={key} label={getLabel(key, labelMap[key] || key)} value={val} highlight={false} spacing={spacing} />;
             });
           })()}
         </Box>
@@ -566,7 +574,7 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
             return (fieldOrder?.address || Object.keys(labelMap)).map((key) => {
               let val: any = (address as any)[key];
               if (key === 'mobile') val = val ? `+91 ${val}` : '';
-              return <FieldRow key={key} label={labelMap[key] || key} value={val} spacing={spacing} />;
+              return <FieldRow key={key} label={getLabel(key, labelMap[key] || key)} value={val} spacing={spacing} />;
             });
           })()}
         </Box>
