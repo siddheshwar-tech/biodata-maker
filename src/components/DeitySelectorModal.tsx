@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React from "react";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
-  Button,
   Box,
   Card,
   Typography,
+  IconButton,
   useTheme,
   useMediaQuery,
-} from '@mui/material';
+} from "@mui/material";
 import Grid from '@mui/material/GridLegacy';
-import CloseIcon from '@mui/icons-material/Close';
-import { deityOptions } from '../utils/deityOptions';
-import { Language } from '../types/biodata.types';
+import CloseIcon from "@mui/icons-material/Close";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { deityOptions } from "../utils/deityOptions";
+import { Language } from "../types/biodata.types";
 
 interface DeitySelectorModalProps {
   open: boolean;
@@ -29,171 +29,121 @@ const DeitySelectorModal: React.FC<DeitySelectorModalProps> = ({
   selectedDeity,
   onSelectDeity,
   onClose,
-  language,
 }) => {
-  const [tempSelectedDeity, setTempSelectedDeity] = useState(selectedDeity);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleConfirm = () => {
-    onSelectDeity(tempSelectedDeity);
-    onClose();
-  };
-
-  const handleClose = () => {
-    setTempSelectedDeity(selectedDeity);
+  const handleSelect = (id: string) => {
+    onSelectDeity(id);
     onClose();
   };
 
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
-      maxWidth="md"
+      onClose={onClose}
+      maxWidth="sm"
       fullWidth
       fullScreen={isMobile}
       PaperProps={{
-        sx: {
-          borderRadius: isMobile ? 0 : 2,
-        },
+        sx: { borderRadius: isMobile ? 0 : 3 },
       }}
     >
       <DialogTitle
         sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
           backgroundColor: theme.palette.primary.main,
-          color: theme.palette.primary.contrastText,
+          color: "#fff",
           fontWeight: 600,
         }}
       >
-        <span>देवतेची प्रतिमा निवडा | Choose Deity Symbol</span>
-        <CloseIcon
-          onClick={handleClose}
-          sx={{
-            cursor: 'pointer',
-            '&:hover': {
-              opacity: 0.8,
-            },
-          }}
-        />
+        देवतेची प्रतिमा निवडा
+        <IconButton onClick={onClose} sx={{ color: "#fff" }}>
+          <CloseIcon />
+        </IconButton>
       </DialogTitle>
 
-      <DialogContent
-        sx={{
-          py: 3,
-          px: isMobile ? 2 : 4,
-        }}
-      >
+      <DialogContent sx={{ py: 3 }}>
         <Grid container spacing={2}>
           {deityOptions.map((deity) => {
-            const isSelected = tempSelectedDeity === deity.id;
+            const isSelected = selectedDeity === deity.id;
+
             return (
-              <Grid
-                item
-                xs={6}
-                sm={4}
-                md={3}
-                key={deity.id}
-                sx={{
-                  display: 'flex',
-                }}
-              >
+              <Grid item xs={4} sm={3} key={deity.id}>
                 <Card
-                  onClick={() => setTempSelectedDeity(deity.id)}
+                  onClick={() => handleSelect(deity.id)}
                   sx={{
-                    width: '100%',
-                    padding: 2,
-                    textAlign: 'center',
-                    cursor: 'pointer',
+                    p: 2,
+                    textAlign: "center",
+                    cursor: "pointer",
+                    borderRadius: 3,
                     border: isSelected
-                      ? `3px solid ${theme.palette.primary.main}`
-                      : '2px solid #e0e0e0',
-                    transition: 'all 0.3s ease',
-                    position: 'relative',
-                    '&:hover': {
-                      border: `3px solid ${theme.palette.secondary.main}`,
-                      transform: 'scale(1.05)',
-                      boxShadow: `0 4px 12px rgba(212, 175, 55, 0.3)`,
+                      ? `2px solid ${theme.palette.secondary.main}`
+                      : "1px solid #e0e0e0",
+                    position: "relative",
+                    transition: "all 0.25s ease",
+                    background: isSelected
+                      ? "linear-gradient(180deg,#fff8e1,#ffffff)"
+                      : "#fff",
+
+                    "&:hover": {
+                      transform: "translateY(-4px) scale(1.05)",
+                      borderColor: theme.palette.secondary.main,
+
+                      boxShadow: `
+        0 6px 14px rgba(0,0,0,0.15),
+        0 0 12px rgba(212,175,55,0.45)
+      `,
+
+                      background:
+                        "linear-gradient(180deg, rgba(255,248,225,0.9), rgba(255,255,255,1))",
                     },
-                    backgroundColor: isSelected
-                      ? 'rgba(139, 0, 0, 0.05)'
-                      : 'transparent',
                   }}
                 >
+                  {/* Deity Image */}
+
                   <Box
                     sx={{
-                      height: '60px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      height: 60,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                       mb: 1,
-                      overflow: 'hidden',
                     }}
                   >
-                    {deity.imagePath && deity.id !== 'none' ? (
+                    {deity.imagePath && deity.id !== "none" &&
                       <img
                         src={deity.imagePath}
                         alt={deity.id}
                         style={{
-                          maxWidth: '100%',
-                          maxHeight: '100%',
-                          objectFit: 'contain',
+                          maxHeight: "60px",
+                          objectFit: "contain",
                         }}
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
-                          const parent = (e.target as HTMLImageElement)
-                            .parentElement;
-                          if (parent) {
-                            parent.textContent = deity.id;
-                            (parent as HTMLElement).style.fontSize = '48px';
-                          }
-                        }}
-                      />
-                    ) : (
-                      <span style={{ fontSize: '48px' }}>{deity.id}</span>
-                    )}
+                      />}
+
                   </Box>
 
                   {/* <Typography
-                    variant="caption"
                     sx={{
+                      fontSize: "0.8rem",
                       fontWeight: 500,
-                      display: 'block',
-                      color: theme.palette.text.primary,
-                      wordBreak: 'break-word',
-                      fontSize: '0.75rem',
                     }}
                   >
-                    {deity.id}
+                    {deity.labelMarathi}
                   </Typography> */}
 
                   {isSelected && (
-                    <Box
+                    <CheckCircleIcon
                       sx={{
-                        position: 'absolute',
-                        top: 8,
-                        right: 8,
-                        width: '24px',
-                        height: '24px',
-                        borderRadius: '50%',
-                        backgroundColor: theme.palette.secondary.main,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                        position: "absolute",
+                        top: 6,
+                        right: 6,
+                        color: theme.palette.secondary.main,
+                        fontSize: 22,
                       }}
-                    >
-                      <Typography
-                        sx={{
-                          color: 'white',
-                          fontWeight: 'bold',
-                          fontSize: '14px',
-                        }}
-                      >
-                        ✓
-                      </Typography>
-                    </Box>
+                    />
                   )}
                 </Card>
               </Grid>
@@ -201,35 +151,6 @@ const DeitySelectorModal: React.FC<DeitySelectorModalProps> = ({
           })}
         </Grid>
       </DialogContent>
-
-      <DialogActions
-        sx={{
-          padding: 2,
-          gap: 1,
-          backgroundColor: '#f5f5f5',
-        }}
-      >
-        <Button
-          onClick={handleClose}
-          variant="outlined"
-          sx={{
-            borderColor: theme.palette.primary.main,
-            color: theme.palette.primary.main,
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleConfirm}
-          variant="contained"
-          sx={{
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
-          }}
-        >
-          Confirm
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

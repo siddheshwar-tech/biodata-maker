@@ -81,6 +81,7 @@ const DeitySelector: React.FC<DeitySelectorProps> = ({
           </Box>
 
           <Button
+            size="small"
             variant="contained"
             startIcon={<EditIcon />}
             onClick={() => setModalOpen(true)}

@@ -30,6 +30,7 @@ import Step4PhotoTemplate from '../steps/Step4PhotoTemplate';
 import Template1Traditional from '../templates/Template1Traditional';
 import Template2 from '../templates/Template2';
 import Template3 from '../templates/Template3';
+import { A4_HEIGHT, A4_WIDTH } from '../utils/a4';
 
 // ─── Step Renderer ────────────────────────────────────────────
 const renderStep = (step: number): React.ReactNode => {
@@ -92,31 +93,53 @@ const LivePreview: React.FC = () => {
           position: 'sticky',
           top: 80,
           maxHeight: 'calc(100vh - 120px)',
-          overflowY: 'auto',
-          overflowX: 'hidden',
+          overflow: 'auto',
           borderRadius: 3,
           border: `1.5px solid ${theme.palette.secondary.main}`,
           backgroundColor: '#F5F0E8',
-          '&::-webkit-scrollbar': { width: '6px' },
-          '&::-webkit-scrollbar-track': { backgroundColor: '#F5F0E8' },
-          '&::-webkit-scrollbar-thumb': { backgroundColor: theme.palette.secondary.main, borderRadius: '3px' },
         }}
       >
-        {/* id="biodata-preview-container" is captured by pdfGenerator.ts */}
         <Box
-          id="biodata-preview-container"
           sx={{
-            transformOrigin: 'top center',
-            transform: { xs: 'scale(0.45)', sm: 'scale(0.55)', md: 'scale(0.60)', lg: 'scale(0.65)' },
-            // Negative margin compensates for scale so container height is correct
-            mb: { xs: '-54%', sm: '-45%', md: '-40%', lg: '-35%' },
+            p: 2
           }}
         >
-          {hasData ? renderTemplate(formData) : (
-            <Box sx={{ transform: { xs: 'scale(2.2)', sm: 'scale(1.8)', md: 'scale(1.65)', lg: 'scale(1.54)' }, transformOrigin: 'top center' }}>
-              <EmptyPreviewState />
+          {/* zoom layer */}
+        <Box
+          sx={{
+            zoom: {
+              xs: 0.40,
+              sm: 0.50,
+              md: 0.60,
+              lg: 0.65,
+            },
+            transformOrigin: "top left",
+          }}
+        >
+          {/* SCALE WRAPPER */}
+          <Box
+            sx={{
+              width: {
+                xs: "320px",
+                sm: "420px",
+                md: "480px",
+                lg: "520px",
+              },
+            }}
+          >
+            {/* REAL PDF CONTAINER */}
+            <Box
+              id="biodata-preview-container"
+              sx={{
+                width: `${A4_WIDTH}px`,
+                minHeight: `${A4_HEIGHT}px`,
+                background: '#fff',
+              }}
+            >
+              {hasData ? renderTemplate(formData) : <EmptyPreviewState />}
             </Box>
-          )}
+          </Box>
+          </Box>
         </Box>
       </Paper>
     </Box>

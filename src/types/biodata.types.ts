@@ -3,6 +3,8 @@
 export type Language = 'marathi' | 'hindi' | 'english';
 export type TemplateId = 1 | 2 | 3;
 
+
+
 export interface PersonalDetails {
   fullName: string;
   dateOfBirth: string;         // format: YYYY-MM-DD
@@ -86,6 +88,10 @@ export interface BiodataContextType {
   updateShlokaText: (text: string) => void;
   updateCustomLabel: (key: string, label: string) => void;
   resetCustomLabels: () => void;
+  removeField: (
+    section: 'personal' | 'family' | 'education' | 'address',
+    field: string
+  ) => void;
   updateFieldOrder: (
     section: 'personal' | 'family' | 'education' | 'address',
     newOrder: string[]

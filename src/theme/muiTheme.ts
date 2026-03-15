@@ -28,13 +28,15 @@ export const muiTheme = createTheme({
     fontFamily: '"Noto Sans Devanagari", "Noto Sans", "Roboto", sans-serif',
     h4: {
       fontWeight: 700,
-      fontSize: 'clamp(1.75rem, 4vw, 2.125rem)',
+      fontSize: 'clamp(1.3rem, 3.5vw, 1.5rem)',
     },
     h5: {
       fontWeight: 600,
+      fontSize: '1.2rem',
     },
     h6: {
       fontWeight: 600,
+      fontSize: '1.05rem',
     },
     body1: {
       lineHeight: 1.7,
