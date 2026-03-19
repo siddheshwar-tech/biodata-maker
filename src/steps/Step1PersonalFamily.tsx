@@ -174,21 +174,21 @@ const Step1PersonalFamily: React.FC = () => {
         );
 
       case "timeOfBirth":
-      return (
-        <Controller
-          name="timeOfBirth"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              type="time"
-              fullWidth
-              label={t("timeOfBirth")}
-              InputLabelProps={{ shrink: true }}
-            />
-          )}
-        />
-      );
+        return (
+          <Controller
+            name="timeOfBirth"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                type="time"
+                fullWidth
+                label={t("timeOfBirth")}
+                InputLabelProps={{ shrink: true }}
+              />
+            )}
+          />
+        );
 
       case "placeOfBirth":
         return (
@@ -216,7 +216,7 @@ const Step1PersonalFamily: React.FC = () => {
                 <Select {...field} label={t("rashi")}>
                   {rashiOptions.map((opt) => (
                     <MenuItem key={opt} value={opt}>
-                      {opt}
+                      {t(`rashi_${opt}` as TranslationKey)}
                     </MenuItem>
                   ))}
                 </Select>
@@ -236,7 +236,7 @@ const Step1PersonalFamily: React.FC = () => {
                 <Select {...field} label={t("nakshatra")}>
                   {nakshatraOptions.map((opt) => (
                     <MenuItem key={opt} value={opt}>
-                      {opt}
+                      {t(`nakshatra_${opt}` as TranslationKey)}
                     </MenuItem>
                   ))}
                 </Select>
@@ -285,135 +285,141 @@ const Step1PersonalFamily: React.FC = () => {
           />
         );
 
-        case "gotra":
-      return (
-        <Controller
-          name="gotra"
-          control={control}
-          render={({ field }) => (
-            <FormControl fullWidth>
-              <InputLabel>{t("gotra")}</InputLabel>
-              <Select {...field} label={t("gotra")}>
-                {gotraOptions.map((opt) => (
-                  <MenuItem key={opt} value={opt}>{opt}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-        />
-      );
+      case "gotra":
+        return (
+          <Controller
+            name="gotra"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel>{t("gotra")}</InputLabel>
+                <Select {...field} label={t("gotra")}>
+                  {gotraOptions.map((opt) => (
+                    <MenuItem key={opt} value={opt}>
+                      {t(`gotra_${opt}` as TranslationKey)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        );
 
-    case "religion":
-      return (
-        <Controller
-          name="religion"
-          control={control}
-          render={({ field }) => (
-            <FormControl fullWidth>
-              <InputLabel>{t("religion")}</InputLabel>
-              <Select {...field} label={t("religion")}>
-                {religionOptions.map((opt) => (
-                  <MenuItem key={opt} value={opt}>{opt}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-        />
-      );
+      case "religion":
+        return (
+          <Controller
+            name="religion"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel>{t("religion")}</InputLabel>
+                <Select {...field} label={t("religion")}>
+                  {religionOptions.map((opt) => (
+                    <MenuItem key={opt} value={opt}>
+                      {t(`religion_${opt}` as TranslationKey)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        );
 
-    case "caste":
-      return (
-        <Controller
-          name="caste"
-          control={control}
-          render={({ field }) => (
-            <TextField {...field} fullWidth label={t("caste")} />
-          )}
-        />
-      );
+      case "caste":
+        return (
+          <Controller
+            name="caste"
+            control={control}
+            render={({ field }) => (
+              <TextField {...field} fullWidth label={t("caste")} />
+            )}
+          />
+        );
 
-    case "subCaste":
-      return (
-        <Controller
-          name="subCaste"
-          control={control}
-          render={({ field }) => (
-            <TextField {...field} fullWidth label={t("subCaste")} />
-          )}
-        />
-      );
+      case "subCaste":
+        return (
+          <Controller
+            name="subCaste"
+            control={control}
+            render={({ field }) => (
+              <TextField {...field} fullWidth label={t("subCaste")} />
+            )}
+          />
+        );
 
-        case "height":
-      return (
-        <Controller
-          name="height"
-          control={control}
-          render={({ field }) => (
-            <FormControl fullWidth>
-              <InputLabel>{t("height")}</InputLabel>
-              <Select {...field} label={t("height")}>
-                {heightOptions.map((opt) => (
-                  <MenuItem key={opt} value={opt}>{opt}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-        />
-      );
+      case "height":
+        return (
+          <Controller
+            name="height"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel>{t("height")}</InputLabel>
+                <Select {...field} label={t("height")}>
+                  {heightOptions.map((opt) => (
+                    <MenuItem key={opt} value={opt}>{opt}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        );
 
-    case "complexion":
-      return (
-        <Controller
-          name="complexion"
-          control={control}
-          render={({ field }) => (
-            <FormControl fullWidth>
-              <InputLabel>{t("complexion")}</InputLabel>
-              <Select {...field} label={t("complexion")}>
-                {complexionOptions.map((opt) => (
-                  <MenuItem key={opt} value={opt}>{opt}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-        />
-      );
+      case "complexion":
+        return (
+          <Controller
+            name="complexion"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel>{t("complexion")}</InputLabel>
+                <Select {...field} label={t("complexion")}>
+                  {complexionOptions.map((opt) => (
+                    <MenuItem key={opt} value={opt}>
+                      {t(`complexion_${opt}` as TranslationKey)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        );
 
-    case "bloodGroup":
-      return (
-        <Controller
-          name="bloodGroup"
-          control={control}
-          render={({ field }) => (
-            <FormControl fullWidth>
-              <InputLabel>{t("bloodGroup")}</InputLabel>
-              <Select {...field} label={t("bloodGroup")}>
-                {bloodGroupOptions.map((opt) => (
-                  <MenuItem key={opt} value={opt}>{opt}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-        />
-      );
+      case "bloodGroup":
+        return (
+          <Controller
+            name="bloodGroup"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel>{t("bloodGroup")}</InputLabel>
+                <Select {...field} label={t("bloodGroup")}>
+                  {bloodGroupOptions.map((opt) => (
+                    <MenuItem key={opt} value={opt}>{opt}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        );
 
-    case "manglik":
-      return (
-        <Controller
-          name="manglik"
-          control={control}
-          render={({ field }) => (
-            <FormControl fullWidth>
-              <InputLabel>{t("manglik")}</InputLabel>
-              <Select {...field} label={t("manglik")}>
-                {manglikOptions.map((opt) => (
-                  <MenuItem key={opt} value={opt}>{opt}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-        />
-      );
+      case "manglik":
+        return (
+          <Controller
+            name="manglik"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel>{t("manglik")}</InputLabel>
+                <Select {...field} label={t("manglik")}>
+                  {manglikOptions.map((opt) => (
+                    <MenuItem key={opt} value={opt}>{opt}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        );
       default:
         return null;
     }

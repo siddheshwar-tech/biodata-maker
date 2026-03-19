@@ -1,53 +1,60 @@
 // src/utils/dropdownOptions.ts
 
-export const rashiOptions: readonly string[] = [
-  'मेष (Aries)',
-  'वृषभ (Taurus)',
-  'मिथुन (Gemini)',
-  'कर्क (Cancer)',
-  'सिंह (Leo)',
-  'कन्या (Virgo)',
-  'तुला (Libra)',
-  'वृश्चिक (Scorpio)',
-  'धनु (Sagittarius)',
-  'मकर (Capricorn)',
-  'कुंभ (Aquarius)',
-  'मीन (Pisces)',
-];
+export const rashiOptions = [
+  'mesh',
+  'vrushabh',
+  'mithun',
+  'kark',
+  'sinh',
+  'kanya',
+  'tula',
+  'vrushchik',
+  'dhanu',
+  'makar',
+  'kumbh',
+  'meen',
+] as const;
 
-export const nakshatraOptions: readonly string[] = [
-  'अश्विनी',
-  'भरणी',
-  'कृत्तिका',
-  'रोहिणी',
-  'मृगशीर्ष',
-  'आर्द्रा',
-  'पुनर्वसु',
-  'पुष्य',
-  'आश्लेषा',
-  'मघा',
-  'पूर्वाफाल्गुनी',
-  'उत्तराफाल्गुनी',
-  'हस्त',
-  'चित्रा',
-  'स्वाती',
-  'विशाखा',
-  'अनुराधा',
-  'ज्येष्ठा',
-  'मूळ',
-  'पूर्वाषाढा',
-  'उत्तराषाढा',
-  'श्रवण',
-  'धनिष्ठा',
-  'शतभिषा',
-  'पूर्वाभाद्रपदा',
-  'उत्तराभाद्रपदा',
-  'रेवती',
-];
+
+
+export const nakshatraOptions = [
+  'ashwini',
+  'bharani',
+  'krittika',
+  'rohini',
+  'mrigashirsha',
+  'ardra',
+  'punarvasu',
+  'pushya',
+  'ashlesha',
+  'magha',
+  'purva_phalguni',
+  'uttara_phalguni',
+  'hasta',
+  'chitra',
+  'swati',
+  'vishakha',
+  'anuradha',
+  'jyeshtha',
+  'mula',
+  'purva_ashadha',
+  'uttara_ashadha',
+  'shravana',
+  'dhanishta',
+  'shatabhisha',
+  'purva_bhadrapada',
+  'uttara_bhadrapada',
+  'revati',
+] as const;
 
 export const bloodGroupOptions: readonly string[] = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-export const complexionOptions: readonly string[] = ['Fair', 'Wheatish', 'Dusky', 'Dark'];
+export const complexionOptions = [
+  'fair',
+  'wheatish',
+  'dusky',
+  'dark',
+] as const;
 
 export const heightOptions: readonly string[] = [
   "4'6\"",
@@ -160,12 +167,19 @@ export const occupationOptions: readonly string[] = [
   'Other',
 ];
 
-export const religionOptions: readonly string[] = ['Hindu', 'Muslim', 'Christian', 'Sikh', 'Buddhist', 'Jain', 'Other'];
+export const religionOptions = [
+  'hindu',
+  'muslim',
+  'christian',
+  'sikh',
+  'buddhist',
+  'jain',
+  'other',
+] as const;
 
 export const manglikOptions: readonly string[] = ['Manglik', 'Non-Manglik', 'Anshik Manglik'];
 
-// common gotras – stored as keys so that they can be localized via translation
-export const gotraOptions: readonly string[] = [
+export const gotraOptions = [
   'atri',
   'bhardwaj',
   'kaushik',
@@ -176,4 +190,4 @@ export const gotraOptions: readonly string[] = [
   'bajaj',
   'chandra',
   'sharma',
-];
+] as const;

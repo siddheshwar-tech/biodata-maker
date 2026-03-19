@@ -20,13 +20,13 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
-import Grid from '@mui/material/GridLegacy';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useBiodata } from '../context/BiodataContext';
 import { useTranslation, TranslationKey } from '../utils/translations';
 import { educationSchema } from '../schemas/biodata.schema';
 import { qualificationOptions, incomeOptions, occupationOptions } from '../utils/dropdownOptions';
+import FieldRow from '../components/form/FieldRow'; // ← CHANGED: imported FieldRow
 
 const EditableLabel: React.FC<{ fieldKey: string; defaultKey: TranslationKey }> = ({ fieldKey, defaultKey }) => {
   const { formData, updateCustomLabel } = useBiodata();
@@ -47,7 +47,15 @@ const EditableLabel: React.FC<{ fieldKey: string; defaultKey: TranslationKey }> 
 const Step2Education: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { formData, updateEducation, setCurrentStep } = useBiodata();
+
+  const {
+    formData,
+    updateEducation,
+    setCurrentStep,
+    fieldOrder,   // ← CHANGED: added
+    removeField,  // ← CHANGED: added
+  } = useBiodata();
+
   const t = useTranslation(formData.language);
 
   const {
@@ -60,10 +68,7 @@ const Step2Education: React.FC = () => {
     defaultValues: formData.education,
   });
 
-  const occupationValue = useWatch({
-    control,
-    name: 'occupation',
-  });
+  const occupationValue = useWatch({ control, name: 'occupation' });
 
   useEffect(() => {
     reset(formData.education);
@@ -72,6 +77,111 @@ const Step2Education: React.FC = () => {
   const onSubmit = (data: any) => {
     updateEducation(data);
     setCurrentStep(2);
+  };
+
+  // ← CHANGED: extracted field rendering into a switch, same pattern as Step1
+  const renderEducationField = (field: string) => {
+    switch (field) {
+      case 'qualification':
+        return (
+          <Controller
+            name="qualification"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth error={!!errors.qualification}>
+                <InputLabel>{t('qualification')}</InputLabel>
+                <Select {...field} label={t('qualification')}>
+                  {qualificationOptions.map((opt) => (
+                    <MenuItem key={opt} value={opt}>{opt}</MenuItem>
+                  ))}
+                </Select>
+                {errors.qualification && (
+                  <FormHelperText>{errors.qualification?.message}</FormHelperText>
+                )}
+              </FormControl>
+            )}
+          />
+        );
+
+      case 'university':
+        return (
+          <Controller
+            name="university"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                label={t('university')}
+                placeholder={t('universityPlaceholder')}
+                error={!!errors.university}
+                helperText={errors.university?.message}
+              />
+            )}
+          />
+        );
+
+      case 'additionalCertifications':
+        return (
+          <Controller
+            name="additionalCertifications"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                multiline
+                rows={2}
+                label={t('certifications')}
+                placeholder={t('certificationsPlaceholder')}
+                error={!!errors.additionalCertifications}
+                helperText={errors.additionalCertifications?.message}
+              />
+            )}
+          />
+        );
+
+      case 'occupation':
+        return (
+          <FormControl fullWidth error={!!errors.occupation}>
+            <FormLabel sx={{ mb: 1 }}>{t('occupationLabel')}</FormLabel>
+            <Controller
+              name="occupation"
+              control={control}
+              render={({ field }) => (
+                <RadioGroup {...field} row>
+                  {occupationOptions.map((opt) => (
+                    <FormControlLabel key={opt} value={opt} control={<Radio />} label={opt} />
+                  ))}
+                </RadioGroup>
+              )}
+            />
+            {errors.occupation && (
+              <FormHelperText>{errors.occupation?.message}</FormHelperText>
+            )}
+          </FormControl>
+        );
+
+      case 'annualIncome':
+        return (
+          <Controller
+            name="annualIncome"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <Select {...field} label={t('annualIncome')}>
+                  {incomeOptions.map((opt) => (
+                    <MenuItem key={opt} value={opt}>{opt}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        );
+
+      default:
+        return null;
+    }
   };
 
   return (
@@ -84,147 +194,24 @@ const Step2Education: React.FC = () => {
 
         <Divider sx={{ borderColor: theme.palette.secondary.main, mb: 3 }} />
 
-        <Box
-          sx={{
-            '& .fieldRow': {
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', sm: '35% 65%' },
-              alignItems: 'center',
-              gap: 1,
-            },
-          }}
-        >
-
-        {/* Qualification */}
-        <Grid container spacing={2} sx={{ mb: 3 }}>
-          <Grid item xs={12}>
-            <Box className="fieldRow">
-              <EditableLabel fieldKey="qualification" defaultKey="qualification" />
-              <Controller
-                name="qualification"
-                control={control}
-                render={({ field }) => (
-                  <FormControl fullWidth error={!!errors.qualification}>
-                    <InputLabel>{t('qualification')}</InputLabel>
-                    <Select {...field} label={t('qualification')}>
-                      {qualificationOptions.map((opt) => (
-                        <MenuItem key={opt} value={opt}>{opt}</MenuItem>
-                      ))}
-                    </Select>
-                    {errors.qualification && (
-                      <FormHelperText>{errors.qualification?.message}</FormHelperText>
-                    )}
-                  </FormControl>
-                )}
+        {/* ← CHANGED: replaced hardcoded Box/Grid blocks with fieldOrder.education.map + FieldRow */}
+        {fieldOrder.education.map((field) => (
+          <FieldRow
+            key={field}
+            label={
+              <EditableLabel
+                fieldKey={field}
+                defaultKey={field as TranslationKey}
               />
-            </Box>
-          </Grid>
-
-          {/* University */}
-          <Grid item xs={12}>
-            <Box className="fieldRow">
-              <EditableLabel fieldKey="university" defaultKey="university" />
-              <Controller
-                name="university"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    fullWidth
-                    label={t('university')}
-                    placeholder={t('universityPlaceholder')}
-                    error={!!errors.university}
-                    helperText={errors.university?.message}
-                  />
-                )}
-              />
-            </Box>
-          </Grid>
-        </Grid>
-
-        {/* Certifications */}
-        <Grid container spacing={2} sx={{ mb: 3 }}>
-          <Grid item xs={12}>
-            <Box className="fieldRow">
-              <EditableLabel fieldKey="additionalCertifications" defaultKey="certifications" />
-              <Controller
-                name="additionalCertifications"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    fullWidth
-                    multiline
-                    rows={2}
-                    label={t('certifications')}
-                    placeholder={t('certificationsPlaceholder')}
-                    error={!!errors.additionalCertifications}
-                    helperText={errors.additionalCertifications?.message}
-                  />
-                )}
-              />
-            </Box>
-          </Grid>
-        </Grid>
-
-        {/* Occupation */}
-        <Grid container spacing={2} sx={{ mb: 3 }}>
-          <Grid item xs={12}>
-            <Box className="fieldRow">
-              <EditableLabel fieldKey="occupation" defaultKey="occupation" />
-
-              <FormControl fullWidth error={!!errors.occupation}>
-                <FormLabel sx={{ mb: 1 }}>{t('occupationLabel')}</FormLabel>
-
-                <Controller
-                  name="occupation"
-                  control={control}
-                  render={({ field }) => (
-                    <RadioGroup {...field} row>
-                      {occupationOptions.map((opt) => (
-                        <FormControlLabel key={opt} value={opt} control={<Radio />} label={opt} />
-                      ))}
-                    </RadioGroup>
-                  )}
-                />
-
-                {errors.occupation && (
-                  <FormHelperText>{errors.occupation?.message}</FormHelperText>
-                )}
-              </FormControl>
-
-            </Box>
-          </Grid>
-        </Grid>
-
-        {/* Annual Income */}
-        <Grid container spacing={2} sx={{ mb: 4 }}>
-          <Grid item xs={12}>
-            <Box className="fieldRow">
-              <EditableLabel fieldKey="annualIncome" defaultKey="annualIncome" />
-
-              <Controller
-                name="annualIncome"
-                control={control}
-                render={({ field }) => (
-                  <FormControl fullWidth>
-                    <Select {...field} label={t('annualIncome')}>
-                      {incomeOptions.map((opt) => (
-                        <MenuItem key={opt} value={opt}>{opt}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                )}
-              />
-
-            </Box>
-          </Grid>
-        </Grid>
-
-        </Box>
+            }
+            onDelete={() => removeField('education', field)}
+          >
+            {renderEducationField(field)}
+          </FieldRow>
+        ))}
 
         {/* Navigation Buttons */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, mt: 3 }}>
           <Button
             variant="outlined"
             startIcon={<ArrowBackIcon />}

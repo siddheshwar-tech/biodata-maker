@@ -26,10 +26,10 @@ export const personalFamilySchema = z.object({
   motherName: z.string().min(2, "Mother's name is required"),
   motherOccupation: z.string().optional(),
 
-totalBrothers: z.number().min(0).max(10),
-marriedBrothers: z.number().min(0).max(10),
-totalSisters: z.number().min(0).max(10),
-marriedSisters: z.number().min(0).max(10),
+  totalBrothers: z.number().min(0).max(10),
+  marriedBrothers: z.number().min(0).max(10),
+  totalSisters: z.number().min(0).max(10),
+  marriedSisters: z.number().min(0).max(10),
 
   familyType: z.string().optional(),
   nativePlace: z.string().optional(),
@@ -46,8 +46,6 @@ export const educationSchema = z.object({
   university: z.string().optional().default(''),
   additionalCertifications: z.string().optional().default(''),
   occupation: z.string().min(1, 'Occupation is required'),
-  companyName: z.string().optional().default(''),
-  jobTitle: z.string().optional().default(''),
   annualIncome: z.string().optional().default(''),
 });
 

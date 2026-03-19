@@ -99,7 +99,58 @@ export type TranslationKey =
   | 'customBlessing'
   | 'biodataTitle'
   | 'fieldName'
-  | 'resetLabels';
+  | 'resetLabels'
+  | 'rashi_mesh'
+  | 'rashi_vrushabh'
+  | 'rashi_mithun'
+  | 'rashi_kark'
+  | 'rashi_sinh'
+  | 'rashi_kanya'
+  | 'rashi_tula'
+  | 'rashi_vrushchik'
+  | 'rashi_dhanu'
+  | 'rashi_makar'
+  | 'rashi_kumbh'
+  | 'rashi_meen'
+  | 'nakshatra_ashwini'
+  | 'nakshatra_bharani'
+  | 'nakshatra_krittika'
+  | 'nakshatra_rohini'
+  | 'nakshatra_mrigashirsha'
+  | 'nakshatra_ardra'
+  | 'nakshatra_punarvasu'
+  | 'nakshatra_pushya'
+  | 'nakshatra_ashlesha'
+  | 'nakshatra_magha'
+  | 'nakshatra_purva_phalguni'
+  | 'nakshatra_uttara_phalguni'
+  | 'nakshatra_hasta'
+  | 'nakshatra_chitra'
+  | 'nakshatra_swati'
+  | 'nakshatra_vishakha'
+  | 'nakshatra_anuradha'
+  | 'nakshatra_jyeshtha'
+  | 'nakshatra_mula'
+  | 'nakshatra_purva_ashadha'
+  | 'nakshatra_uttara_ashadha'
+  | 'nakshatra_shravana'
+  | 'nakshatra_dhanishta'
+  | 'nakshatra_shatabhisha'
+  | 'nakshatra_purva_bhadrapada'
+  | 'nakshatra_uttara_bhadrapada'
+  | 'nakshatra_revati'
+  | 'religion_hindu'
+  | 'religion_muslim'
+  | 'religion_christian'
+  | 'religion_sikh'
+  | 'religion_buddhist'
+  | 'religion_jain'
+  | 'religion_other'
+  | 'complexion_fair'
+  | 'complexion_wheatish'
+  | 'complexion_dusky'
+  | 'complexion_dark'
+  ;
 
 type Translations = Record<TranslationKey, string>;
 
@@ -193,7 +244,7 @@ export const translations: Record<Language, Translations> = {
     biodataTitle: 'बायोडेटा',
     // gotra option labels
     gotra_atri: 'अत्री',
-    gotra_bhardwaj: 'भर्तृद्वाज',
+    gotra_bhardwaj: 'भरद्वाज',
     gotra_kaushik: 'कौशिक',
     gotra_kashyap: 'कश्यप',
     gotra_vasistha: 'वसिष्ठ',
@@ -202,6 +253,57 @@ export const translations: Record<Language, Translations> = {
     gotra_bajaj: 'बाजाज',
     gotra_chandra: 'चंद्र',
     gotra_sharma: 'शर्मा',
+    rashi_mesh: 'मेष',
+    rashi_vrushabh: 'वृषभ',
+    rashi_mithun: 'मिथुन',
+    rashi_kark: 'कर्क',
+    rashi_sinh: 'सिंह',
+    rashi_kanya: 'कन्या',
+    rashi_tula: 'तुला',
+    rashi_vrushchik: 'वृश्चिक',
+    rashi_dhanu: 'धनु',
+    rashi_makar: 'मकर',
+    rashi_kumbh: 'कुंभ',
+    rashi_meen: 'मीन',
+    nakshatra_ashwini: 'अश्विनी',
+    nakshatra_bharani: 'भरणी',
+    nakshatra_krittika: 'कृत्तिका',
+    nakshatra_rohini: 'रोहिणी',
+    nakshatra_mrigashirsha: 'मृगशीर्ष',
+    nakshatra_ardra: 'आर्द्रा',
+    nakshatra_punarvasu: 'पुनर्वसु',
+    nakshatra_pushya: 'पुष्य',
+    nakshatra_ashlesha: 'आश्लेषा',
+    nakshatra_magha: 'मघा',
+    nakshatra_purva_phalguni: 'पूर्वाफाल्गुनी',
+    nakshatra_uttara_phalguni: 'उत्तराफाल्गुनी',
+    nakshatra_hasta: 'हस्त',
+    nakshatra_chitra: 'चित्रा',
+    nakshatra_swati: 'स्वाती',
+    nakshatra_vishakha: 'विशाखा',
+    nakshatra_anuradha: 'अनुराधा',
+    nakshatra_jyeshtha: 'ज्येष्ठा',
+    nakshatra_mula: 'मूळ',
+    nakshatra_purva_ashadha: 'पूर्वाषाढा',
+    nakshatra_uttara_ashadha: 'उत्तराषाढा',
+    nakshatra_shravana: 'श्रवण',
+    nakshatra_dhanishta: 'धनिष्ठा',
+    nakshatra_shatabhisha: 'शतभिषा',
+    nakshatra_purva_bhadrapada: 'पूर्वाभाद्रपदा',
+    nakshatra_uttara_bhadrapada: 'उत्तराभाद्रपदा',
+    nakshatra_revati: 'रेवती',
+    religion_hindu: 'हिंदू',
+    religion_muslim: 'मुस्लिम',
+    religion_christian: 'ख्रिश्चन',
+    religion_sikh: 'शीख',
+    religion_buddhist: 'बौद्ध',
+    religion_jain: 'जैन',
+    religion_other: 'इतर',
+    complexion_fair: 'गोरा',
+    complexion_wheatish: 'गव्हाळ',
+    complexion_dusky: 'सावळा',
+    complexion_dark: 'काळा',
+
   },
   hindi: {
     appName: 'विवाह बायोडेटा मेकर',
@@ -301,7 +403,57 @@ export const translations: Record<Language, Translations> = {
     gotra_bajaj: 'बाजाज',
     gotra_chandra: 'चंद्र',
     gotra_sharma: 'शर्मा',
-  
+    rashi_mesh: 'मेष',
+    rashi_vrushabh: 'वृषभ',
+    rashi_mithun: 'मिथुन',
+    rashi_kark: 'कर्क',
+    rashi_sinh: 'सिंह',
+    rashi_kanya: 'कन्या',
+    rashi_tula: 'तुला',
+    rashi_vrushchik: 'वृश्चिक',
+    rashi_dhanu: 'धनु',
+    rashi_makar: 'मकर',
+    rashi_kumbh: 'कुंभ',
+    rashi_meen: 'मीन',
+    nakshatra_ashwini: 'अश्विनी',
+    nakshatra_bharani: 'भरणी',
+    nakshatra_krittika: 'कृत्तिका',
+    nakshatra_rohini: 'रोहिणी',
+    nakshatra_mrigashirsha: 'मृगशीर्ष',
+    nakshatra_ardra: 'आर्द्रा',
+    nakshatra_punarvasu: 'पुनर्वसु',
+    nakshatra_pushya: 'पुष्य',
+    nakshatra_ashlesha: 'आश्लेषा',
+    nakshatra_magha: 'मघा',
+    nakshatra_purva_phalguni: 'पूर्वाफाल्गुनी',
+    nakshatra_uttara_phalguni: 'उत्तराफाल्गुनी',
+    nakshatra_hasta: 'हस्त',
+    nakshatra_chitra: 'चित्रा',
+    nakshatra_swati: 'स्वाती',
+    nakshatra_vishakha: 'विशाखा',
+    nakshatra_anuradha: 'अनुराधा',
+    nakshatra_jyeshtha: 'ज्येष्ठा',
+    nakshatra_mula: 'मूल',
+    nakshatra_purva_ashadha: 'पूर्वाषाढ़ा',
+    nakshatra_uttara_ashadha: 'उत्तराषाढ़ा',
+    nakshatra_shravana: 'श्रवण',
+    nakshatra_dhanishta: 'धनिष्ठा',
+    nakshatra_shatabhisha: 'शतभिषा',
+    nakshatra_purva_bhadrapada: 'पूर्वाभाद्रपदा',
+    nakshatra_uttara_bhadrapada: 'उत्तराभाद्रपदा',
+    nakshatra_revati: 'रेवती',
+    religion_hindu: 'हिंदू',
+    religion_muslim: 'मुस्लिम',
+    religion_christian: 'ईसाई',
+    religion_sikh: 'सिख',
+    religion_buddhist: 'बौद्ध',
+    religion_jain: 'जैन',
+    religion_other: 'अन्य',
+    complexion_fair: 'गोरा',
+    complexion_wheatish: 'गेहुआँ',
+    complexion_dusky: 'सांवला',
+    complexion_dark: 'काला',
+
   },
   english: {
     appName: 'Vivah Biodata Maker',
@@ -401,6 +553,57 @@ export const translations: Record<Language, Translations> = {
     gotra_bajaj: 'Bajaj',
     gotra_chandra: 'Chandra',
     gotra_sharma: 'Sharma',
+    rashi_mesh: 'Aries',
+    rashi_vrushabh: 'Taurus',
+    rashi_mithun: 'Gemini',
+    rashi_kark: 'Cancer',
+    rashi_sinh: 'Leo',
+    rashi_kanya: 'Virgo',
+    rashi_tula: 'Libra',
+    rashi_vrushchik: 'Scorpio',
+    rashi_dhanu: 'Sagittarius',
+    rashi_makar: 'Capricorn',
+    rashi_kumbh: 'Aquarius',
+    rashi_meen: 'Pisces',
+    nakshatra_ashwini: 'Ashwini',
+    nakshatra_bharani: 'Bharani',
+    nakshatra_krittika: 'Krittika',
+    nakshatra_rohini: 'Rohini',
+    nakshatra_mrigashirsha: 'Mrigashirsha',
+    nakshatra_ardra: 'Ardra',
+    nakshatra_punarvasu: 'Punarvasu',
+    nakshatra_pushya: 'Pushya',
+    nakshatra_ashlesha: 'Ashlesha',
+    nakshatra_magha: 'Magha',
+    nakshatra_purva_phalguni: 'Purva Phalguni',
+    nakshatra_uttara_phalguni: 'Uttara Phalguni',
+    nakshatra_hasta: 'Hasta',
+    nakshatra_chitra: 'Chitra',
+    nakshatra_swati: 'Swati',
+    nakshatra_vishakha: 'Vishakha',
+    nakshatra_anuradha: 'Anuradha',
+    nakshatra_jyeshtha: 'Jyeshtha',
+    nakshatra_mula: 'Mula',
+    nakshatra_purva_ashadha: 'Purva Ashadha',
+    nakshatra_uttara_ashadha: 'Uttara Ashadha',
+    nakshatra_shravana: 'Shravana',
+    nakshatra_dhanishta: 'Dhanishta',
+    nakshatra_shatabhisha: 'Shatabhisha',
+    nakshatra_purva_bhadrapada: 'Purva Bhadrapada',
+    nakshatra_uttara_bhadrapada: 'Uttara Bhadrapada',
+    nakshatra_revati: 'Revati',
+    religion_hindu: 'Hindu',
+    religion_muslim: 'Muslim',
+    religion_christian: 'Christian',
+    religion_sikh: 'Sikh',
+    religion_buddhist: 'Buddhist',
+    religion_jain: 'Jain',
+    religion_other: 'Other',
+    complexion_fair: 'Fair',
+    complexion_wheatish: 'Wheatish',
+    complexion_dusky: 'Dusky',
+    complexion_dark: 'Dark',
+
   },
 };
 

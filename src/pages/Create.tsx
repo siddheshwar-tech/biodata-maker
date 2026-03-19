@@ -31,14 +31,15 @@ import Template1Traditional from '../templates/Template1Traditional';
 import Template2 from '../templates/Template2';
 import Template3 from '../templates/Template3';
 import { A4_HEIGHT, A4_WIDTH } from '../utils/a4';
+import Template4 from '../templates/Template4';
 
 // ─── Step Renderer ────────────────────────────────────────────
 const renderStep = (step: number): React.ReactNode => {
   switch (step) {
-    case 0:  return <Step1PersonalFamily />;
-    case 1:  return <Step2Education />;
-    case 2:  return <Step3Address />;
-    case 3:  return <Step4PhotoTemplate />;
+    case 0: return <Step1PersonalFamily />;
+    case 1: return <Step2Education />;
+    case 2: return <Step3Address />;
+    case 3: return <Step4PhotoTemplate />;
     default: return <Step1PersonalFamily />;
   }
 };
@@ -47,9 +48,13 @@ const renderStep = (step: number): React.ReactNode => {
 // Add Template2 and Template3 imports + cases when ready
 const renderTemplate = (formData: ReturnType<typeof useBiodata>['formData']): React.ReactNode => {
   switch (formData.selectedTemplate) {
-    case 1:  return <Template1Traditional formData={formData} />;
-    case 2: return <Template2 formData={formData} />;
-    default: return <Template3 formData={formData} />;
+    case 1: return <Template2 formData={formData} />;
+    case 2: return <Template4 formData={formData} />;
+    case 3: return <Template3 formData={formData} />;
+    case 4: return <Template2 formData={formData} />;
+
+
+    default: return <Template1Traditional formData={formData} />;
   }
 };
 
@@ -90,7 +95,6 @@ const LivePreview: React.FC = () => {
       <Paper
         elevation={4}
         sx={{
-          position: 'sticky',
           top: 80,
           maxHeight: 'calc(100vh - 120px)',
           overflow: 'auto',
@@ -105,40 +109,40 @@ const LivePreview: React.FC = () => {
           }}
         >
           {/* zoom layer */}
-        <Box
-          sx={{
-            zoom: {
-              xs: 0.40,
-              sm: 0.50,
-              md: 0.60,
-              lg: 0.65,
-            },
-            transformOrigin: "top left",
-          }}
-        >
-          {/* SCALE WRAPPER */}
           <Box
             sx={{
-              width: {
-                xs: "320px",
-                sm: "420px",
-                md: "480px",
-                lg: "520px",
+              zoom: {
+                xs: 0.40,
+                sm: 0.50,
+                md: 0.60,
+                lg: 0.65,
               },
+              transformOrigin: "top left",
             }}
           >
-            {/* REAL PDF CONTAINER */}
+            {/* SCALE WRAPPER */}
             <Box
-              id="biodata-preview-container"
               sx={{
-                width: `${A4_WIDTH}px`,
-                minHeight: `${A4_HEIGHT}px`,
-                background: '#fff',
+                width: {
+                  xs: "320px",
+                  sm: "420px",
+                  md: "480px",
+                  lg: "520px",
+                },
               }}
             >
-              {hasData ? renderTemplate(formData) : <EmptyPreviewState />}
+              {/* REAL PDF CONTAINER */}
+              <Box
+                id="biodata-preview-container"
+                sx={{
+                  width: `${A4_WIDTH}px`,
+                  minHeight: `${A4_HEIGHT}px`,
+                  background: '#fff',
+                }}
+              >
+                {hasData ? renderTemplate(formData) : <EmptyPreviewState />}
+              </Box>
             </Box>
-          </Box>
           </Box>
         </Box>
       </Paper>
@@ -201,7 +205,7 @@ const Create: React.FC = () => {
       <Navbar />
       <Container maxWidth="xl" sx={{ py: 3 }}>
         <StepIndicator activeStep={currentStep} />
-        <Grid container spacing={3}>
+        <Grid container spacing={3} alignItems="flex-start">
 
           {/* Left: Form */}
           <Grid item xs={12} md={7}>
@@ -224,7 +228,7 @@ const Create: React.FC = () => {
 
           {/* Right: Live Preview (desktop only) */}
           {!isMobile && (
-            <Grid item md={5}>
+            <Grid item md={5} sx={{ position: 'sticky', top: 80, alignSelf: 'flex-start' }}>
               <LivePreview />
             </Grid>
           )}

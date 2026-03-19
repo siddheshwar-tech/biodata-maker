@@ -5,9 +5,32 @@ import { useBiodata } from "../context/BiodataContext";
 import { useTranslation } from "../utils/translations";
 import { deityOptions } from "../utils/deityOptions";
 
+import {
+  getTranslatedValue,
+  getTranslatedLabel,
+  formatReligionCaste,
+  formatParents,
+  formatSiblings,
+  formatAddress,
+} from "../utils/fieldTranslation";
+
 interface Props {
   formData: BiodataFormData;
 }
+
+/* ---------- CONFIG: field → translation prefix ---------- */
+
+const TRANSLATABLE_FIELDS: Record<string, string> = {
+  rashi: "rashi",
+  nakshatra: "nakshatra",
+  gotra: "gotra",
+  religion: "religion",
+  manglik: "manglik",
+  complexion: "complexion",
+  familyType: "familyType",
+  occupation: "occupation",
+  annualIncome: "income",
+};
 
 /* ---------- Field Row ---------- */
 
@@ -18,14 +41,14 @@ interface FieldRowProps {
 }
 
 const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight }) => {
-  if (!value) return null;
+  if (value === undefined || value === null || value === "") return null;
 
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
-        py: "1px",
+        py: "2px",
         borderBottom: "1px dotted rgba(0,0,0,0.15)",
       }}
     >
@@ -35,7 +58,6 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight }) => {
           fontWeight: 600,
           fontSize: highlight ? "0.9rem" : "0.82rem",
           color: "#8B0000",
-          textAlign: "left",
         }}
       >
         {label}
@@ -48,7 +70,6 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight }) => {
           flex: 1,
           fontWeight: highlight ? 700 : 400,
           fontSize: highlight ? "0.9rem" : "0.82rem",
-          textAlign: "left",
         }}
       >
         {value}
@@ -85,24 +106,50 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
 /* ---------- Template ---------- */
 
 const Template2: React.FC<Props> = ({ formData }) => {
-  const { personal, family, education, address, photo, selectedDeity, shlokaText, customLabels } = formData;
+  const {
+    personal,
+    family,
+    education,
+    address,
+    photo,
+    selectedDeity,
+    shlokaText,
+    customLabels,
+    language,
+  } = formData;
+
   const { fieldOrder } = useBiodata();
-  const { language } = formData;
   const t = useTranslation(language);
 
-  const getLabel = (key: string, defaultKey?: string) => {
-    return customLabels?.[key] || t(defaultKey || (key as any));
+  /* ---------- label resolver ---------- */
+
+  const getLabel = (key: string) =>
+    customLabels?.[key] || t(key as any);
+
+  /* ---------- value resolver (SCALABLE CORE) ---------- */
+
+  const getValue = (field: string, value: any) => {
+    if (!value) return value;
+
+    const prefix = TRANSLATABLE_FIELDS[field];
+    if (!prefix) return value;
+
+    return t(`${prefix}_${value}` as any);
   };
+
+  /* ---------- helpers ---------- */
 
   const brotherText =
     family.totalBrothers > 0
-      ? `${family.totalBrothers} (विवाहित: ${family.marriedBrothers})`
+      ? `${family.totalBrothers} (${family.marriedBrothers})`
       : "";
 
   const sisterText =
     family.totalSisters > 0
-      ? `${family.totalSisters} (विवाहित: ${family.marriedSisters})`
+      ? `${family.totalSisters} (${family.marriedSisters})`
       : "";
+
+  /* ---------- render ---------- */
 
   return (
     <Box
@@ -172,17 +219,6 @@ const Template2: React.FC<Props> = ({ formData }) => {
             {shlokaText}
           </Typography>
         )}
-
-        {/* <Typography
-          sx={{
-            fontSize: "1.5rem",
-            fontWeight: 700,
-            color: "#8B0000",
-            letterSpacing: "2px",
-          }}
-        >
-          {t('biodataTitle')}
-        </Typography> */}
       </Box>
 
       {/* PHOTO */}
@@ -208,223 +244,99 @@ const Template2: React.FC<Props> = ({ formData }) => {
       )}
 
       {/* PERSONAL */}
+      <Section title={t("personalDetails")}>
+        {(fieldOrder?.personal || Object.keys(personal || {})).map((key) => {
+          if (!(key in personal)) return null;
 
-      <Section title={t('personalDetails')}>
-        {(() => {
-          const labelMap: Record<string, string> = {
-            fullName: t('fullName'),
-            dateOfBirth: t('dateOfBirth'),
-            timeOfBirth: t('timeOfBirth'),
-            placeOfBirth: t('placeOfBirth'),
-            rashi: t('rashi'),
-            nakshatra: t('nakshatra'),
-            gotra: t('gotra'),
-            religion: t('religion'),
-            caste: t('caste'),
-            subCaste: t('subCaste'),
-            height: t('height'),
-            complexion: t('complexion'),
-            bloodGroup: t('bloodGroup'),
-            manglik: t('manglik'),
-          };
+          const val = personal[key as keyof typeof personal];
 
-          // combine religion and caste when both exist
-          const keys = fieldOrder?.personal || Object.keys(labelMap);
-          const seen = new Set<string>();
-          return keys.reduce<React.ReactNode[]>((acc, key) => {
-            if (seen.has(key)) return acc;
-            if (key === 'religion' || key === 'caste') {
-              seen.add('religion');
-              seen.add('caste');
-              const rel = personal.religion;
-              const cast = personal.caste;
-              if (rel && cast) {
-                acc.push(
-                  <FieldRow
-                    key="religion-caste"
-                    label={t('religion')}
-                    value={`${rel} (${cast})`}
-                  />
-                );
-              } else if (rel) {
-                acc.push(
-                  <FieldRow key="religion" label={t('religion')} value={rel} />
-                );
-              } else if (cast) {
-                acc.push(
-                  <FieldRow key="caste" label={t('caste')} value={cast} />
-                );
-              }
-              return acc;
-            }
-            seen.add(key);
-            const val = (personal as any)[key];
-            acc.push(
+          if (key === "religion" || key === "caste") {
+            if (key !== "religion") return null;
+
+            return (
               <FieldRow
-                key={key}
-                label={getLabel(key, labelMap[key] || key)}
-                value={val}
-                highlight={key === "fullName"}
+                key="religion"
+                label={customLabels?.["religion"] || t("religion") || "religion"}
+                value={formatReligionCaste(
+                  t,
+                  personal.religion,
+                  personal.caste
+                )}
               />
             );
-            return acc;
-          }, []);
-        })()}
+          }
+
+          return (
+            <FieldRow
+              key={key}
+              label={customLabels?.[key] || t(key as any) || key}
+              value={getTranslatedValue(t, key, val)}
+            />
+          );
+        })}
       </Section>
 
       {/* FAMILY */}
+      <Section title={t("familyDetails")}>
+        <FieldRow
+          label={getTranslatedLabel(t, "fatherName", customLabels)}
+          value={formatParents(family.fatherName, family.fatherOccupation)}
+        />
+        <FieldRow
+          label={getTranslatedLabel(t, "motherName", customLabels)}
+          value={formatParents(family.motherName, family.motherOccupation)}
+        />
+        <FieldRow
+          label={getTranslatedLabel(t, "brothers", customLabels)}
+          value={formatSiblings(
+            family.totalBrothers,
+            family.marriedBrothers
+          )}
+        />
+        <FieldRow
+          label={getTranslatedLabel(t, "sisters", customLabels)}
+          value={formatSiblings(
+            family.totalSisters,
+            family.marriedSisters
+          )}
+        />
 
-      <Section title={t('familyDetails')}>
-        {(() => {
-          const fatherDisplay =
-            family.fatherName && family.fatherOccupation
-              ? `${family.fatherName} (${family.fatherOccupation})`
-              : family.fatherName || family.fatherOccupation;
+        <FieldRow
+          label={getTranslatedLabel(t, "familyType", customLabels)}
+          value={getTranslatedValue(t, "familyType", family.familyType)}
+        />
 
-          const motherDisplay =
-            family.motherName && family.motherOccupation
-              ? `${family.motherName} (${family.motherOccupation})`
-              : family.motherName || family.motherOccupation;
-
-          return [
-            fatherDisplay ? (
-              <FieldRow
-                key="father"
-                label={getLabel('fatherName')}
-                value={fatherDisplay}
-              />
-            ) : null,
-            motherDisplay ? (
-              <FieldRow
-                key="mother"
-                label={getLabel('motherName')}
-                value={motherDisplay}
-              />
-            ) : null,
-            family.totalBrothers > 0 ? (
-              <FieldRow
-                key="brothers"
-                label={getLabel('totalBrothers', t('brothers'))}
-                value={brotherText}
-              />
-            ) : null,
-            family.totalSisters > 0 ? (
-              <FieldRow
-                key="sisters"
-                label={getLabel('totalSisters', t('sisters'))}
-                value={sisterText}
-              />
-            ) : null,
-            family.familyType ? (
-              <FieldRow
-                key="familyType"
-                label={getLabel('familyType')}
-                value={family.familyType}
-              />
-            ) : null,
-            family.nativePlace ? (
-              <FieldRow
-                key="nativePlace"
-                label={getLabel('nativePlace')}
-                value={family.nativePlace}
-              />
-            ) : null,
-          ].filter(Boolean);
-        })()}
+        <FieldRow
+          label={getTranslatedLabel(t, "nativePlace", customLabels)}
+          value={family.nativePlace}
+        />
       </Section>
+
 
       {/* EDUCATION */}
-
-      <Section title={t('educationCareer')}>
-        {(() => {
-          const labelMap: Record<string, string> = {
-            qualification: t('qualification'),
-            university: t('university'),
-            occupation: t('occupation'),
-            companyName: t('companyName'),
-            jobTitle: t('jobTitle'),
-            annualIncome: t('annualIncome'),
-          };
-
-          // compute combined display for qualification + university
-          const qualDisplay = education.qualification
-            ? education.university
-              ? `${education.qualification} (${education.university})`
-              : education.qualification
-            : '';
-
-          return (fieldOrder?.education || Object.keys(labelMap)).map((key) => {
-            if (key === 'qualification') {
-              return (
-                <FieldRow
-                  key="qualification"
-                  label={labelMap.qualification}
-                  value={qualDisplay}
-                  highlight
-                />
-              );
-            }
-            if (key === 'university') {
-              return null;
-            }
-            const val = (education as any)[key];
-            return (
-              <FieldRow
-                key={key}
-                label={labelMap[key]}
-                value={val}
-                highlight={false}
-              />
-            );
-          });
-        })()}
+      <Section title={t("educationCareer")}>
+        {(fieldOrder.education || Object.keys(education)).map((key) => {
+          const val = education[key as keyof typeof education];
+          return (
+            <FieldRow
+              key={key}
+              label={getTranslatedLabel(t, key, customLabels)}
+              value={getTranslatedValue(t, key, val)}
+            />
+          );
+        })}
       </Section>
 
+
       {/* ADDRESS */}
-
-      <Section title={t('addressContact')}>
-        {(() => {
-          // Combine address fields into a single line
-          const addressParts = [];
-          if (address.fullAddress) addressParts.push(address.fullAddress);
-          if (address.city) addressParts.push(address.city);
-          if (address.state) addressParts.push(address.state);
-          if (address.pincode) addressParts.push(address.pincode);
-          const combinedAddress = addressParts.join(", ");
-
-          const rows = [address.district, address.mobile, address.email].filter(Boolean).length;
-
-          return [
-            combinedAddress ? (
-              <FieldRow
-                key="address"
-                label={getLabel('fullAddress')}
-                value={combinedAddress}
-              />
-            ) : null,
-            address.district ? (
-              <FieldRow
-                key="district"
-                label={t('district')}
-                value={address.district}
-              />
-            ) : null,
-            address.mobile ? (
-              <FieldRow
-                key="mobile"
-                label={t('mobile')}
-                value={`+91 ${address.mobile}`}
-              />
-            ) : null,
-            address.email ? (
-              <FieldRow
-                key="email"
-                label={t('email')}
-                value={address.email}
-              />
-            ) : null,
-          ].filter(Boolean);
-        })()}
+      <Section title={t("addressContact")}>
+        <FieldRow label={t("fullAddress")} value={formatAddress(address)} />
+        <FieldRow label={t("district")} value={address.district} />
+        <FieldRow
+          label={t("mobile")}
+          value={address.mobile ? `+91 ${address.mobile}` : ""}
+        />
+        <FieldRow label={t("email")} value={address.email} />
       </Section>
     </Box>
   );

@@ -1,7 +1,7 @@
 // src/types/biodata.types.ts
 
 export type Language = 'marathi' | 'hindi' | 'english';
-export type TemplateId = 1 | 2 | 3;
+export type TemplateId = 1 | 2 | 3 | 4;
 
 
 
@@ -40,8 +40,6 @@ export interface EducationDetails {
   university: string;
   additionalCertifications: string;
   occupation: string;          // from dropdown: Job/Business/Self-employed
-  companyName: string;
-  jobTitle: string;
   annualIncome: string;        // from dropdown range
 }
 

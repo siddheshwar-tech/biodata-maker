@@ -5,9 +5,32 @@ import { useBiodata } from "../context/BiodataContext";
 import { useTranslation } from "../utils/translations";
 import { deityOptions } from "../utils/deityOptions";
 
+import {
+  getTranslatedValue,
+  getTranslatedLabel,
+  formatReligionCaste,
+  formatParents,
+  formatSiblings,
+  formatAddress,
+} from "../utils/fieldTranslation";
+
 interface Props {
   formData: BiodataFormData;
 }
+
+/* ---------- CONFIG: field → translation prefix ---------- */
+
+const TRANSLATABLE_FIELDS: Record<string, string> = {
+  rashi: "rashi",
+  nakshatra: "nakshatra",
+  gotra: "gotra",
+  religion: "religion",
+  manglik: "manglik",
+  complexion: "complexion",
+  familyType: "familyType",
+  occupation: "occupation",
+  annualIncome: "income",
+};
 
 /* ---------- Field Row ---------- */
 
@@ -74,7 +97,14 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
       {title}
     </Typography>
 
-    <Box sx={{ maxWidth: 450, mx: "auto", borderTop: "2px solid #D4AF37", mb: 0.5 }} />
+    <Box
+      sx={{
+        maxWidth: 450,
+        mx: "auto",
+        borderTop: "2px solid #D4AF37",
+        mb: 0.5,
+      }}
+    />
 
     {children}
   </Box>
@@ -83,31 +113,57 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
 /* ---------- Template ---------- */
 
 const Template3: React.FC<Props> = ({ formData }) => {
+  const {
+    personal,
+    family,
+    education,
+    address,
+    photo,
+    selectedDeity,
+    shlokaText,
+    customLabels,
+    language,
+  } = formData;
 
-  const { personal, family, education, address, photo, selectedDeity, shlokaText, customLabels } = formData;
   const { fieldOrder } = useBiodata();
-  const { language } = formData;
-
   const t = useTranslation(language);
 
-  const getLabel = (key: string) => customLabels?.[key] || t(key as any);
+/* ---------- label resolver ---------- */
+
+  const getLabel = (key: string) =>
+    customLabels?.[key] || t(key as any);
+
+  /* ---------- value resolver (SCALABLE CORE) ---------- */
+
+  const getValue = (field: string, value: any) => {
+    if (!value) return value;
+
+    const prefix = TRANSLATABLE_FIELDS[field];
+    if (!prefix) return value;
+
+    return t(`${prefix}_${value}` as any);
+  };
+
+  /* ---------- helpers ---------- */
 
   const brotherText =
     family.totalBrothers > 0
-      ? `${family.totalBrothers} (विवाहित: ${family.marriedBrothers})`
+      ? `${family.totalBrothers} (${family.marriedBrothers})`
       : "";
 
   const sisterText =
     family.totalSisters > 0
-      ? `${family.totalSisters} (विवाहित: ${family.marriedSisters})`
+      ? `${family.totalSisters} (${family.marriedSisters})`
       : "";
+
+      /* ---------- render ---------- */
 
   return (
     <Box
       sx={{
         width: 794,
         maxHeight: 1123,
-        backgroundImage: "url('/templates/template_3.jpg')",
+        backgroundImage: "url('/templates/template_3.jpg')", // KEEP ORIGINAL DESIGN
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -117,20 +173,20 @@ const Template3: React.FC<Props> = ({ formData }) => {
         fontFamily: "Noto Sans Devanagari, sans-serif",
       }}
     >
-
       {/* HEADER */}
 
       <Box sx={{ textAlign: "center", mb: 1 }}>
-
         {selectedDeity && selectedDeity !== "none" && (
-          <Box sx={{ mb: 0, mt: 10 }}>
+          <Box sx={{ mt: 10 }}>
             {(() => {
-              const deity = deityOptions.find(d => d.id === selectedDeity);
+              const deity = deityOptions.find(
+                (d) => d.id === selectedDeity
+              );
               return deity?.imagePath ? (
                 <img
                   src={deity.imagePath}
                   alt={selectedDeity}
-                  style={{ width: 48, height: 48, objectFit: "contain" }}
+                  style={{ width: 48, height: 48 }}
                 />
               ) : null;
             })()}
@@ -150,6 +206,16 @@ const Template3: React.FC<Props> = ({ formData }) => {
           </Typography>
         )}
 
+        <Typography
+          sx={{
+            fontSize: "1rem",
+            fontWeight: 600,
+            color: "#8B0000",
+            letterSpacing: "1px",
+          }}
+        >
+          {t("biodataTitle")}
+        </Typography>
       </Box>
 
       {/* PHOTO */}
@@ -168,148 +234,111 @@ const Template3: React.FC<Props> = ({ formData }) => {
             <img
               src={photo}
               alt="photo"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
             />
           </Box>
         </Box>
       )}
 
       {/* PERSONAL */}
-
       <Section title={t("personalDetails")}>
+        {(fieldOrder?.personal || Object.keys(personal || {})).map((key) => {
+          if (!(key in personal)) return null;
 
-        {fieldOrder.personal.map(key => {
+          const val = personal[key as keyof typeof personal];
 
-          const value = (personal as any)[key];
+          if (key === "religion" || key === "caste") {
+            if (key !== "religion") return null;
 
-          if (key === "religion" && personal.religion && personal.caste) {
             return (
               <FieldRow
-                key="religion-caste"
-                label={getLabel("religion")}
-                value={`${personal.religion} (${personal.caste})`}
+                key="religion"
+                label={customLabels?.["religion"] || t("religion") || "religion"}
+                value={formatReligionCaste(
+                  t,
+                  personal.religion,
+                  personal.caste
+                )}
               />
             );
           }
 
-          if (key === "caste") return null;
-
           return (
             <FieldRow
               key={key}
-              label={getLabel(key)}
-              value={value}
-              highlight={key === "fullName"}
+              label={customLabels?.[key] || t(key as any) || key}
+              value={getTranslatedValue(t, key, val)}
             />
           );
-
         })}
-
       </Section>
 
       {/* FAMILY */}
-
       <Section title={t("familyDetails")}>
+        <FieldRow
+          label={getTranslatedLabel(t, "fatherName", customLabels)}
+          value={formatParents(family.fatherName, family.fatherOccupation)}
+        />
+        <FieldRow
+          label={getTranslatedLabel(t, "motherName", customLabels)}
+          value={formatParents(family.motherName, family.motherOccupation)}
+        />
+        <FieldRow
+          label={getTranslatedLabel(t, "brothers", customLabels)}
+          value={formatSiblings(
+            family.totalBrothers,
+            family.marriedBrothers
+          )}
+        />
+        <FieldRow
+          label={getTranslatedLabel(t, "sisters", customLabels)}
+          value={formatSiblings(
+            family.totalSisters,
+            family.marriedSisters
+          )}
+        />
 
-        {family.fatherName && (
-          <FieldRow
-            label={getLabel("fatherName")}
-            value={`${family.fatherName} (${family.fatherOccupation || ""})`}
-          />
-        )}
+        <FieldRow
+          label={getTranslatedLabel(t, "familyType", customLabels)}
+          value={getTranslatedValue(t, "familyType", family.familyType)}
+        />
 
-        {family.motherName && (
-          <FieldRow
-            label={getLabel("motherName")}
-            value={`${family.motherName} (${family.motherOccupation || ""})`}
-          />
-        )}
-
-        {brotherText && (
-          <FieldRow
-            label={getLabel("totalBrothers")}
-            value={brotherText}
-          />
-        )}
-
-        {sisterText && (
-          <FieldRow
-            label={getLabel("totalSisters")}
-            value={sisterText}
-          />
-        )}
-
-        {family.familyType && (
-          <FieldRow
-            label={getLabel("familyType")}
-            value={family.familyType}
-          />
-        )}
-
-        {family.nativePlace && (
-          <FieldRow
-            label={getLabel("nativePlace")}
-            value={family.nativePlace}
-          />
-        )}
-
+        <FieldRow
+          label={getTranslatedLabel(t, "nativePlace", customLabels)}
+          value={family.nativePlace}
+        />
       </Section>
 
+
       {/* EDUCATION */}
-
       <Section title={t("educationCareer")}>
-
-        {fieldOrder.education.map(key => {
-
-          const value = (education as any)[key];
-
+        {(fieldOrder.education || Object.keys(education)).map((key) => {
+          const val = education[key as keyof typeof education];
           return (
             <FieldRow
               key={key}
-              label={getLabel(key)}
-              value={value}
-              highlight={key === "qualification"}
+              label={getTranslatedLabel(t, key, customLabels)}
+              value={getTranslatedValue(t, key, val)}
             />
           );
-
         })}
-
       </Section>
+
 
       {/* ADDRESS */}
-
       <Section title={t("addressContact")}>
-
-        {address.fullAddress && (
-          <FieldRow
-            label={getLabel("fullAddress")}
-            value={`${address.fullAddress}, ${address.city}, ${address.state} ${address.pincode}`}
-          />
-        )}
-
-        {address.district && (
-          <FieldRow
-            label={getLabel("district")}
-            value={address.district}
-          />
-        )}
-
-        {address.mobile && (
-          <FieldRow
-            label={getLabel("mobile")}
-            value={`+91 ${address.mobile}`}
-          />
-        )}
-
-        {address.email && (
-          <FieldRow
-            label={getLabel("email")}
-            value={address.email}
-          />
-        )}
-
+        <FieldRow label={t("fullAddress")} value={formatAddress(address)} />
+        <FieldRow label={t("district")} value={address.district} />
+        <FieldRow
+          label={t("mobile")}
+          value={address.mobile ? `+91 ${address.mobile}` : ""}
+        />
+        <FieldRow label={t("email")} value={address.email} />
       </Section>
-
     </Box>
   );
 };

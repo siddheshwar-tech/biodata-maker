@@ -45,8 +45,6 @@ const defaultFieldOrder = {
     'qualification',
     'additionalCertifications',
     'occupation',
-    'companyName',
-    'jobTitle',
     'annualIncome',
   ],
   address: [
