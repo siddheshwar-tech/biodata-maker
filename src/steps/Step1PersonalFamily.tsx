@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 import { z } from "zod";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { format } from 'date-fns';
 
 import {
   TextField,
@@ -44,6 +47,8 @@ import {
   gotraOptions,
 } from "../utils/dropdownOptions";
 
+import { mapToFormValues } from "../utils/util";
+
 const EditableLabel: React.FC<{
   fieldKey: string;
   defaultKey: TranslationKey;
@@ -84,31 +89,40 @@ const Step1PersonalFamily: React.FC = () => {
 
   const t = useTranslation(formData.language);
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<PersonalFamilyFormValues>({
-    resolver: zodResolver(personalFamilySchema),
-    defaultValues: {
-      ...formData.personal,
-      ...formData.family,
-    },
-  });
+  // const {control,handleSubmit,reset,formState: { errors },} = useForm<PersonalFamilyFormValues>({
+  //   resolver: zodResolver(personalFamilySchema),
+  //   defaultValues: {
+  //     ...formData.personal,
+  //     ...formData.family,
+  //   },
+  // });
+
+
+  const { control, handleSubmit, reset, formState: { errors } } =
+    useForm<PersonalFamilyFormValues>({
+      resolver: zodResolver(personalFamilySchema),
+      defaultValues: mapToFormValues({
+        ...formData.personal,
+        ...formData.family,
+      }),
+    });
 
   useEffect(() => {
-    reset({
-      ...formData.personal,
-      ...formData.family,
-    });
+    reset(
+      mapToFormValues({
+        ...formData.personal,
+        ...formData.family,
+      })
+    );
   }, [formData, reset]);
+
 
   const onSubmit: SubmitHandler<PersonalFamilyFormValues> = (data) => {
     updatePersonal({
       fullName: data.fullName,
-      dateOfBirth: data.dateOfBirth,
-      timeOfBirth: data.timeOfBirth ?? '',
+      // dateOfBirth: data.dateOfBirth ? format(data.dateOfBirth, 'yyyy-MM-dd') : '',
+      dateOfBirth: data.dateOfBirth ? format(data.dateOfBirth, 'dd/MM/yyyy') : '',
+      timeOfBirth: data.timeOfBirth ? format(data.timeOfBirth, 'HH:mm') : '',
       placeOfBirth: data.placeOfBirth,
       rashi: data.rashi,
       nakshatra: data.nakshatra ?? '',
@@ -162,12 +176,16 @@ const Step1PersonalFamily: React.FC = () => {
             name="dateOfBirth"
             control={control}
             render={({ field }) => (
-              <TextField
-                {...field}
-                type="date"
-                fullWidth
+              <DatePicker
                 label={t("dateOfBirth")}
-                InputLabelProps={{ shrink: true }}
+                value={field.value || null}
+                onChange={(date) => field.onChange(date)}
+                format="dd/MM/yyyy"
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                  },
+                }}
               />
             )}
           />
@@ -179,12 +197,16 @@ const Step1PersonalFamily: React.FC = () => {
             name="timeOfBirth"
             control={control}
             render={({ field }) => (
-              <TextField
-                {...field}
-                type="time"
-                fullWidth
+              <TimePicker
                 label={t("timeOfBirth")}
-                InputLabelProps={{ shrink: true }}
+                value={field.value || null}
+                onChange={(time) => field.onChange(time)}
+                format="hh:mm a" // 12-hour format (AM/PM)
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                  },
+                }}
               />
             )}
           />

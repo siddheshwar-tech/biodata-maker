@@ -222,12 +222,6 @@ const Step3Address: React.FC = () => {
 
         </Box>
 
-        <Typography variant="h6" sx={{ color: theme.palette.primary.main, mt: 4, mb: 1 }}>
-          {t('addressContact')}
-        </Typography>
-
-        <Divider sx={{ borderColor: theme.palette.secondary.main, mb: 3 }} />
-
         <Box
           sx={{
             '& .fieldRow': {

@@ -7,10 +7,7 @@ import {
 import Grid from '@mui/material/GridLegacy';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import DownloadIcon from '@mui/icons-material/Download';
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import PaletteIcon from '@mui/icons-material/Palette';
+import LockIcon from '@mui/icons-material/Lock';
 import Navbar from '../components/Navbar';
 import { useBiodata } from '../context/BiodataContext';
 import { useTranslation } from '../utils/translations';
@@ -97,61 +94,9 @@ const Home: React.FC = () => {
         <Grid container spacing={3} sx={{ mb: 8 }}>
           <Grid item xs={12} sm={4}><FeatureCard icon={<CheckCircleOutlineIcon fontSize="large" />} title="100% Free" description="No charges. No watermark. Use anytime, unlimited times." /></Grid>
           <Grid item xs={12} sm={4}><FeatureCard icon={<LockOpenIcon fontSize="large" />} title="No Login" description="No account needed. Fill the form and download PDF directly." /></Grid>
-          <Grid item xs={12} sm={4}><FeatureCard icon={<AutoAwesomeIcon fontSize="large" />} title="Beautiful Designs" description="3 professional templates — Traditional, Religious, Modern. Mobile friendly." /></Grid>
+          <Grid item xs={12} sm={4}><FeatureCard icon={<LockIcon fontSize="large" />} title="Your Data Stays Private" description="Nothing is stored on our servers. Your biodata is built and saved entirely on your device." /></Grid>
         </Grid>
-
-        <Box sx={{ backgroundColor: '#FFF0E8', borderRadius: 4, p: { xs: 3, md: 5 }, mb: 8 }}>
-          <Typography variant="h5" fontWeight={700} textAlign="center" gutterBottom sx={{ mb: 4 }}>How It Works — 3 Easy Steps</Typography>
-          <Grid container spacing={2} justifyContent="center">
-            <Grid item xs={12} sm={4}><HowItWorksStep step={1} icon={<EditNoteIcon />} label="Fill Your Details" /></Grid>
-            <Grid item xs={12} sm={4}><HowItWorksStep step={2} icon={<PaletteIcon />} label="Choose Template" /></Grid>
-            <Grid item xs={12} sm={4}><HowItWorksStep step={3} icon={<DownloadIcon />} label="Download PDF" /></Grid>
-          </Grid>
-        </Box>
-
-        <Typography variant="h5" fontWeight={700} textAlign="center" gutterBottom sx={{ mb: 4 }}>Available Templates</Typography>
-        <Grid container spacing={3} sx={{ mb: 8 }}>
-          <Grid item xs={12} sm={4}>
-            <TemplateCard
-              id={1}
-              name="Traditional | Paramparik"
-              imgSrc="/templates/template_1.jpg"
-              tag="Most Popular"
-              onClick={() => goToCreate(1)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TemplateCard
-              id={2}
-              name="Religious | Dharmik"
-              imgSrc="/templates/template_2.jpg"
-              tag="Traditional"
-              onClick={() => goToCreate(2)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TemplateCard
-              id={3}
-              name="Modern | Adhunik"
-              imgSrc="/templates/template_3.jpg"
-              tag="Professional"
-              onClick={() => goToCreate(3)}
-            />
-          </Grid>
-        </Grid>
-
-        <Box sx={{ textAlign: 'center', py: 5, backgroundColor: theme.palette.primary.main, borderRadius: 4, color: 'white' }}>
-          <Typography variant="h5" fontWeight={700} gutterBottom>Create Your Biodata Today — Free!</Typography>
-          <Typography variant="body1" sx={{ opacity: 0.9, mb: 3 }}>Ready in 2 minutes • Download PDF</Typography>
-          <Button variant="contained" size="large" onClick={() => navigate('/create')} sx={{ backgroundColor: theme.palette.secondary.main, color: '#2C1810', fontWeight: 700, fontSize: '1.1rem', px: 5, py: 1.5, '&:hover': { backgroundColor: theme.palette.secondary.light } }}>
-            {t('createBiodata')} --&gt;
-          </Button>
-        </Box>
       </Container>
-
-      <Box sx={{ backgroundColor: theme.palette.primary.dark, color: 'white', textAlign: 'center', py: 3, mt: 4 }}>
-        <Typography variant="body2" sx={{ opacity: 0.8 }}>2025 Vivah Biodata Maker -- 100% Free | No Login | No Watermark</Typography>
-      </Box>
     </Box>
   );
 };

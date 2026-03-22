@@ -55,8 +55,8 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, highlight }) => {
       <Typography
         sx={{
           width: "45%",
-          fontWeight: 600,
-          fontSize: highlight ? "0.9rem" : "0.82rem",
+          fontWeight: 500,
+          fontSize: highlight ? "0.8rem" : "0.72rem",
           color: "#8B0000",
         }}
       >

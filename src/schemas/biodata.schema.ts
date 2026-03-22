@@ -6,8 +6,8 @@ import { z } from 'zod';
 export const personalFamilySchema = z.object({
   // ── Personal Details ──
   fullName: z.string().min(2, 'Name must be at least 2 characters'),
-  dateOfBirth: z.string().min(1, 'Date of birth is required'),
-  timeOfBirth: z.string().optional(),
+  dateOfBirth: z.date().max(new Date(), 'Date of birth cannot be in the future'),
+  timeOfBirth: z.date().nullable().optional(),
   placeOfBirth: z.string().min(1, 'Place of birth is required'),
   rashi: z.string().min(1, 'Rashi is required'),
   nakshatra: z.string().optional(),
