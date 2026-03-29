@@ -260,6 +260,12 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
     return customLabels?.[key] || t(defaultKey || (key as any));
   };
 
+  const shouldRenderCustomPersonalField = (key: string) => {
+    const value = (personal as any)[key];
+    const label = customLabels?.[key]?.trim();
+    return !!label && !!value;
+  };
+
   // Calculate dynamic spacing based on content
   const spacing = calculateDynamicSpacing(formData, fieldOrder);
 
@@ -428,6 +434,8 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
               complexion: t('complexion'),
               bloodGroup: t('bloodGroup'),
               manglik: t('manglik'),
+              customField1: t('customField1'),
+              customField2: t('customField2'),
             };
 
             // custom logic: if both religion and caste provided, combine into one row
@@ -478,6 +486,14 @@ const Template1Traditional: React.FC<Props> = ({ formData }) => {
 
               seen.add(key);
               const val = (personal as any)[key];
+
+              if (
+                (key === 'customField1' || key === 'customField2') &&
+                !shouldRenderCustomPersonalField(key)
+              ) {
+                return acc;
+              }
+
               acc.push(
                 <FieldRow
                   key={key}

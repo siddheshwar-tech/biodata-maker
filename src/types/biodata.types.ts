@@ -20,6 +20,8 @@ export interface PersonalDetails {
   complexion: string;          // from dropdown
   bloodGroup: string;          // from dropdown
   manglik: string;            // Manglik status
+  customField1: string;
+  customField2: string;
 }
 
 export interface FamilyDetails {

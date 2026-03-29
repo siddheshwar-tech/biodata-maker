@@ -19,6 +19,8 @@ export const personalFamilySchema = z.object({
   complexion: z.string().optional(),
   bloodGroup: z.string().optional(),
   manglik: z.string().optional(),
+  customField1: z.string().optional().default(''),
+  customField2: z.string().optional().default(''),
 
   // ── Family Details ──
   fatherName: z.string().min(2, "Father's name is required"),
@@ -55,16 +57,19 @@ export type EducationFormValues = z.infer<typeof educationSchema>;
 // STEP 3 — Address & Contact
 // ─────────────────────────────────────────────
 export const addressSchema = z.object({
-  fullAddress: z.string().min(5, 'Address must be at least 5 characters'),
-  city: z.string().min(1, 'City is required'),
+  fullAddress: z.string().optional().default(''),
+  city: z.string().optional().default(''),
   district: z.string().optional().default(''),
-  state: z.string().min(1, 'State is required'),
+  state: z.string().optional().default(''),
   pincode: z.string()
-    .length(6, 'Pincode must be exactly 6 digits')
-    .regex(/^[0-9]{6}$/, 'Pincode must contain only numbers'),
+    .regex(/^$|^[0-9]{6}$/, 'Pincode must be exactly 6 digits')
+    .default(''),
   mobile: z.string()
-    .regex(/^[0-9]{10}$/, 'Enter a valid 10-digit mobile number'),
-  email: z.string().email('Enter a valid email').optional().or(z.literal('')),
+    .regex(/^$|^[0-9]{10}$/, 'Enter a valid 10-digit mobile number')
+    .default(''),
+  email: z.string()
+    .regex(/^$|^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Enter a valid email')
+    .default(''),
 });
 
 export type AddressFormValues = z.infer<typeof addressSchema>;

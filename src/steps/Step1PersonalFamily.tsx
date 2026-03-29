@@ -51,19 +51,23 @@ import { mapToFormValues } from "../utils/util";
 
 const EditableLabel: React.FC<{
   fieldKey: string;
-  defaultKey: TranslationKey;
-}> = ({ fieldKey, defaultKey }) => {
+  defaultKey?: TranslationKey;
+  allowEmptyDefault?: boolean;
+  placeholder?: string;
+}> = ({ fieldKey, defaultKey, allowEmptyDefault = false, placeholder }) => {
   const { formData, updateCustomLabel } = useBiodata();
   const t = useTranslation(formData.language);
 
   const labelValue =
-    formData?.customLabels?.[fieldKey] ?? t(defaultKey);
+    formData?.customLabels?.[fieldKey] ??
+    (allowEmptyDefault ? "" : defaultKey ? t(defaultKey) : "");
 
   return (
     <TextField
       fullWidth
       size="small"
       label={t("fieldName")}
+      placeholder={placeholder}
       value={labelValue}
       onChange={(e) =>
         updateCustomLabel(fieldKey, e.target.value)
@@ -134,6 +138,8 @@ const Step1PersonalFamily: React.FC = () => {
       complexion: data.complexion ?? '',
       bloodGroup: data.bloodGroup ?? '',
       manglik: data.manglik ?? '',
+      customField1: data.customField1 ?? '',
+      customField2: data.customField2 ?? '',
     });
 
     updateFamily({
@@ -442,6 +448,23 @@ const Step1PersonalFamily: React.FC = () => {
             )}
           />
         );
+
+      case "customField1":
+      case "customField2":
+        return (
+          <Controller
+            name={field}
+            control={control}
+            render={({ field: controllerField }) => (
+              <TextField
+                {...controllerField}
+                fullWidth
+                label={t("customFieldValue")}
+                placeholder={t("customFieldValuePlaceholder")}
+              />
+            )}
+          />
+        );
       default:
         return null;
     }
@@ -489,10 +512,18 @@ const Step1PersonalFamily: React.FC = () => {
           <FieldRow
             key={field}
             label={
-              <EditableLabel
-                fieldKey={field}
-                defaultKey={field as TranslationKey}
-              />
+              field === "customField1" || field === "customField2" ? (
+                <EditableLabel
+                  fieldKey={field}
+                  allowEmptyDefault
+                  placeholder={t("customFieldLabelPlaceholder")}
+                />
+              ) : (
+                <EditableLabel
+                  fieldKey={field}
+                  defaultKey={field as TranslationKey}
+                />
+              )
             }
             onDelete={() => removeField("personal", field)}
           >

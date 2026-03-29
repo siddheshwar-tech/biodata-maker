@@ -62,6 +62,8 @@ const Step4PhotoTemplate: React.FC = () => {
         complexion: 'complexion',
         bloodGroup: 'bloodGroup',
         manglik: 'manglik',
+        customField1: 'customField1',
+        customField2: 'customField2',
       },
       family: {
         fatherName: 'fatherName',

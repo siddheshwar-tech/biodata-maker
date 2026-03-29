@@ -133,6 +133,12 @@ const Template3: React.FC<Props> = ({ formData }) => {
   const getLabel = (key: string) =>
     customLabels?.[key] || t(key as any);
 
+  const shouldRenderCustomPersonalField = (key: string) => {
+    const value = personal[key as keyof typeof personal];
+    const label = customLabels?.[key]?.trim();
+    return !!label && !!value;
+  };
+
   /* ---------- value resolver (SCALABLE CORE) ---------- */
 
   const getValue = (field: string, value: any) => {
@@ -250,6 +256,13 @@ const Template3: React.FC<Props> = ({ formData }) => {
           if (!(key in personal)) return null;
 
           const val = personal[key as keyof typeof personal];
+
+          if (
+            (key === "customField1" || key === "customField2") &&
+            !shouldRenderCustomPersonalField(key)
+          ) {
+            return null;
+          }
 
           if (key === "religion" || key === "caste") {
             if (key !== "religion") return null;

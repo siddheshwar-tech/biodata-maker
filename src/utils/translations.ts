@@ -99,6 +99,11 @@ export type TranslationKey =
   | 'customBlessing'
   | 'biodataTitle'
   | 'fieldName'
+  | 'customField1'
+  | 'customField2'
+  | 'customFieldValue'
+  | 'customFieldLabelPlaceholder'
+  | 'customFieldValuePlaceholder'
   | 'resetLabels'
   | 'rashi_mesh'
   | 'rashi_vrushabh'
@@ -242,6 +247,11 @@ export const translations: Record<Language, Translations> = {
     clickButtonBelow: 'खाली दिलेल्या बटनावर क्लिक करा',
     pdfDownloadFolder: 'PDF आपोआप डाउनलोड फोल्डरमध्ये सेव्ह होईल',
     biodataTitle: 'बायोडेटा',
+    customField1: 'सानुकूल फील्ड 1',
+    customField2: 'सानुकूल फील्ड 2',
+    customFieldValue: 'माहिती',
+    customFieldLabelPlaceholder: 'स्वतःचे फील्ड नाव लिहा',
+    customFieldValuePlaceholder: 'स्वतःची माहिती लिहा',
     // gotra option labels
     gotra_atri: 'अत्री',
     gotra_bhardwaj: 'भरद्वाज',
@@ -390,6 +400,11 @@ export const translations: Record<Language, Translations> = {
     clickButtonBelow: 'नीचे दिए गए बटन पर क्लिक करें',
     pdfDownloadFolder: 'PDF अपने आप डाउनलोड फ़ोल्डर में सेव हो जाएगी',
     fieldName: 'फ़ील्ड का नाम',
+    customField1: 'कस्टम फील्ड 1',
+    customField2: 'कस्टम फील्ड 2',
+    customFieldValue: 'जानकारी',
+    customFieldLabelPlaceholder: 'अपना फील्ड नाम लिखें',
+    customFieldValuePlaceholder: 'अपनी जानकारी लिखें',
     resetLabels: 'सभी लेबल रीसेट करें',
     biodataTitle: 'बायोडेटा',
     // gotra option labels
@@ -541,6 +556,11 @@ export const translations: Record<Language, Translations> = {
     pdfDownloadFolder: 'PDF will automatically go to download folder',
     biodataTitle: 'Biodata',
     fieldName: 'Field name',
+    customField1: 'Custom Field 1',
+    customField2: 'Custom Field 2',
+    customFieldValue: 'Value',
+    customFieldLabelPlaceholder: 'Enter your field name',
+    customFieldValuePlaceholder: 'Enter your value',
     resetLabels: 'Reset labels',
     // gotra option labels
     gotra_atri: 'Atri',

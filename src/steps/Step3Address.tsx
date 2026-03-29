@@ -16,7 +16,6 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
-import Grid from '@mui/material/GridLegacy';
 import HomeIcon from '@mui/icons-material/Home';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -27,6 +26,7 @@ import { useBiodata } from '../context/BiodataContext';
 import { useTranslation, TranslationKey } from '../utils/translations';
 import { addressSchema } from '../schemas/biodata.schema';
 import { indianStates } from '../utils/dropdownOptions';
+import FieldRow from '../components/form/FieldRow';
 
 const EditableLabel: React.FC<{ fieldKey: string; defaultKey: TranslationKey }> = ({ fieldKey, defaultKey }) => {
   const { formData, updateCustomLabel } = useBiodata();
@@ -47,7 +47,13 @@ const EditableLabel: React.FC<{ fieldKey: string; defaultKey: TranslationKey }> 
 const Step3Address: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { formData, updateAddress, setCurrentStep } = useBiodata();
+  const {
+    formData,
+    updateAddress,
+    setCurrentStep,
+    fieldOrder,
+    removeField,
+  } = useBiodata();
   const t = useTranslation(formData.language);
 
   const {
@@ -69,6 +75,173 @@ const Step3Address: React.FC = () => {
     setCurrentStep(3);
   };
 
+  const renderAddressField = (fieldName: string) => {
+    switch (fieldName) {
+      case 'fullAddress':
+        return (
+          <Controller
+            name="fullAddress"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                multiline
+                rows={3}
+                label={t('fullAddress')}
+                placeholder={t('addressPlaceholder')}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <HomeIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                error={!!errors.fullAddress}
+                helperText={errors.fullAddress?.message}
+              />
+            )}
+          />
+        );
+
+      case 'city':
+        return (
+          <Controller
+            name="city"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                label={t('city')}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LocationOnIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                error={!!errors.city}
+                helperText={errors.city?.message}
+              />
+            )}
+          />
+        );
+
+      case 'district':
+        return (
+          <Controller
+            name="district"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                label={t('district')}
+                error={!!errors.district}
+                helperText={errors.district?.message}
+              />
+            )}
+          />
+        );
+
+      case 'state':
+        return (
+          <Controller
+            name="state"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth error={!!errors.state}>
+                <Select {...field} label={t('state')}>
+                  {indianStates.map((opt) => (
+                    <MenuItem key={opt} value={opt}>
+                      {opt}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.state && (
+                  <FormHelperText>{errors.state?.message}</FormHelperText>
+                )}
+              </FormControl>
+            )}
+          />
+        );
+
+      case 'pincode':
+        return (
+          <Controller
+            name="pincode"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                label={t('pincode')}
+                type="tel"
+                inputProps={{ maxLength: 6 }}
+                error={!!errors.pincode}
+                helperText={errors.pincode?.message}
+              />
+            )}
+          />
+        );
+
+      case 'mobile':
+        return (
+          <Controller
+            name="mobile"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                label={t('mobile')}
+                type="tel"
+                inputProps={{ maxLength: 10 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PhoneIcon /> +91
+                    </InputAdornment>
+                  ),
+                }}
+                error={!!errors.mobile}
+                helperText={errors.mobile?.message || t('mobileHelperText')}
+              />
+            )}
+          />
+        );
+
+      case 'email':
+        return (
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                label={t('email')}
+                type="email"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                error={!!errors.email}
+                helperText={errors.email?.message || t('optionalLabel')}
+              />
+            )}
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <Paper sx={{ padding: 3 }}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -79,222 +252,20 @@ const Step3Address: React.FC = () => {
 
         <Divider sx={{ borderColor: theme.palette.secondary.main, mb: 3 }} />
 
-        <Box
-          sx={{
-            '& .fieldRow': {
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', sm: '35% 65%' },
-              alignItems: 'center',
-              gap: 1,
-            },
-          }}
-        >
-
-          <Grid container spacing={2} sx={{ mb: 3 }}>
-            <Grid item xs={12}>
-              <Box className="fieldRow">
-                <EditableLabel fieldKey="fullAddress" defaultKey="fullAddress" />
-
-                <Controller
-                  name="fullAddress"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      multiline
-                      rows={3}
-                      label={t('fullAddress')}
-                      placeholder={t('addressPlaceholder')}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <HomeIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                      error={!!errors.fullAddress}
-                      helperText={errors.fullAddress?.message}
-                    />
-                  )}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2} sx={{ mb: 3 }}>
-            <Grid item xs={12}>
-              <Box className="fieldRow">
-                <EditableLabel fieldKey="city" defaultKey="city" />
-
-                <Controller
-                  name="city"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      label={t('city')}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <LocationOnIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                      error={!!errors.city}
-                      helperText={errors.city?.message}
-                    />
-                  )}
-                />
-              </Box>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Box className="fieldRow">
-                <EditableLabel fieldKey="district" defaultKey="district" />
-
-                <Controller
-                  name="district"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      label={t('district')}
-                      error={!!errors.district}
-                      helperText={errors.district?.message}
-                    />
-                  )}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2} sx={{ mb: 3 }}>
-            <Grid item xs={12}>
-              <Box className="fieldRow">
-                <EditableLabel fieldKey="state" defaultKey="state" />
-
-                <Controller
-                  name="state"
-                  control={control}
-                  render={({ field }) => (
-                    <FormControl fullWidth error={!!errors.state}>
-                      <Select {...field} label={t('state')}>
-                        {indianStates.map((opt) => (
-                          <MenuItem key={opt} value={opt}>
-                            {opt}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                      {errors.state && (
-                        <FormHelperText>{errors.state?.message}</FormHelperText>
-                      )}
-                    </FormControl>
-                  )}
-                />
-              </Box>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Box className="fieldRow">
-                <EditableLabel fieldKey="pincode" defaultKey="pincode" />
-
-                <Controller
-                  name="pincode"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      label={t('pincode')}
-                      type="tel"
-                      inputProps={{ maxLength: 6 }}
-                      error={!!errors.pincode}
-                      helperText={errors.pincode?.message}
-                    />
-                  )}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-
-        </Box>
-
-        <Box
-          sx={{
-            '& .fieldRow': {
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', sm: '35% 65%' },
-              alignItems: 'center',
-              gap: 1,
-            },
-          }}
-        >
-
-          <Grid container spacing={2} sx={{ mb: 3 }}>
-            <Grid item xs={12}>
-              <Box className="fieldRow">
-                <EditableLabel fieldKey="mobile" defaultKey="mobile" />
-
-                <Controller
-                  name="mobile"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      label={t('mobile')}
-                      type="tel"
-                      inputProps={{ maxLength: 10 }}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <PhoneIcon /> +91
-                          </InputAdornment>
-                        ),
-                      }}
-                      error={!!errors.mobile}
-                      helperText={errors.mobile?.message || t('mobileHelperText')}
-                    />
-                  )}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2} sx={{ mb: 4 }}>
-            <Grid item xs={12}>
-              <Box className="fieldRow">
-                <EditableLabel fieldKey="email" defaultKey="email" />
-
-                <Controller
-                  name="email"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      label={t('email')}
-                      type="email"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <EmailIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                      error={!!errors.email}
-                      helperText={errors.email?.message || t('optionalLabel')}
-                    />
-                  )}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-
-        </Box>
+        {fieldOrder.address.map((field) => (
+          <FieldRow
+            key={field}
+            label={
+              <EditableLabel
+                fieldKey={field}
+                defaultKey={field as TranslationKey}
+              />
+            }
+            onDelete={() => removeField('address', field)}
+          >
+            {renderAddressField(field)}
+          </FieldRow>
+        ))}
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
           <Button

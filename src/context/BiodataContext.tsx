@@ -28,6 +28,8 @@ const defaultFieldOrder = {
     'complexion',
     'bloodGroup',
     'manglik',
+    'customField1',
+    'customField2',
   ],
   family: [
     'fatherName',
@@ -98,6 +100,8 @@ const defaultFormData: BiodataFormData = {
     complexion: '',
     bloodGroup: '',
     manglik: '',
+    customField1: '',
+    customField2: '',
   },
   family: {
     fatherName: '',
