@@ -22,6 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { useBiodata } from '../context/BiodataContext';
 import Navbar from '../components/Navbar';
+import SEOHead from '../components/SEOHead';
 import StepIndicator from '../components/StepIndicator';
 import Step1PersonalFamily from '../steps/Step1PersonalFamily';
 import Step2Education from '../steps/Step2Education';
@@ -166,6 +167,11 @@ const Create: React.FC = () => {
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: theme.palette.background.default }}>
+      <SEOHead
+        title="Create Your Marathi Biodata Online | Free PDF Download - Vivah Biodata Maker"
+        description="Fill out your marriage biodata details online. Choose from beautiful Marathi templates. Download instant PDF. No signup required."
+        canonical="https://marathibiodatafree.com/create"
+      />
       {/* Sticky Delete Button */}
       <Fab
         color="error"

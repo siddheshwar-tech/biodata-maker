@@ -10,15 +10,11 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('jspdf') || id.includes('html2canvas')) {
-              return 'pdf';
-            }
-            if (id.includes('@mui/icons-material')) {
-              return 'mui-icons';
-            }
-            // create a dedicated vendor chunk for other deps
-            return 'vendor';
+          if (id.includes('jspdf') || id.includes('html2canvas')) {
+            return 'pdf-libs';
+          }
+          if (id.includes('@mui/material') || id.includes('@mui/icons-material')) {
+            return 'mui';
           }
         },
       },

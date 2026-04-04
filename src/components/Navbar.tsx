@@ -22,7 +22,7 @@ const Navbar: React.FC = () => {
   const { formData, updateLanguage } = useBiodata();
   const t = useTranslation(formData.language);
 
-  // 👉 Smart config instead of if-else mess
+  // Smart config instead of if-else mess
   const typingToolConfig: Record<
     string,
     { label: string; url: string }
